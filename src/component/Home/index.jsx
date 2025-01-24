@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Wrapper from './style'
 import HomeList from './Homelist'
+import RO_LO_Mapping from '../RO_LO_Mapping'
 
 const Home = ({user}) => {
 
@@ -31,7 +32,7 @@ const Home = ({user}) => {
                 : (index === 2
                     ? "Students List"
                     : (index === 3
-                        ? "RO Lists"
+                        ? <RO_LO_Mapping/>
                         : (index === 4
                             ? "LO Lists"
                             : "AC Lists"

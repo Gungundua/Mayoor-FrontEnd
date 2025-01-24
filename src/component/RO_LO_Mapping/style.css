@@ -1,0 +1,82 @@
+/* Container for the RO list */
+.ro-list-container {
+  width: 100%;
+  max-width: 400px;
+  margin: auto;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Header section of the RO list */
+.ro-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #00c39a;
+  color: white;
+  padding: 16px;
+  cursor: pointer;
+}
+
+/* RO information (icon and text) */
+.ro-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.expand-icon {
+  font-size: 16px;
+}
+
+/* LO list container */
+.lo-list {
+  background-color: white;
+  padding: 16px;
+}
+
+/* Individual LO item */
+.lo-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+/* Priority buttons container */
+.priority-buttons {
+  display: flex;
+  gap: 4px;
+}
+
+/* Priority button styles */
+.priority-button {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.priority-button.h {
+  background-color: green;
+  color: white;
+}
+
+.priority-button.m {
+  background-color: yellow;
+  color: black;
+}
+
+.priority-button.l {
+  background-color: red;
+  color: white;
+}
+
+/* Unselected state for priority buttons */
+.priority-button:not(.h):not(.m):not(.l) {
+  background-color: white;
+  color: black;
+}
