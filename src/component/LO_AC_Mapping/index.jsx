@@ -1,28 +1,41 @@
 import React, { useState } from "react"; 
 import Wrapper from "./style";
+import Form_AC from "../Form_AC"
 
 const ACMapping = () => {
-  const [acList, setAcList] = useState([
-    { id: 1, priority: "" , description:"title"},
-    { id: 2, priority: "" , description:"title"},
-    { id: 3, priority: "" , description:"title"},
-    { id: 4, priority: "" , description:"title"},
-    { id: 5, priority: "" , description:"title"},
-    { id: 6, priority: "" , description:"title"},
-    { id: 6, priority: "" , description:"title"},
-    { id: 6, priority: "" , description:"title"},
-    { id: 6, priority: "" , description:"title"},
-    { id: 6, priority: "" , description:"title"},
-    { id: 6, priority: "" , description:"title"},
-    { id: 6, priority: "" , description:"title"},
-    { id: 6, priority: "" , description:"title"},
-    { id: 6, priority: "" , description:"title"},
-    { id: 6, priority: "" , description:"title"},
+  const [acItems, setAcItems] = useState([
+    { id: 1, priority: "" , title:"title"},
+    { id: 2, priority: "" , title:"title"},
+    { id: 3, priority: "" , title:"title"},
+    { id: 4, priority: "" , title:"title"},
+    { id: 5, priority: "" , title:"title"},
+    { id: 6, priority: "" , title:"title"},
+    { id: 6, priority: "" , title:"title"},
+    { id: 6, priority: "" , title:"title"},
+    { id: 6, priority: "" , title:"title"},
+    { id: 6, priority: "" , title:"title"},
+    { id: 6, priority: "" , title:"title"},
+    { id: 6, priority: "" , title:"title"},
+    { id: 6, priority: "" , title:"title"},
+    { id: 6, priority: "" , title:"title"},
+    { id: 6, priority: "" , title:"title"},
   ]);
 
-
+  const handleClick = (id, priority) => {
+    setAcItems((prev) =>
+      prev.map((ac) =>
+        ac.id === id
+          ? { ...ac, priority: ac.priority === priority ? "" : priority } // Deselect if already selected
+          : ac
+      )
+    );
+  };
+  const [showForm, setShowForm] = useState(false)
+  const handleform = ()=>{
+    setShowForm(true)
+  }
   const setPriority = (id, priority) => {
-    setAcList((prev) =>
+    setAcItems((prev) =>
       prev.map((ac) =>
         ac.id === id ? { ...ac, priority } : ac
       )
@@ -33,18 +46,18 @@ const ACMapping = () => {
     <Wrapper>
         <div className="ac-list-container">
         <div className="ac-list">
-          {acList.map((ac) => (
+          {acItems.map((ac) => (
             <div key={ac.id} className="ac-item">
               <div>
                 <h2>AC {ac.id}</h2>
-                <span>{ac.description}</span>
+                <span>{ac.title}</span>
               </div>
               <div className="priority-buttons">
                 <button
                   className={`priority-button ${
                     ac.priority === "H" ? "h" : ""
                   }`}
-                  onClick={() => setPriority(ac.id, "H")}
+                  onClick={() => handleClick(ac.id, "H")}
                 >
                   H
                 </button>
@@ -52,7 +65,7 @@ const ACMapping = () => {
                   className={`priority-button ${
                     ac.priority === "M" ? "m" : ""
                   }`}
-                  onClick={() => setPriority(ac.id, "M")}
+                  onClick={() => handleClick(ac.id, "M")}
                 >
                   M
                 </button>
@@ -60,7 +73,7 @@ const ACMapping = () => {
                   className={`priority-button ${
                     ac.priority === "L" ? "l" : ""
                   }`}
-                  onClick={() => setPriority(ac.id, "L")}
+                  onClick={() => handleClick(ac.id, "L")}
                 >
                   L
                 </button>
@@ -69,10 +82,17 @@ const ACMapping = () => {
           ))}
         </div>
         <div className="btns">
-          <input type="button" value="Add New AC" className="add"/>
+          <input type="button" value="Add New AC" className="add" onClick={handleform}/>
           <input type="button" value="Done" className="btn" />
         </div>
     </div>
+    {showForm && (
+        <div className="popup-overlay">
+          <div className="popup-content">
+            <Form_AC closeForm={() => setShowForm(false)} />
+          </div>
+        </div>
+      )} 
     </Wrapper>
   );
 };

@@ -14,7 +14,6 @@ const App = () => {
         {
             user ? <Home user={user} /> : <Login setUser = {setUser} />
         }
-        {onclick = <ROList/>}
     </>
 }
 

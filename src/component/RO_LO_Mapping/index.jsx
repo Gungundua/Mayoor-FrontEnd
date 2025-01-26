@@ -1,70 +1,68 @@
 import React, { useState } from "react";
-import "./style.css"; 
+import Wrapper from "./style";
+import Form_LO from "../Form_LO";
 
-const ROList = () => {
-  const [expanded, setExpanded] = useState(false);
-  const [loList, setLoList] = useState([
-    { id: 1, priority: "" , description:"title"},
-    { id: 2, priority: "" , description:"title"},
-    { id: 3, priority: "" , description:"title"},
-    { id: 4, priority: "" , description:"title"},
-    { id: 5, priority: "" , description:"title"},
-    { id: 6, priority: "" , description:"title"},
+const LOMapping = () => {
+  const [loItems, setLoItems] = useState([
+    { id: 1, priority: "", title: "title" },
+    { id: 2, priority: "", title: "title" },
+    { id: 3, priority: "", title: "title" },
+    { id: 4, priority: "", title: "title" },
+    { id: 5, priority: "", title: "title" },
   ]);
 
-  const toggleExpanded = () => {
-    setExpanded(!expanded);
-  };
-
-  const setPriority = (id, priority) => {
-    setLoList((prev) =>
+  // Handle click to toggle priority
+  const handleClick = (id, priority) => {
+    setLoItems((prev) =>
       prev.map((lo) =>
-        lo.id === id ? { ...lo, priority } : lo
+        lo.id === id
+          ? { ...lo, priority: lo.priority === priority ? "" : priority } // Deselect if already selected
+          : lo
       )
     );
   };
 
-  return (
-    <div className="ro-list-container">
-      <div className="ro-header" onClick={toggleExpanded}>
-        <div className="ro-info">
-          <div>
-            <h3>RO-1</h3>
-            <p>Description</p>
-          </div>
-        </div>
-        <div className="expand-icon">{expanded ? "▲" : "▼"}</div>
-      </div>
-      {expanded && (
+  const [showForm, setShowForm] = useState(false);
+  const handleform = () => {
+    setShowForm(true); // Set to true when button is clicked
+  };
+    return (
+    <Wrapper>
+      <div className="lo-list-container">
         <div className="lo-list">
-          {loList.map((lo) => (
+          {loItems.map((lo) => (
             <div key={lo.id} className="lo-item">
               <div>
                 <h2>LO {lo.id}</h2>
-                <span>{lo.description}</span>
+                <span>{lo.title}</span>
               </div>
               <div className="priority-buttons">
+                {/* High Priority */}
                 <button
                   className={`priority-button ${
                     lo.priority === "H" ? "h" : ""
                   }`}
-                  onClick={() => setPriority(lo.id, "H")}
+                  onClick={() => handleClick(lo.id, "H")}
                 >
                   H
                 </button>
+
+                {/* Medium Priority */}
                 <button
                   className={`priority-button ${
                     lo.priority === "M" ? "m" : ""
                   }`}
-                  onClick={() => setPriority(lo.id, "M")}
+                  onClick={() => handleClick(lo.id, "M")}
                 >
                   M
                 </button>
+
+                {/* Low Priority */}
                 <button
                   className={`priority-button ${
                     lo.priority === "L" ? "l" : ""
                   }`}
-                  onClick={() => setPriority(lo.id, "L")}
+                  onClick={() => handleClick(lo.id, "L")}
                 >
                   L
                 </button>
@@ -72,9 +70,20 @@ const ROList = () => {
             </div>
           ))}
         </div>
-      )}
-    </div>
+        <div className="btns">
+          <input type="button" value="Add New LO" className="add" onClick={handleform} />
+          <input type="button" value="Done" className="btn" />
+        </div>
+      </div>
+      {showForm && (
+        <div className="popup-overlay">
+          <div className="popup-content">
+            <Form_LO closeForm={() => setShowForm(false)} />
+          </div>
+        </div>
+      )}    
+      </Wrapper>
   );
 };
 
-export default ROList;
+export default LOMapping;
