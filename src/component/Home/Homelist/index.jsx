@@ -2,14 +2,13 @@ import React, { useState, useEffect } from 'react';
 import Wrapper from './style';
 import axios from 'axios';
 
-const HomeList = ({ user, setIndex }) => {
+const HomeList = ({ user, setIndex, setUserData, userdata }) => {
   const [selectedYear, setSelectedYear] = useState('');
   const [selectedClass, setSelectedClass] = useState('');
   const [selectedSection, setSelectedSection] = useState('');
   const [selectedQuarter, setSelectedQuarter] = useState('');
   const [selectedSubject, setSelectedSubject] = useState('');
   const [students, setStudents] = useState([]);
-  const [userdata, setUserdata] = useState({});
 
   const handleClick = () => {
     const updatedUserdata = {
@@ -17,34 +16,35 @@ const HomeList = ({ user, setIndex }) => {
       class: parseInt(selectedClass, 10),
       section: selectedSection,
       quarter: parseInt(selectedQuarter, 10),
-      // subject: parseInt(selectedYear, 10),
+      subject: parseInt(selectedSubject, 10),
     };
-    setUserdata(updatedUserdata); // Update userdata state
-    // localStorage.setItem('userdata', JSON.stringify(updatedUserdata)); // Store in localStorage
-    console.log('User Data:', updatedUserdata);
-    loadStudents(updatedUserdata);
+
+    setUserData(updatedUserdata); // Update user data in parent component
+    console.log('Updated User Data:', updatedUserdata);
+    loadStudents(updatedUserdata); // Fetch students based on updated userdata
   };
+
   const loadStudents = (userdata) => {
     const headers = {
       Authorization: 'Bearer YOUR_ACCESS_TOKEN', // Replace with the actual token
       'Content-Type': 'application/json',
-      year: userdata.year,         // Extracting 'year' from userdata
-      class: userdata.class,   // Extracting 'class' (or className) from userdata
-      section: userdata.section,   // Extracting 'section' from userdata
+      year: userdata.year,
+      class: userdata.class,
+      section: userdata.section,
     };
-  
+
     axios
       .get('http://10.33.0.41:8000/api/students', { headers })
       .then(({ data }) => {
         console.log('Response Data:', data);
-        setStudents(data); // Assuming setStudents is a state setter function
+        setStudents(data);
       })
       .catch((err) => {
-        console.error('Error:', err.response || err.message);
+        console.error('Error fetching students:', err.response || err.message);
       })
       .finally(() => {
         console.log('API request completed.');
-      });
+      });
   };
 
   useEffect(() => {
@@ -55,15 +55,15 @@ const HomeList = ({ user, setIndex }) => {
 
   return (
     <Wrapper>
-      <div id='user'>
+      <div id="user">
         <h1>Hi, {user.name}</h1>
         <p>Please select your choices!</p>
       </div>
 
       <form className="choice">
-        <label htmlFor='year'>Year</label>
+        <label htmlFor="year">Year</label>
         <select
-          id='year'
+          id="year"
           value={selectedYear}
           onChange={(e) => setSelectedYear(e.target.value)}
         >
@@ -75,9 +75,9 @@ const HomeList = ({ user, setIndex }) => {
           <option value="2025">2025</option>
         </select>
 
-        <label htmlFor='class'>Class</label>
+        <label htmlFor="class">Class</label>
         <select
-          id='class'
+          id="class"
           value={selectedClass}
           onChange={(e) => setSelectedClass(e.target.value)}
           disabled={!selectedYear}
@@ -90,9 +90,9 @@ const HomeList = ({ user, setIndex }) => {
           <option value="10">10</option>
         </select>
 
-        <label htmlFor='section'>Section</label>
+        <label htmlFor="section">Section</label>
         <select
-          id='section'
+          id="section"
           value={selectedSection}
           onChange={(e) => setSelectedSection(e.target.value)}
           disabled={!selectedClass}
@@ -105,9 +105,9 @@ const HomeList = ({ user, setIndex }) => {
           <option value="C">C</option>
         </select>
 
-        <label htmlFor='quarter'>Quarter</label>
+        <label htmlFor="quarter">Quarter</label>
         <select
-          id='quarter'
+          id="quarter"
           value={selectedQuarter}
           onChange={(e) => setSelectedQuarter(e.target.value)}
           disabled={!selectedSection}
@@ -123,7 +123,7 @@ const HomeList = ({ user, setIndex }) => {
 
         <label htmlFor="subject">Subject</label>
         <select
-          id='subject'
+          id="subject"
           value={selectedSubject}
           onChange={(e) => setSelectedSubject(e.target.value)}
           disabled={!selectedQuarter}
@@ -138,7 +138,7 @@ const HomeList = ({ user, setIndex }) => {
         </select>
 
         <button
-          id='submit'
+          id="submit"
           onClick={(e) => {
             e.preventDefault();
             handleClick();

@@ -16,7 +16,7 @@ const styles = {
     },
     header: {
       backgroundColor: "#21C3BC",
-      padding: "20px 15px 50px 15px",
+      padding: "10px 15px 30px 15px",
       color: "Black",
       display: "flex",
       flexDirection: "column",
