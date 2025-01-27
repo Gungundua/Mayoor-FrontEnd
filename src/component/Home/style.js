@@ -24,6 +24,17 @@ const Wrapper = styled.section`
                 background-color: #21c3bc;
             }
         }
+        .tab-icon{
+            flex : 1;
+            border : none;
+            background : #135d5d;
+            color : #fff;
+            font-weight: bold;
+            cursor: pointer;
+            &.active{
+                background-color: #21c3bc;
+            }
+        }
     }
 `
 

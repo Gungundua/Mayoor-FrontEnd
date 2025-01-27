@@ -20,38 +20,38 @@ const HomeList = ({ user, setIndex, setUserData, userdata }) => {
     };
 
     setUserData(updatedUserdata); // Update user data in parent component
-    console.log('Updated User Data:', updatedUserdata);
-    loadStudents(updatedUserdata); // Fetch students based on updated userdata
+    console.log('User Data:', updatedUserdata);
+    //loadStudents(updatedUserdata); // Fetch students based on updated userdata
   };
 
-  const loadStudents = (userdata) => {
-    const headers = {
-      Authorization: 'Bearer YOUR_ACCESS_TOKEN', // Replace with the actual token
-      'Content-Type': 'application/json',
-      year: userdata.year,
-      class: userdata.class,
-      section: userdata.section,
-    };
+  // const loadStudents = (userdata) => {
+  //   const headers = {
+  //     Authorization: 'Bearer YOUR_ACCESS_TOKEN', // Replace with the actual token
+  //     'Content-Type': 'application/json',
+  //     year: userdata.year,
+  //     class: userdata.class,
+  //     section: userdata.section,
+  //   };
 
-    axios
-      .get('http://10.33.0.41:8000/api/students', { headers })
-      .then(({ data }) => {
-        console.log('Response Data:', data);
-        setStudents(data);
-      })
-      .catch((err) => {
-        console.error('Error fetching students:', err.response || err.message);
-      })
-      .finally(() => {
-        console.log('API request completed.');
-      });
-  };
+  //   axios
+  //     .get('http://10.33.0.41:8000/api/students', { headers })
+  //     .then(({ data }) => {
+  //       console.log('Response Data:', data);
+  //       setStudents(data);
+  //     })
+  //     .catch((err) => {
+  //       console.error('Error fetching students:', err.response || err.message);
+  //     })
+  //     .finally(() => {
+  //       console.log('API request completed.');
+  //     });
+  // };
 
-  useEffect(() => {
-    if (Object.keys(userdata).length > 0) {
-      loadStudents(userdata);
-    }
-  }, [userdata]);
+  // useEffect(() => {
+  //   if (Object.keys(userdata).length > 0) {
+  //     loadStudents(userdata);
+  //   }
+  // }, [userdata]);
 
   return (
     <Wrapper>

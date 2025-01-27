@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import Wrapper from './style';
 import { FaArrowLeft } from 'react-icons/fa';
 import Student from './Student.avif';
-import StudentSelect from '../Students/StudentSelect';
 
 const Profile = () => {
 
@@ -40,11 +39,25 @@ const Profile = () => {
     );
   }
 
+  const handleDoneClick = () => {
+    console.log('AC Data:', acData);
+    alert('Marks saved successfully!');
+  };
+
+  const handleMarksChange = (e, id) => {
+    const value = e.target.value;
+    if (/^\d*$/.test(value)) {
+      const updatedData = [...acData];
+      updatedData[id - 1].marks = value;
+      setAcData(updatedData);
+    }
+  };
+
   return (
     <Wrapper>
       <div className="search-container">
       <button className="back-button" onClick={handleBackButtonClick}>
-          <StudentSelect />
+          <FaArrowLeft />
         </button>
         <input type="text" placeholder="Search..." value={searchQuery} onChange={handleSearchChange} className="search-bar" />
       </div>
@@ -63,11 +76,17 @@ const Profile = () => {
         {acData.map((ac) => (
             <div className="ac-box" key={ac.id}>
               <h2>{ac.acName}</h2>
-              <input type="text" value={ac.marks} onChange={(e) => { const updatedData = [...acData]; updatedData[ac.id - 1].marks = e.target.value; setAcData(updatedData)}} placeholder="Enter Marks" className="marks-input" />
-            </div>
+              <input
+              type="text"
+              value={ac.marks}
+              onChange={(e) => handleMarksChange(e, ac.id)}
+              placeholder="Enter Marks"
+              className="marks-input"
+            /></div>
         ))}
       </div>
-
+      
+      <button className="done-button" onClick={handleDoneClick}>Done</button>
     </Wrapper>
   );
 }

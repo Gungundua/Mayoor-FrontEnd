@@ -71,6 +71,15 @@ overflow: hidden;
   margin-top: 0px;
 }
 
+.done-button {
+  background-color: green;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
 .ac-container {
   display: flex;
   overflow-x: auto;

@@ -1,45 +1,68 @@
-import React, {useState} from 'react'
-import Wrapper from './style'
+import React, { useState, useEffect } from 'react';
+import Wrapper from './style';
 import LOMapping from '../RO_LO_Mapping';
-import List from '../images/list.png'
+import List from '../images/list.png';
+import axios from 'axios';
 
-const ROlist = ({loItems, setLoItems}) => {
-    const [activeIndex, setActiveIndex] = useState(null);
+const ROlist = ({ loItems, setLoItems, userData }) => {
+  const [activeIndex, setActiveIndex] = useState(null);
+  const [roList, setRoList] = useState([]);
 
   const toggleDropdown = (index) => {
     setActiveIndex(activeIndex === index ? null : index);
-  }
-  const roItems = [
-    { id: 1, number : "RO-1", title : "Title of RO-1" },
-    { id: 2, number : "RO-2", title : "Title of RO-2" },
-    { id: 3, number : "RO-3", title : "Title of RO-3" },
-    { id: 4, number : "RO-4", title : "Title of RO-4" },
-    { id: 5, number : "RO-5", title : "Title of RO-5" },
-    { id: 6, number : "RO-6", title : "Title of RO-6" },
-    { id: 7, number : "RO-7", title : "Title of RO-7" },
-    { id: 8, number : "RO-8", title : "Title of RO-8" },
-    { id: 1, number : "RO-1", title : "Title of RO-1" },
-    { id: 2, number : "RO-2", title : "Title of RO-2" },
-    { id: 3, number : "RO-3", title : "Title of RO-3" },
-    { id: 4, number : "RO-4", title : "Title of RO-4" },
-    { id: 5, number : "RO-5", title : "Title of RO-5" },
-    { id: 6, number : "RO-6", title : "Title of RO-6" },
-    { id: 7, number : "RO-7", title : "Title of RO-7" },
-    { id: 8, number : "RO-8", title : "Title of RO-8" },
-  ]
+  };
+
+  useEffect(() => {
+    const loadRO = async (userdata) => {
+      const headers = {
+        Authorization: 'Bearer YOUR_ACCESS_TOKEN', // Replace with the actual token
+        'Content-Type': 'application/json',
+        year: userdata.year,
+        class: userdata.class,
+        section: userdata.section,
+        subject: userdata.subject,
+      };
+  
+      try {
+        const response = await axios.get('http://10.33.0.41:8000/api/report_outcomes', { headers });
+        const data = response.data;
+  
+        console.log('Response Data:', data);
+  
+        // Check if data has the expected structure
+        if (data && Array.isArray(data.ro)) {
+          setRoList(data.ro); // Use the `ro` array from the response
+        } else {
+          console.warn('Expected an array but received:', data);
+          setRoList([]); // If not valid, set an empty array
+        }
+      } catch (error) {
+        console.error('Error fetching report outcomes:', error.response || error.message);
+        setRoList([]); // In case of an error, set an empty array
+      }
+    };
+  
+    if (Object.keys(userData).length > 0) {
+      loadRO(userData);
+    }
+  }, [userData]); // Dependency on userData to trigger the effect
+  
+
+  console.log('User data in RO:', userData);
+
   return (
     <Wrapper>
       <h2 className="ro-list-title">RO List</h2>
       <ul className="ro-list">
-        {roItems.map((item, index) => (
+        {roList.map((item, index) => (
           <li key={item.id} className="ro-list-item">
             <div className="ro-header" onClick={() => toggleDropdown(index)}>
               <div className="list-icon-container">
-                <img src={List} alt="" className="list-icon"/>
+                <img src={List} alt="" className="list-icon" />
               </div>
               <div className="ro-info">
-              <p className="item-no">{item.number}</p>
-              <p className="item-title">{item.title}</p>
+                <p className="item-no">RO - {item.id}</p>
+                <p className="item-title">{item.name}</p>
               </div>
               <div className="ro-dropdown-icon">
                 {activeIndex === index ? "▲" : "▼"}
@@ -47,14 +70,14 @@ const ROlist = ({loItems, setLoItems}) => {
             </div>
             {activeIndex === index && (
               <div className="ro-dropdown-content">
-                <LOMapping loItems={loItems} setLoItems={setLoItems}/>
+                <LOMapping loItems={loItems} setLoItems={setLoItems} />
               </div>
             )}
           </li>
         ))}
       </ul>
     </Wrapper>
-  )
-}
+  );
+};
 
-export default ROlist
+export default ROlist;
