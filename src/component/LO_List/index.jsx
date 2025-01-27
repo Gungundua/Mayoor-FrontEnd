@@ -5,6 +5,7 @@ import Edit from '../images/edit2.png';
 import ACMapping from "../LO_AC_Mapping";
 import List from '../images/list.png';
 import axios from "axios";
+import Form_LO from "../Form_LO";
 
 const LOlist = ({ loItems, setLoItems, acItems, setAcItems, userData }) => {
   const [activeIndex, setActiveIndex] = useState(null);
@@ -13,6 +14,10 @@ const LOlist = ({ loItems, setLoItems, acItems, setAcItems, userData }) => {
   const toggleDropdown = (index) => {
     setActiveIndex(activeIndex === index ? null : index);
   };
+   const [showForm, setShowForm] = useState(false);
+    const handleform = () => {
+      setShowForm(true); // Set to true when button is clicked
+    };
 
   // const deleteItem = (id, event) => {
   //   event.stopPropagation(); // Prevents event propagation to the parent
@@ -99,7 +104,14 @@ const LOlist = ({ loItems, setLoItems, acItems, setAcItems, userData }) => {
           </li>
         ))}
       </ul>
-      <div className="add">+</div>
+      <div className="add" onClick={handleform}>+</div>
+      {showForm && (
+        <div className="popup-overlay">
+          <div className="popup-content">
+            <Form_LO closeForm={() => setShowForm(false)} />
+          </div>
+        </div>
+      )}
     </Wrapper>
   );
 };

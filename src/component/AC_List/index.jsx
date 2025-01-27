@@ -4,6 +4,7 @@ import Delete from '../images/delete2.png'
 import Edit from '../images/edit2.png'
 import List from '../images/list.png'
 import axios from "axios";
+import Form_AC from "../Form_AC";
 
 const AClist = ({acItems, setAcItems, userData}) => {
   const [activeIndex, setActiveIndex] = useState(null);
@@ -13,6 +14,10 @@ const AClist = ({acItems, setAcItems, userData}) => {
     setAcItems(acItems.filter((item) => item.id !== id));
   };
   const [acList, setAcList] = useState([]);
+  const [showForm, setShowForm] = useState(false)
+  const handleform = ()=>{
+    setShowForm(true)
+  }
 
   useEffect(() => {
     const loadAC = async (userdata) => {
@@ -76,7 +81,14 @@ const AClist = ({acItems, setAcItems, userData}) => {
           </li>
         ))}
       </ul>
-      <div className="add">+</div>
+      <div className="add" onClick={handleform}>+</div>
+      {showForm && (
+        <div className="popup-overlay">
+          <div className="popup-content">
+            <Form_AC closeForm={() => setShowForm(false)} />
+          </div>
+        </div>
+      )}
     </Wrapper>
   );
 };

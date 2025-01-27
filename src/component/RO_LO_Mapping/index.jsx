@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Wrapper from "./style";
+import Form_LO from "../Form_LO/index"
 
 const LOMapping = ({loItems, setLoItems}) => {
   // const [loList, setLoList] = useState([
@@ -19,6 +20,11 @@ const LOMapping = ({loItems, setLoItems}) => {
   //   { id: 6, priority: "" , description:"title"},
   //   { id: 6, priority: "" , description:"title"},
   // ]);
+
+  const [showForm, setShowForm] = useState(false);
+  const handleform = () => {
+    setShowForm(true); // Set to true when button is clicked
+  };
 
   const handleClick = (id, priority) => {
     setLoItems((prev) =>
@@ -78,10 +84,17 @@ const LOMapping = ({loItems, setLoItems}) => {
           ))}
         </div>
         <div className="btns">
-          <input type="button" value="Add New LO" className="add"/>
+          <input type="button" value="Add New LO" className="add" onClick={handleform}/>
           <input type="button" value="Done" className="btn" />
         </div>
     </div>
+    {showForm && (
+        <div className="popup-overlay">
+          <div className="popup-content">
+            <Form_LO closeForm={() => setShowForm(false)} />
+          </div>
+        </div>
+      )}
     </Wrapper>
   );
 };

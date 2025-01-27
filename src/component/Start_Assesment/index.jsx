@@ -1,13 +1,46 @@
-import React, { useState } from 'react';
-import Wrapper from './style';
-import { FaArrowLeft } from 'react-icons/fa';
-import Student from './Student.avif';
+import React, { useState, useEffect } from "react";
+import Wrapper from "./style";
+import { FaArrowLeft } from "react-icons/fa";
+import Student from "./Student.avif";
 
-const Profile = () => {
+const Assessment = () => {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [acData, setAcData] = useState([]);
   const [isProfileVisible, setIsProfileVisible] = useState(true);
+  
+   // Load data from localStorage when the component mounts
+   useEffect(() => {
+    const storedData = localStorage.getItem("assessmentData");
+    if (storedData) {
+      setAcData(JSON.parse(storedData));
+    } else {
+      generateAcData(); 
+    }
+  }, []);
+
+  useEffect(() => {
+    if (acData.length > 0) {
+      localStorage.setItem("assessmentData", JSON.stringify(acData));
+      console.log("Updated Assessment Data:", acData); 
+    }
+  }, [acData]);
+
+   // Send data in headers to the backend via a POST API using axios
+  //  const sendDataToBackend = async () => {
+  //   try {
+  //     const headers = {
+  //       "Content-Type": "application/json", // Set the content type to JSON
+  //       "Assessment-Data": JSON.stringify(acData), // Add the data to the headers
+  //     };
+
+  //     const response = await axios.post("https://10.33.0.41:8000/api/assessment_criteria", {}, { headers });
+
+  //     console.log("Data sent successfully:", response.data); // Log response from backend
+  //   } catch (error) {
+  //     console.error("Error sending data:", error);
+  //   }
+  // };
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
@@ -21,7 +54,7 @@ const Profile = () => {
     setAcData(data);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     generateAcData();
   }, []);  
   
@@ -38,11 +71,6 @@ const Profile = () => {
       </Wrapper>
     );
   }
-
-  const handleDoneClick = () => {
-    console.log('AC Data:', acData);
-    alert('Marks saved successfully!');
-  };
 
   const handleMarksChange = (e, id) => {
     const value = e.target.value;
@@ -86,11 +114,9 @@ const Profile = () => {
         ))}
       </div>
       
-      <button className="done-button" onClick={handleDoneClick}>Done</button>
+      <button className="done-button" >Done</button>
     </Wrapper>
   );
 }
 
-export default Profile;
-
-
+export default Assessment;
