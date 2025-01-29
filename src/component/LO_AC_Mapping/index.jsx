@@ -1,12 +1,23 @@
 import React from "react";
 import Wrapper from "./style";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Form_AC from "../Form_AC/index"
 
 
-const ACMapping = ({ acItems, setAcItems, userData}) => {
+const ACMapping = ({userData}) => {
+  const [acList, setAcList] = useState([]);
+
+  useEffect(() => {
+    // Retrieve stored AC list from localStorage
+    const storedAcList = localStorage.getItem("acList");
+    if (storedAcList) {
+      setAcList(JSON.parse(storedAcList));
+    } else {
+      console.warn("No AC List found in localStorage");
+    }
+  }, []);
   const setPriority = (id, priority) => {
-    setAcItems((prev) =>
+    setAcList((prev) =>
       prev.map((ac) =>
         ac.id === id ? { ...ac, priority } : ac
       )
@@ -18,7 +29,7 @@ const ACMapping = ({ acItems, setAcItems, userData}) => {
   }
 
   const handleClick = (id, priority) => {
-    setAcItems((prev) =>
+    setAcList((prev) =>
       prev.map((ac) =>
         ac.id === id
           ? { ...ac, priority: ac.priority === priority ? "" : priority } // Deselect if already selected
@@ -30,11 +41,11 @@ const ACMapping = ({ acItems, setAcItems, userData}) => {
     <Wrapper>
       <div className="ac-list-container">
         <div className="ac-list">
-          {acItems.map((ac) => (
+          {acList.map((ac, index) => (
             <div key={ac.id} className="ac-item">
               <div>
-                <h2>AC {ac.id}</h2>
-                <span>{ac.title}</span>
+                <h2>AC {index + 1}</h2>
+                <span>{ac.name}</span>
               </div>
               <div className="priority-buttons">
                 <button

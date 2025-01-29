@@ -24,14 +24,14 @@ const LOMapping = ({userData}) => {
   const [loList, setLoList] = useState([]);
 
   useEffect(() => {
-    // Retrieve loList from sessionStorage
-    const storedLoList = sessionStorage.getItem('loList');
-    if (storedLoList) {
-      setLoList(JSON.parse(storedLoList)); // Parse it back to an array
-    } else {
-      console.warn('No LO List found in sessionStorage');
-    }
-  }, []);
+      // Retrieve stored AC list from localStorage
+      const storedAcList = localStorage.getItem("loList");
+      if (storedAcList) {
+        setLoList(JSON.parse(storedAcList));
+      } else {
+        console.warn("No LO List found in localStorage");
+      }
+    }, []);
 
   const [showForm, setShowForm] = useState(false);
   
@@ -61,10 +61,10 @@ const LOMapping = ({userData}) => {
     <Wrapper>
       <div className="lo-list-container">
         <div className="lo-list">
-          {loList.map((lo) => (
+          {loList.map((lo, index) => (
             <div key={lo.id} className="lo-item">
               <div>
-                <h2>LO {lo.id}</h2>
+                <h2>LO {index + 1}</h2>
                 <span>{lo.name}</span>
               </div>
               <div className="priority-buttons">

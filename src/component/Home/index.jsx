@@ -49,7 +49,7 @@ const Home = ({ user }) => {
     setUserData(data); // Update user data in the parent state
   };
   
-  console.log('user data in home:', userData);
+  // console.log('user data in home:', userData);
   return (
     <Wrapper>
       <div className="screen">
