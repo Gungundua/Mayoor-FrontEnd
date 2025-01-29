@@ -20,43 +20,48 @@ const AClist = ({acItems, setAcItems, userData}) => {
   }
 
   useEffect(() => {
-    const loadAC = async (userdata) => {
-      const headers = {
-        Authorization: 'Bearer YOUR_ACCESS_TOKEN', // Replace with the actual token
-        'Content-Type': 'application/json',
-        year: userdata.year,
-        class: userdata.class,
-        section: userdata.section,
-        subject: userdata.subject,
-        quarter: userdata.quarter,
-      };
-  
-      console.log("Headers:", headers);
-  
-      try {
-        const response = await axios.get('http://10.33.0.41:8000/api/assessment_criterias', { headers });
-        const data = response.data;
-  
-        console.log("API Response Data:", data);
-  
-        // Handle the correct API response format
-        if (data && Array.isArray(data.assessments)) {
-          setAcList(data.assessments); // Use the `assessments` array from the response
-        } else {
-          console.warn("Unexpected API response format:", data);
-          setAcList([]); // Default to empty if the format is unexpected
-        }
-      } catch (error) {
-        console.error("Error fetching report outcomes:", error.response || error.message);
-        setAcList([]);
-      }
-    };
-  
-    if (Object.keys(userData).length > 0) {
-      loadAC(userData);
+    const storedLoList = sessionStorage.getItem('loList');
+    if (storedLoList) {
+      setAcList(JSON.parse(storedLoList)); // Load from session storage if available
     } else {
-      console.warn("userData is empty or invalid:", userData);
-    }
+      const loadAC = async (userdata) => {
+        const headers = {
+          Authorization: 'Bearer YOUR_ACCESS_TOKEN', // Replace with the actual token
+          'Content-Type': 'application/json',
+          year: userdata.year,
+          class: userdata.class,
+          section: userdata.section,
+          subject: userdata.subject,
+          quarter: userdata.quarter,
+        };
+    
+        console.log("Headers:", headers);
+    
+        try {
+          const response = await axios.get('http://10.33.0.41:8000/api/assessment_criterias', { headers });
+          const data = response.data;
+    
+          console.log("API Response Data:", data);
+    
+          // Handle the correct API response format
+          if (data && Array.isArray(data.assessments)) {
+            setAcList(data.assessments); // Use the `assessments` array from the response
+          } else {
+            console.warn("Unexpected API response format:", data);
+            setAcList([]); // Default to empty if the format is unexpected
+          }
+        } catch (error) {
+          console.error("Error fetching report outcomes:", error.response || error.message);
+          setAcList([]);
+        }
+      };
+    
+      if (Object.keys(userData).length > 0) {
+        loadAC(userData);
+      } else {
+        console.warn("userData is empty or invalid:", userData);
+      }
+    } 
   }, [userData]); // Dependency on userData to trigger the effect
 
   console.log('user data in ac :', userData);

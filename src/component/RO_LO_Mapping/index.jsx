@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Wrapper from "./style";
 import Form_LO from "../Form_LO/index"
 
-const LOMapping = ({loItems, setLoItems}) => {
+const LOMapping = ({userData}) => {
   // const [loList, setLoList] = useState([
   //   { id: 1, priority: "" , description:"title"},
   //   { id: 2, priority: "" , description:"title"},
@@ -21,13 +21,26 @@ const LOMapping = ({loItems, setLoItems}) => {
   //   { id: 6, priority: "" , description:"title"},
   // ]);
 
+  const [loList, setLoList] = useState([]);
+
+  useEffect(() => {
+    // Retrieve loList from sessionStorage
+    const storedLoList = sessionStorage.getItem('loList');
+    if (storedLoList) {
+      setLoList(JSON.parse(storedLoList)); // Parse it back to an array
+    } else {
+      console.warn('No LO List found in sessionStorage');
+    }
+  }, []);
+
   const [showForm, setShowForm] = useState(false);
+  
   const handleform = () => {
     setShowForm(true); // Set to true when button is clicked
   };
 
   const handleClick = (id, priority) => {
-    setLoItems((prev) =>
+    setLoList((prev) =>
       prev.map((lo) =>
         lo.id === id
           ? { ...lo, priority: lo.priority === priority ? "" : priority } // Deselect if already selected
@@ -37,7 +50,7 @@ const LOMapping = ({loItems, setLoItems}) => {
   };
 
   const setPriority = (id, priority) => {
-    setLoItems((prev) =>
+    setLoList((prev) =>
       prev.map((lo) =>
         lo.id === id ? { ...lo, priority } : lo
       )
@@ -48,11 +61,11 @@ const LOMapping = ({loItems, setLoItems}) => {
     <Wrapper>
       <div className="lo-list-container">
         <div className="lo-list">
-          {loItems.map((lo) => (
+          {loList.map((lo) => (
             <div key={lo.id} className="lo-item">
               <div>
                 <h2>LO {lo.id}</h2>
-                <span>{lo.title}</span>
+                <span>{lo.name}</span>
               </div>
               <div className="priority-buttons">
                 <button

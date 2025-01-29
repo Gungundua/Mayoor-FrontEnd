@@ -70,7 +70,7 @@ const ROlist = ({ loItems, setLoItems, userData }) => {
             </div>
             {activeIndex === index && (
               <div className="ro-dropdown-content">
-                <LOMapping loItems={loItems} setLoItems={setLoItems} />
+                <LOMapping loItems={loItems} setLoItems={setLoItems} userData={userData}/>
               </div>
             )}
           </li>

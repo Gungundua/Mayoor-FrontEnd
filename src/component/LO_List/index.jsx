@@ -26,47 +26,60 @@ const LOlist = ({ loItems, setLoItems, acItems, setAcItems, userData }) => {
 
 
   useEffect(() => {
-    const loadLO = async (userdata) => {
-      const headers = {
-        Authorization: 'Bearer YOUR_ACCESS_TOKEN', // Replace with the actual token
-        'Content-Type': 'application/json',
-        year: userdata.year,
-        class: userdata.class,
-        section: userdata.section,
-        subject: userdata.subject,
-        quarter: userdata.quarter,
+    // Check if loList is already in session storage
+    const storedLoList = sessionStorage.getItem('loList');
+    if (storedLoList) {
+      setLoList(JSON.parse(storedLoList)); // Load from session storage if available
+    } else {
+      const loadLO = async (userdata) => {
+        const headers = {
+          Authorization: 'Bearer YOUR_ACCESS_TOKEN', // Replace with the actual token
+          'Content-Type': 'application/json',
+          year: userdata.year,
+          class: userdata.class,
+          section: userdata.section,
+          subject: userdata.subject,
+          quarter: userdata.quarter,
+        };
+  
+        console.log("Headers:", headers);
+  
+        try {
+          const response = await axios.get('http://10.33.0.41:8000/api/learning_outcomes', { headers });
+          const data = response.data;
+  
+          console.log("API Response Data:", data);
+  
+          let updatedLoList = [];
+          if (Array.isArray(data)) {
+            updatedLoList = data;
+          } else if (Array.isArray(data.ro)) {
+            updatedLoList = data.ro;
+          } else if (Array.isArray(data.lo)) {
+            updatedLoList = data.lo;
+          } else {
+            console.warn("Unexpected API response format:", data);
+            updatedLoList = [];
+          }
+  
+          setLoList(updatedLoList);
+          sessionStorage.setItem('loList', JSON.stringify(updatedLoList)); // Store in session storage
+  
+        } catch (error) {
+          console.error("Error fetching report outcomes:", error.response || error.message);
+          setLoList([]);
+          sessionStorage.removeItem('loList'); // Clear session storage on error
+        }
       };
   
-      console.log("Headers:", headers);
-  
-      try {
-        const response = await axios.get('http://10.33.0.41:8000/api/learning_outcomes', { headers });
-        const data = response.data;
-  
-        console.log("API Response Data:", data);
-  
-        if (Array.isArray(data)) {
-          setLoList(data);
-        } else if (Array.isArray(data.ro)) {
-          setLoList(data.ro);
-        } else if (Array.isArray(data.lo)) {
-          setLoList(data.lo);
-        } else {
-          console.warn("Unexpected API response format:", data);
-          setLoList([]);
-        }
-      } catch (error) {
-        console.error("Error fetching report outcomes:", error.response || error.message);
-        setLoList([]);
+      if (Object.keys(userData).length > 0) {
+        loadLO(userData);
+      } else {
+        console.warn("userData is empty or invalid:", userData);
       }
-    };
-  
-    if (Object.keys(userData).length > 0) {
-      loadLO(userData);
-    } else {
-      console.warn("userData is empty or invalid:", userData);
     }
   }, [userData]);
+  
    // Dependency on userData to trigger the effect
 
   console.log('user data in lo :', userData);
@@ -98,7 +111,7 @@ const LOlist = ({ loItems, setLoItems, acItems, setAcItems, userData }) => {
             </div>
             {activeIndex === index && (
               <div className="lo-dropdown-content">
-                <ACMapping acItems={acItems} setAcItems={setAcItems} />
+                <ACMapping acItems={acItems} setAcItems={setAcItems} userData={userData}/>
               </div>
             )}
           </li>
