@@ -34,7 +34,7 @@ const Form_AC = ({ closeForm, userData, loadAC }) => {
 
     try {
       const response = await axios.post(
-        "http://10.33.0.41:8000/api/assessment_criterias",
+        "http://10.33.0.41:8000/api/assessment-criteria",
         body,
         { headers }
       );

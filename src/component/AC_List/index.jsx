@@ -5,43 +5,31 @@ import Edit from "../images/edit2.png";
 import List from "../images/list.png";
 import axios from "axios";
 import Form_AC from "../Form_AC";
-
-const AClist = ({ userData }) => {
+import Assessment from "../Start_Assesment/index.jsx";
+const AC_List = ({ userData }) => {
   const [acList, setAcList] = useState([]);
-
-  const [activeIndex, setActiveIndex] = useState(null);
   const [showForm, setShowForm] = useState(false);
-
-  const toggleDropdown = (index) => {
-    setActiveIndex(activeIndex === index ? null : index);
-  };
-
+  const [selectedAssessment, setSelectedAssessment] = useState(null);
   const loadAC = async () => {
     if (!userData.year || !userData.class || !userData.section || !userData.subject || !userData.quarter) {
       console.warn("Missing user data, skipping API call.");
       return;
     }
-
     const headers = {
-      Authorization: "Bearer YOUR_ACCESS_TOKEN", // Replace with actual token
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       "Content-Type": "application/json",
       year: userData.year,
-      className: userData.class,
+      class: userData.class,
       section: userData.section,
       subject: userData.subject,
       quarter: userData.quarter,
     };
-
     try {
-      const response = await axios.get(
-        "http://10.33.0.41:8000/api/assessment_criterias",
-        { headers }
-      );
-
+      const response = await axios.get("http://10.33.0.41:8000/api/assessment-criteria", { headers });
       const data = response.data;
       if (Array.isArray(data.assessments)) {
         setAcList(data.assessments);
-        localStorage.setItem("acList", JSON.stringify(data.assessments)); // Store in localStorage
+        localStorage.setItem("acList", JSON.stringify(data.assessments));
       } else {
         setAcList([]);
         console.warn("Unexpected API response format:", data);
@@ -51,25 +39,31 @@ const AClist = ({ userData }) => {
       setAcList([]);
     }
   };
-
   useEffect(() => {
-    // Retrieve stored data from localStorage if available
     const storedACList = localStorage.getItem("acList");
     if (storedACList) {
       setAcList(JSON.parse(storedACList));
+    } else {
+      loadAC();
     }
-
-    // Fetch fresh data when userData changes
-    loadAC();
-  }, [userData]); // Fetch only when userData changes
-
+  }, [userData]);
+  const handleStartAssessment = (item) => {
+    console.log("Item clicked:", item);
+    setSelectedAssessment(item);
+  };
+  const handleBackToList = () => {
+    setSelectedAssessment(null);
+  };
+  if (selectedAssessment) {
+    return <Assessment selectedAssessment={selectedAssessment} onBack={handleBackToList} />;
+  }
   return (
     <Wrapper>
       <h2 className="ac-list-title">AC List</h2>
       <ul className="ac-list">
         {acList.map((item, index) => (
-          <li key={item.id} className="ac-list-item">
-            <div className="ac-header" onClick={() => toggleDropdown(index)}>
+          <li key={item.id} className="ac-list-item" onClick={() => handleStartAssessment(item)}>
+            <div className="ac-header">
               <div className="list-icon-container">
                 <img src={List} alt="" className="list-icon" />
               </div>
@@ -79,15 +73,7 @@ const AClist = ({ userData }) => {
               </div>
               <img src={Edit} alt="edit" className="edit" />
               <img src={Delete} alt="delete" className="delete" />
-              <div className="ac-dropdown-icon">
-                {activeIndex === index ? "▲" : "▼"}
-              </div>
             </div>
-            {activeIndex === index && (
-              <div className="ac-dropdown-content">
-                <p>Max Marks: {item.max_marks}</p>
-              </div>
-            )}
           </li>
         ))}
       </ul>
@@ -95,12 +81,11 @@ const AClist = ({ userData }) => {
       {showForm && (
         <div className="popup-overlay">
           <div className="popup-content">
-            <Form_AC closeForm={() => setShowForm(false)} userData={userData} loadAC={loadAC}/>
+            <Form_AC closeForm={() => setShowForm(false)} userData={userData} loadAC={loadAC} />
           </div>
         </div>
       )}
     </Wrapper>
   );
 };
-
-export default AClist;
+export default AC_List;

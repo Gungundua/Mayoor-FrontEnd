@@ -95,7 +95,7 @@ const ACMapping = ({ userData, loId }) => {
     // Make the POST request to send the filtered priorityMapping data via Axios
     try {
       const response = await axios.post(
-        'http://10.33.0.41:8000/api/lo_ac_mapping', // Replace with your actual API URL
+        'http://10.33.0.41:8000/api/learning-outcome-mapping', // Replace with your actual API URL
         body,
         { headers }
       );

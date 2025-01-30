@@ -24,7 +24,7 @@ const ROlist = ({ loItems, setLoItems, userData }) => {
       };
   
       try {
-        const response = await axios.get('http://10.33.0.41:8000/api/report_outcomes', { headers });
+        const response = await axios.get('http://10.33.0.41:8000/api/report-outcome', { headers });
         const data = response.data;
   
         console.log('Response Data:', data);

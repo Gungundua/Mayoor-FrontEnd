@@ -50,6 +50,7 @@ const Wrapper = styled.section`
         align-items: center;
         padding: 50px 20px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        flex : 1;
     }
     select {
         width: 80%;
@@ -93,43 +94,5 @@ const Wrapper = styled.section`
         opacity: 0.6;
         cursor: not-allowed;
     }
-    @media (max-width: 768px) {
-        #user {
-            flex-direction: row;
-            align-items: flex-start;
-            height: 30px
-        }
-            h2{
-            font-size: 15px;
-            }
-        #name {
-        font-size: 29px;
-        font-weight: bold;
-        }
-        #image {
-            margin-left: 20px;
-            margin-top: 10px;
-            margin-right: -20px;
-            height:20px;
-        }
-            #profile{
-            height: 30px;
-            width: 30px
-            }
-            #notification{
-            height: 30px;
-            width: 30px;
-            }
-        form {
-            padding: 30px 10px;
-            color: #636363;
-        }
-        select {
-            width: 90%;
-        }
-        #submit {
-            width: 40%;
-        }
-}
 `;
 export default Wrapper;
