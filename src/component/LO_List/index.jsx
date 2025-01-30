@@ -26,7 +26,7 @@ const LOlist = ({acItems, setAcItems, userData }) => {
       Authorization: 'Bearer YOUR_ACCESS_TOKEN', // Replace with the actual token
       'Content-Type': 'application/json',
       year: userData.year,
-      class: userData.class,
+      className: userData.class,
       section: userData.section,
       subject: userData.subject,
       quarter: userData.quarter,
@@ -101,15 +101,12 @@ const LOlist = ({acItems, setAcItems, userData }) => {
                 className="delete"
                 //onClick={(event) => deleteItem(item.id, event)}
               />
-              <div className="lo-dropdown-icon">
-                {activeIndex === index ? "▲" : "▼"}
-              </div>
             </div>
-            {activeIndex === index && (
-              <div className="lo-dropdown-content">
-                <ACMapping acItems={acItems} setAcItems={setAcItems} />
+            
+              <div className={activeIndex === index ? "show lo-dropdown-content" : "lo-dropdown-content"}>
+                <ACMapping acItems={acItems} setAcItems={setAcItems} userData={userData} loList={loList} loId={item.id} />
               </div>
-            )}
+            
           </li>
         ))}
       </ul>

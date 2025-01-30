@@ -68,6 +68,10 @@ const Wrapper = styled.section`
     padding: 10px;
     background: #e0f2f1;
     color: #004d40;
+    display : none;
+    &.show{
+      display : block;
+    }
   }
   .add{
     background-color: #21c3bc;
