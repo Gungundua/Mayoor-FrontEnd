@@ -16,31 +16,50 @@ const ACMapping = ({ userData, loId }) => {
     } else {
       console.warn("No AC List found in localStorage");
     }
-  }, []);
+
+    // Check if priorities are already saved for the current loId
+    const savedPriorityMapping = localStorage.getItem(`priorityMapping_${loId}`);
+    if (savedPriorityMapping) {
+      setPriorityMapping(JSON.parse(savedPriorityMapping));
+    }
+  }, [loId]);
 
   const handleform = () => {
     setShowForm(true);
   };
 
   const handleClick = (acid, priority) => {
+    if (priorityMapping[loId]?.isLocked) return; // Prevent changes if it's locked
+
     setPriorityMapping((prev) => {
       const updatedPriorityMapping = { ...prev };
 
       // Initialize loid Data if it doesn't exist
       if (!updatedPriorityMapping[loId]) {
-        updatedPriorityMapping[loId] = { Data: {} };
+        updatedPriorityMapping[loId] = { Data: {}, isLocked: false }; // Add `isLocked` to prevent further changes
       }
 
       const loidData = updatedPriorityMapping[loId].Data;
 
       // Toggle the priority for the acId (if it's already selected, deselect it)
-      loidData[acid] = loidData[acid] === priority.toLowerCase() ? "" : priority.toLowerCase();
+      loidData[acid] = loidData[acid] === priority ? "" : priority;
 
       return updatedPriorityMapping;
     });
   };
 
   const handleDone = async () => {
+    // Lock the priority mapping after the user is done
+    setPriorityMapping((prev) => {
+      const updatedPriorityMapping = { ...prev };
+      updatedPriorityMapping[loId].isLocked = true; // Lock the selection
+
+      // Save to localStorage
+      localStorage.setItem(`priorityMapping_${loId}`, JSON.stringify(updatedPriorityMapping));
+
+      return updatedPriorityMapping;
+    });
+
     // Filter out empty priorities in priorityMapping
     const filteredPriorityMapping = { ...priorityMapping };
 
@@ -101,25 +120,28 @@ const ACMapping = ({ userData, loId }) => {
               <div className="priority-buttons">
                 <button
                   className={`priority-button ${
-                    priorityMapping[loId]?.Data[ac.id] === "h" ? "h" : ""
+                    priorityMapping[loId]?.Data[ac.id] === "H" ? "h" : ""
                   }`}
-                  onClick={() => handleClick(ac.id, "h")}
+                  onClick={() => handleClick(ac.id, "H")}
+                  disabled={priorityMapping[loId]?.isLocked} // Disable button if locked
                 >
                   H
                 </button>
                 <button
                   className={`priority-button ${
-                    priorityMapping[loId]?.Data[ac.id] === "m" ? "m" : ""
+                    priorityMapping[loId]?.Data[ac.id] === "M" ? "m" : ""
                   }`}
-                  onClick={() => handleClick(ac.id, "m")}
+                  onClick={() => handleClick(ac.id, "M")}
+                  disabled={priorityMapping[loId]?.isLocked} // Disable button if locked
                 >
                   M
                 </button>
                 <button
                   className={`priority-button ${
-                    priorityMapping[loId]?.Data[ac.id] === "l" ? "l" : ""
+                    priorityMapping[loId]?.Data[ac.id] === "L" ? "l" : ""
                   }`}
-                  onClick={() => handleClick(ac.id, "l")}
+                  onClick={() => handleClick(ac.id, "L")}
+                  disabled={priorityMapping[loId]?.isLocked} // Disable button if locked
                 >
                   L
                 </button>

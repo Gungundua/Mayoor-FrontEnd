@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const Wrapper = styled.section`
-    font-family: Arial, sans-serif;
+    font-family:simplifica;
     width: 100%;
     height: 90vh; /* Fix the height to the viewport size */
     display: flex;
@@ -111,9 +111,9 @@ const Wrapper = styled.section`
   border-radius: 5px;
   padding: 2px;
 }
-.item-title{
+/* .item-title{
   font-weight: bold;
-}
+} */
 .popup-overlay {
   position: fixed;
   top: 0;
