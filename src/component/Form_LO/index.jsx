@@ -55,7 +55,7 @@ const Form_LO = ({ closeForm, userData, loadLO }) => {
         <p>Enter the LO you want to add :</p>
         <input
           type="text"
-          placeholder="LO Input"
+          placeholder="Enter Learning Outcome"
           className="input"
           value={loInput}
           onChange={(e) => setLoInput(e.target.value)}

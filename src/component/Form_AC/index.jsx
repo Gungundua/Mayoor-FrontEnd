@@ -59,7 +59,7 @@ const Form_AC = ({ closeForm, userData, loadAC }) => {
       <h3>Add New Assessment Criteria</h3>
       <input
         type="text"
-        placeholder="Enter AC Name"
+        placeholder="Enter Assessment Criteria"
         value={acName}
         onChange={(e) => setAcName(e.target.value)}
         className="input"

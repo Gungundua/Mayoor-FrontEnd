@@ -96,7 +96,14 @@ const HomeList = ({ user, setIndex, setUserData, userdata }) => {
           </option>
           <option value="1">I</option>
           <option value="2">II</option>
-          <option value="10">10</option>
+          <option value="2">III</option>
+          <option value="2">IV</option>
+          <option value="2">V</option>
+          <option value="2">VI</option>
+          <option value="2">VII</option>
+          <option value="2">VIII</option>
+          <option value="2">IX</option>
+          <option value="10">X</option>
         </select>
 
         <label htmlFor="section">Section</label>

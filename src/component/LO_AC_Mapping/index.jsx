@@ -114,8 +114,8 @@ const ACMapping = ({ userData, loId }) => {
           {acList.map((ac, index) => (
             <div key={ac.id} className="ac-item">
               <div>
-                <h2>AC {index + 1}</h2>
-                <span>{ac.name}</span>
+                {/* <h2>AC {index + 1}</h2> */}
+                <span className="name">{ac.name}</span>
               </div>
               <div className="priority-buttons">
                 <button
