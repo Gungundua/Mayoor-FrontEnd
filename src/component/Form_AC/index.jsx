@@ -21,7 +21,7 @@ const Form_AC = ({ closeForm, userData, loadAC }) => {
       Authorization: "Bearer YOUR_ACCESS_TOKEN", // Replace with actual token
       "Content-Type": "application/json",
       year: userData.year,
-      class: userData.class,
+      classname: userData.class,
       section: userData.section,
       subject: userData.subject,
       quarter: userData.quarter,

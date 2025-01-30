@@ -14,9 +14,9 @@ const Home = ({ user }) => {
   const [tabs, setTabs] = useState([
     { id: 1, title: 'Home', icon: homeIcon },
     { id: 2, title: 'Students', icon: stuIcon },
-    { id: 3, title: 'RO', icon: listIcon },
-    { id: 4, title: 'LO', icon: listIcon },
     { id: 5, title: 'AC', icon: listIcon },
+    { id: 4, title: 'LO', icon: listIcon },
+    { id: 3, title: 'RO', icon: listIcon },
   ]);
   const [loItems, setLoItems] = useState([
     { id: 11, number: 'LO-1', title: 'Title of LO-1' },

@@ -47,7 +47,7 @@ const Assessment = ({ selectedAssessment, onBack }) => {
         </div>
         <div className="info-container">
           <h1 className="name">{selectedAssessment ? selectedAssessment.name : "AC-1"}</h1>
-          <p className="title">AC Title</p>
+          {/* <p className="title">AC Title</p> */}
         </div>
       </div>
       <div className="ac-container">

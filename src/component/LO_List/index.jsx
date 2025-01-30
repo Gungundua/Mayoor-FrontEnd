@@ -26,7 +26,7 @@ const LOlist = ({acItems, setAcItems, userData }) => {
       Authorization: 'Bearer YOUR_ACCESS_TOKEN', // Replace with the actual token
       'Content-Type': 'application/json',
       year: userData.year,
-      className: userData.class,
+      classname: userData.class,
       section: userData.section,
       subject: userData.subject,
       quarter: userData.quarter,
@@ -91,16 +91,15 @@ const LOlist = ({acItems, setAcItems, userData }) => {
                 <img src={List} alt="" className="list-icon" />
               </div>
               <div className="lo-info">
-                <p className="item-no">LO - {index + 1}</p>
                 <p className="item-title">{item.name}</p>
               </div>
-              <img src={Edit} alt="edit" className="edit" />
+              {/* <img src={Edit} alt="edit" className="edit" />
               <img
                 src={Delete}
                 alt="delete"
                 className="delete"
                 //onClick={(event) => deleteItem(item.id, event)}
-              />
+              /> */}
             </div>
             
               <div className={activeIndex === index ? "show lo-dropdown-content" : "lo-dropdown-content"}>

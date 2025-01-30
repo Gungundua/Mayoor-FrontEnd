@@ -15,6 +15,7 @@ const Form_LO = ({ closeForm, userData, loadLO }) => {
       const headers = {
         Authorization: 'Bearer YOUR_ACCESS_TOKEN', // Replace with the actual token
         'Content-Type': 'application/json',
+        classname : userData.class,
         year: userData.year,
         subject: userData.subject,
         quarter: userData.quarter,
@@ -35,7 +36,7 @@ const Form_LO = ({ closeForm, userData, loadLO }) => {
 
       if (response.status === 201) {
         alert('LO successfully added!');
-        loadLO()
+        loadLO(userData)
       } else {
         console.warn('Unexpected response:', response);
         alert('Failed to add LO. Please try again!');

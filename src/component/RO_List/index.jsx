@@ -18,7 +18,7 @@ const ROlist = ({ loItems, setLoItems, userData }) => {
         Authorization: 'Bearer YOUR_ACCESS_TOKEN', // Replace with the actual token
         'Content-Type': 'application/json',
         year: userdata.year,
-        class: userdata.class,
+        classname: userdata.class,
         section: userdata.section,
         subject: userdata.subject,
       };
@@ -61,11 +61,10 @@ const ROlist = ({ loItems, setLoItems, userData }) => {
                 <img src={List} alt="" className="list-icon" />
               </div>
               <div className="ro-info">
-                <p className="item-no">RO - {item.id}</p>
                 <p className="item-title">{item.name}</p>
               </div>
               <div className="ro-dropdown-icon">
-                {activeIndex === index ? "▲" : "▼"}
+                {activeIndex === index }
               </div>
             </div>
             {activeIndex === index && (

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const Wrapper = styled.section`
-    font-family: Arial, sans-serif;
+    font-family:sans-serif;
     width: 100%;
     height: 90vh; /* Fix the height to the viewport size */
     display: flex;
@@ -72,17 +72,17 @@ const Wrapper = styled.section`
   
 .list-icon{
   height: 20px;
-  background-color: #21c3bc;
+ // background-color: #21c3bc;
 }
 .list-icon-container{
-  background-color: #21c3bc;
+ // background-color: #21c3bc;
   margin-right: 10px;
   border-radius: 5px;
   padding: 2px;
 }
-.item-title{
+/* .item-title{
   font-weight: bold;
-}
+} */
 `
 
 export default Wrapper;

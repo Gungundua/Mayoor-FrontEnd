@@ -36,7 +36,7 @@ const StudentSelect = ({ userData }) => {
       Authorization: "Bearer YOUR_ACCESS_TOKEN", // Replace with the actual token
       "Content-Type": "application/json",
       year: userData.year,
-      className: userData.class,
+      classname: userData.class,
       section: userData.section,
     };
   
@@ -139,18 +139,18 @@ const StudentSelect = ({ userData }) => {
               <div key={index}>
                 <div style={styles.studentItem} onClick={() => toggleExpand(index)}>
                   {student.name || `Student ${index + 1}`}
-                  <img
+                  {/* <img
                     src={expandedIndex === index ? dropUp : dropDown}
                     alt="arrow"
                     style={styles.arrow}
-                  />
+                  /> */}
                 </div>
-                {expandedIndex === index && (
+                {/* {expandedIndex === index && (
                   <div style={styles.studentDetails}>
                     <p>Age: {student.age || "N/A"}</p>
                     <p>Class: {student.class || "N/A"}</p>
                   </div>
-                )}
+                )} */}
               </div>
             ))
           ) : (

@@ -19,7 +19,7 @@ const AC_List = ({ userData }) => {
       Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       "Content-Type": "application/json",
       year: userData.year,
-      class: userData.class,
+      classname: userData.class,
       section: userData.section,
       subject: userData.subject,
       quarter: userData.quarter,
@@ -68,11 +68,10 @@ const AC_List = ({ userData }) => {
                 <img src={List} alt="" className="list-icon" />
               </div>
               <div className="ac-info">
-                <p className="item-no">AC - {index + 1}</p>
                 <p className="item-title">{item.name}</p>
               </div>
-              <img src={Edit} alt="edit" className="edit" />
-              <img src={Delete} alt="delete" className="delete" />
+              {/* <img src={Edit} alt="edit" className="edit" />
+              <img src={Delete} alt="delete" className="delete" /> */}
             </div>
           </li>
         ))}
