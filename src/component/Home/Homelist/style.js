@@ -1,66 +1,135 @@
 import styled from "styled-components";
-
 const Wrapper = styled.section`
     flex: 1;
     display: flex;
     flex-direction: column;
-    background-color: #21C3BC;
-
+    background-color: #21C2BA;
+    font-family: Poppins;
+    // padding: 20px;
     #user {
-        padding: 40px 0px 70px 40px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 40px 70px;
         font-size: 17px;
+        color: black;
+        /* font-family: Poppins; */
     }
-
+    #user-content {
+        display: flex;
+        flex-direction: column;
+    }
+    #image {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        margin-left: auto;
+    }
+    #profile{
+        height: 40px;
+        width: 40px;
+    }
+    #notification{
+        height: 40px;
+        width: 40px;
+    }
+    #name {
+        font-size: 35px;
+        font-weight: bold;
+    }
     p {
-    font-size: 15px;
+        font-size: 15px;
+        margin-top: 5px;
     }
-
-    form{
-        background-color: white;
+    form {
+        background-color: #FFFFF0;
         border-radius: 30px 30px 0 0;
         display: flex;
-        flex : 1;
         flex-direction: column;
         gap: 20px;
         align-items: center;
-        padding-top: 50px;
-        
-        select{
-            width: 80%;
-            padding : 15px;
-            font-weight: 600;
-            border-radius: 50px;
-            background-color: #B3E4F4C7;
-        }
+        padding: 50px 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
-
+    select {
+        width: 80%;
+        padding: 15px;
+        font-weight: 600;
+        border-radius: 50px;
+        background-color: rgba(179, 228, 244, 0.78);
+        border: none;
+        outline: none;
+        transition: 0.3s;
+        cursor: pointer;
+    }
+    select:hover {
+        background-color: rgba(179, 228, 244, 0.9);
+    }
+    select:disabled {
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
     label {
         align-self: flex-start;
         padding-left: 11%;
-        line-height: 1;
+        font-weight: bold;
+        font-size: 14px;
     }
-
     #submit {
         width: 25%;
-        padding : 15px;
+        padding: 15px;
         border-radius: 50px;
         background-color: #409FF3;
-        margin-top: 50px;
-        margin-bottom: 50px;
         color: white;
         font-weight: bold;
         cursor: pointer;
+        border: none;
+        transition: 0.3s;
     }
-
+    #submit:hover {
+        background-color: #3078C0;
+    }
     #submit:disabled {
         opacity: 0.6;
         cursor: not-allowed;
     }
-
-    select:disabled {
-        cursor: not-allowed;
-    }
-
-`
-
-export default Wrapper
+    @media (max-width: 768px) {
+        #user {
+            flex-direction: row;
+            align-items: flex-start;
+            height: 30px
+        }
+            h2{
+            font-size: 15px;
+            }
+        #name {
+        font-size: 29px;
+        font-weight: bold;
+        }
+        #image {
+            margin-left: 20px;
+            margin-top: 10px;
+            margin-right: -20px;
+            height:20px;
+        }
+            #profile{
+            height: 30px;
+            width: 30px
+            }
+            #notification{
+            height: 30px;
+            width: 30px;
+            }
+        form {
+            padding: 30px 10px;
+            color: #636363;
+        }
+        select {
+            width: 90%;
+        }
+        #submit {
+            width: 40%;
+        }
+}
+`;
+export default Wrapper;

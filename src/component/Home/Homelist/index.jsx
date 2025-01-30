@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Wrapper from './style';
 import axios from 'axios';
+import notification from "./bell.png";
+import student from './user.png'
 
 const HomeList = ({ user, setIndex, setUserData, userdata }) => {
   const [selectedYear, setSelectedYear] = useState('');
@@ -56,8 +58,15 @@ const HomeList = ({ user, setIndex, setUserData, userdata }) => {
   return (
     <Wrapper>
       <div id="user">
-        <h1>Hi, {user.name}</h1>
+        <div id="detail">
+        <h2>Hi ,</h2>
+        <h1 id="name">{user.name}</h1>
         <p>Please select your choices!</p>
+        </div>
+        <div id="image">
+          <img id="notification" src={notification} alt="" />
+          <img id="profile" src={student} alt="" />
+        </div>
       </div>
 
       <form className="choice">
