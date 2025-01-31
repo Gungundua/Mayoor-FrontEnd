@@ -4,13 +4,14 @@ import HomeList from './Homelist';
 import ROlist from '../RO_List';
 import LOlist from '../LO_List';
 import AClist from '../AC_List';
-import StudentSelect from '../Students/StudentSelect'
 import stuIcon from '../assets/Graduate.png';
 import homeIcon from '../assets/Smart Home.png';
 import listIcon from '../assets/Audit.png';
 import StudentList from '../Students/StudentSelect';
 
 const Home = ({ user }) => {
+
+  
   const [index, setIndex] = useState(1);
   const [tabs, setTabs] = useState([
     { id: 1, title: 'Home', icon: homeIcon },

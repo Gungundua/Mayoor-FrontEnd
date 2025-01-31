@@ -1,16 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import Wrapper from './style';
-import axios from 'axios';
 import notification from "./bell.png";
-import student from './user.png'
+import student from './user.png';
 
 const HomeList = ({ user, setIndex, setUserData }) => {
-  const [selectedYear, setSelectedYear] = useState('');
-  const [selectedClass, setSelectedClass] = useState('');
-  const [selectedSection, setSelectedSection] = useState('');
-  const [selectedQuarter, setSelectedQuarter] = useState('');
-  const [selectedSubject, setSelectedSubject] = useState('');
-  const [students, setStudents] = useState([]);
+  // Clear sessionStorage on tab refresh
+  useEffect(() => {
+    const clearSessionStorageOnRefresh = () => {
+      sessionStorage.clear();
+    };
+
+    window.addEventListener("beforeunload", clearSessionStorageOnRefresh);
+    
+    return () => {
+      window.removeEventListener("beforeunload", clearSessionStorageOnRefresh);
+    };
+  }, []);
+
+  const [selectedYear, setSelectedYear] = useState(sessionStorage.getItem("year") || '');
+  const [selectedClass, setSelectedClass] = useState(sessionStorage.getItem("class") || '');
+  const [selectedSection, setSelectedSection] = useState(sessionStorage.getItem("section") || '');
+  const [selectedQuarter, setSelectedQuarter] = useState(sessionStorage.getItem("quarter") || '');
+  const [selectedSubject, setSelectedSubject] = useState(sessionStorage.getItem("subject") || '');
+
+  const updateSessionStorage = (key, value, setter) => {
+    sessionStorage.setItem(key, value);
+    setter(value);
+  };
 
   const handleClick = () => {
     const updatedUserdata = {
@@ -21,51 +37,21 @@ const HomeList = ({ user, setIndex, setUserData }) => {
       subject: parseInt(selectedSubject, 10),
     };
 
-    setUserData(updatedUserdata); // Update user data in parent component
-    console.log('User Data:', updatedUserdata);
-    //loadStudents(updatedUserdata); // Fetch students based on updated userdata
+    sessionStorage.setItem("userData", JSON.stringify(updatedUserdata));
+    setUserData(updatedUserdata);
   };
-
-  // const loadStudents = (userdata) => {
-  //   const headers = {
-  //     Authorization: 'Bearer YOUR_ACCESS_TOKEN', // Replace with the actual token
-  //     'Content-Type': 'application/json',
-  //     year: userdata.year,
-  //     class: userdata.class,
-  //     section: userdata.section,
-  //   };
-
-  //   axios
-  //     .get('http://10.33.0.41:8000/api/students', { headers })
-  //     .then(({ data }) => {
-  //       console.log('Response Data:', data);
-  //       setStudents(data);
-  //     })
-  //     .catch((err) => {
-  //       console.error('Error fetching students:', err.response || err.message);
-  //     })
-  //     .finally(() => {
-  //       console.log('API request completed.');
-  //     });
-  // };
-
-  // useEffect(() => {
-  //   if (Object.keys(userdata).length > 0) {
-  //     loadStudents(userdata);
-  //   }
-  // }, [userdata]);
 
   return (
     <Wrapper>
       <div id="user">
         <div id="detail">
-        <h2>Hi ,</h2>
-        <h1 id="name">{user.name}</h1>
-        <p>Please select your choices!</p>
+          <h2>Hi ,</h2>
+          <h1 id="name">{user.name}</h1>
+          <p>Please select your choices!</p>
         </div>
         <div id="image">
-          <img id="notification" src={notification} alt="" />
-          <img id="profile" src={student} alt="" />
+          <img id="notification" src={notification} alt="Notification" />
+          <img id="profile" src={student} alt="User" />
         </div>
       </div>
 
@@ -74,11 +60,9 @@ const HomeList = ({ user, setIndex, setUserData }) => {
         <select
           id="year"
           value={selectedYear}
-          onChange={(e) => setSelectedYear(e.target.value)}
+          onChange={(e) => updateSessionStorage("year", e.target.value, setSelectedYear)}
         >
-          <option value="" disabled>
-            -- Select year --
-          </option>
+          <option value="" disabled>-- Select year --</option>
           <option value="2023">2023</option>
           <option value="2024">2024</option>
           <option value="2025">2025</option>
@@ -88,21 +72,19 @@ const HomeList = ({ user, setIndex, setUserData }) => {
         <select
           id="class"
           value={selectedClass}
-          onChange={(e) => setSelectedClass(e.target.value)}
+          onChange={(e) => updateSessionStorage("class", e.target.value, setSelectedClass)}
           disabled={!selectedYear}
         >
-          <option value="" disabled>
-            -- Select class --
-          </option>
+          <option value="" disabled>-- Select class --</option>
           <option value="1">I</option>
           <option value="2">II</option>
-          <option value="2">III</option>
-          <option value="2">IV</option>
-          <option value="2">V</option>
-          <option value="2">VI</option>
-          <option value="2">VII</option>
-          <option value="2">VIII</option>
-          <option value="2">IX</option>
+          <option value="3">III</option>
+          <option value="4">IV</option>
+          <option value="5">V</option>
+          <option value="6">VI</option>
+          <option value="7">VII</option>
+          <option value="8">VIII</option>
+          <option value="9">IX</option>
           <option value="10">X</option>
         </select>
 
@@ -110,12 +92,10 @@ const HomeList = ({ user, setIndex, setUserData }) => {
         <select
           id="section"
           value={selectedSection}
-          onChange={(e) => setSelectedSection(e.target.value)}
+          onChange={(e) => updateSessionStorage("section", e.target.value, setSelectedSection)}
           disabled={!selectedClass}
         >
-          <option value="" disabled>
-            -- Select section --
-          </option>
+          <option value="" disabled>-- Select section --</option>
           <option value="A">A</option>
           <option value="B">B</option>
           <option value="C">C</option>
@@ -125,12 +105,10 @@ const HomeList = ({ user, setIndex, setUserData }) => {
         <select
           id="quarter"
           value={selectedQuarter}
-          onChange={(e) => setSelectedQuarter(e.target.value)}
+          onChange={(e) => updateSessionStorage("quarter", e.target.value, setSelectedQuarter)}
           disabled={!selectedSection}
         >
-          <option value="" disabled>
-            -- Select quarter --
-          </option>
+          <option value="" disabled>-- Select quarter --</option>
           <option value="1">I</option>
           <option value="2">II</option>
           <option value="3">III</option>
@@ -141,12 +119,10 @@ const HomeList = ({ user, setIndex, setUserData }) => {
         <select
           id="subject"
           value={selectedSubject}
-          onChange={(e) => setSelectedSubject(e.target.value)}
+          onChange={(e) => updateSessionStorage("subject", e.target.value, setSelectedSubject)}
           disabled={!selectedQuarter}
         >
-          <option value="" disabled>
-            -- Select subject --
-          </option>
+          <option value="" disabled>-- Select subject --</option>
           <option value="1">English</option>
           <option value="2">Hindi</option>
           <option value="3">Maths</option>
