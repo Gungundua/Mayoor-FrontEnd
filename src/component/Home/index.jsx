@@ -8,6 +8,7 @@ import StudentSelect from '../Students/StudentSelect'
 import stuIcon from '../assets/Graduate.png';
 import homeIcon from '../assets/Smart Home.png';
 import listIcon from '../assets/Audit.png';
+import StudentList from '../Students/StudentSelect';
 
 const Home = ({ user }) => {
   const [index, setIndex] = useState(1);
@@ -56,7 +57,7 @@ const Home = ({ user }) => {
         {index === 1 ? (
           <HomeList user={user} setIndex={setIndex} setUserData={handleUserData} userdata = {userData} />
         ) : index === 2 ? (
-          <StudentSelect userData = {userData} />
+          <StudentList userData = {userData} />
         ) : index === 3 ? (
           <ROlist loItems={loItems} setLoItems={setLoItems} userData = {userData}/>
         ) : index === 4 ? (

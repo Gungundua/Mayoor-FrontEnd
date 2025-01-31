@@ -4,7 +4,7 @@ import axios from 'axios';
 import notification from "./bell.png";
 import student from './user.png'
 
-const HomeList = ({ user, setIndex, setUserData, userdata }) => {
+const HomeList = ({ user, setIndex, setUserData }) => {
   const [selectedYear, setSelectedYear] = useState('');
   const [selectedClass, setSelectedClass] = useState('');
   const [selectedSection, setSelectedSection] = useState('');

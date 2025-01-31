@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import Wrapper from "./style";
 import { FaArrowLeft } from "react-icons/fa";
 import Student from '../Start_Assesment/Student.avif';
+
+
 const Assessment = ({ selectedAssessment, onBack }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [acData, setAcData] = useState([]);

@@ -55,7 +55,7 @@ const AC_List = ({ userData }) => {
     setSelectedAssessment(null);
   };
   if (selectedAssessment) {
-    return <Assessment selectedAssessment={selectedAssessment} onBack={handleBackToList} />;
+    return <Assessment selectedAssessment={selectedAssessment} onBack={handleBackToList} userData={userData}/>;
   }
   return (
     <Wrapper>
