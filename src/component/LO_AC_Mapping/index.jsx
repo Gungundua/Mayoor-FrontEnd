@@ -90,6 +90,8 @@ const ACMapping = ({ userData, loId }) => {
       year: userData.year,
       subject: userData.subject,
       quarter: userData.quarter,
+      section: userData.section,
+      classname: userData.class,
     };
 
     // Make the POST request to send the filtered priorityMapping data via Axios
