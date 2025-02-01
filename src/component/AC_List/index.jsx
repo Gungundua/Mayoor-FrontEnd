@@ -33,7 +33,7 @@ const AC_List = ({ userData }) => {
     };
 
     try {
-      const response = await axios.get("http://10.33.0.41:8000/api/assessment-criteria", { headers });
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/assessment-criteria`, { headers });
       const data = response.data;
 
       if (Array.isArray(data.assessments)) {

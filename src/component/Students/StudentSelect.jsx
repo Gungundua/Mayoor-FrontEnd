@@ -5,8 +5,7 @@ import userIcon from "../assets/user.png";
 import { IoSearchOutline } from "react-icons/io5";
 import axios from "axios";
 import StudentReport from "../Student_report/StudentReport.jsx";
-import TeacherProfile from "../TeacherProfile";
-// import StudentReport from "../Student_report/StudentReport";
+import TeacherProfile from "../TeacherProfile/index.jsx";
 
 const StudentList = ({ userData }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -14,13 +13,22 @@ const StudentList = ({ userData }) => {
   const [filteredStudents, setFilteredStudents] = useState([]); // Stores search-filtered students
   const [isFocused, setIsFocused] = useState(false);
   const [showReport, setShowReport] = useState(null);
+  const [showTeacherProfile, setShowTeacherProfile] = useState(false);
 
-  const handleShowReport = (student) => {
-    setShowReport(student); // Pass the entire student object
+  const handleReport = (student) => {
+    setShowReport(student); // Set the clicked student
   };
 
-  const handleBackToList = () => {
-    setShowReport(null); // Reset showReport to null to go back to student list
+  const handleProfile = () => {
+    setShowTeacherProfile(true);
+  };
+
+  const handleBackToList1 = () => {
+    setShowReport(null); // Back to student list from report
+  };
+
+  const handleBackToList2 = () => {
+    setShowTeacherProfile(false); // Back to student list from teacher profile
   };
 
   // ✅ Update filtered students when `students` or `searchTerm` changes
@@ -38,20 +46,12 @@ const StudentList = ({ userData }) => {
     return () => clearTimeout(handler);
   }, [searchTerm, students]);
 
+  // ✅ Fetch student data when `userData` changes
   useEffect(() => {
     const loadStudents = async () => {
-      if (Object.keys(userData).length === 0) return;
-  
-      // Check local storage first
-      const storedStudents = localStorage.getItem("students");
-      if (storedStudents) {
-        setStudents(JSON.parse(storedStudents));
-        return; // Use cached data instead of fetching again
-      }
-  
       try {
         const headers = {
-          Authorization: "Bearer YOUR_ACCESS_TOKEN",
+          Authorization: "Bearer YOUR_ACCESS_TOKEN", // Replace with actual token
           "Content-Type": "application/json",
           year: userData.year,
           classname: userData.class,
@@ -59,34 +59,48 @@ const StudentList = ({ userData }) => {
           subject: userData.subject,
         };
   
-        const response = await axios.get(
-          "http://10.33.0.41:8000/api/students",
-          { headers }
-        );
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/students`, { headers });
+        console.log("Response Data:", response.data);
   
-        if (response.data && Array.isArray(response.data.Students)) {
-          setStudents(response.data.Students);
-          localStorage.setItem("students", JSON.stringify(response.data.Students)); // Store in local storage
+        if (response.data && Array.isArray(response.data.students)) {
+          setStudents(response.data.students);
+          localStorage.setItem("students", JSON.stringify(response.data.students)); // Store in localStorage
         } else {
+          console.warn("Expected an array but received:", response.data);
           setStudents([]);
+          localStorage.removeItem("students"); // Clear storage if data is invalid
         }
       } catch (error) {
+        console.error("Error fetching students:", error.response || error.message);
         setStudents([]);
       }
     };
   
-    loadStudents();
-  }, [userData]);
-  
+    // Retrieve from localStorage first
+    const storedStudents = localStorage.getItem("students");
+    if (storedStudents) {
+      setStudents(JSON.parse(storedStudents));
+    } else if (Object.keys(userData).length > 0) {
+      loadStudents(); // Fetch only if no stored data
+    }
+  }, [userData]); // ✅ Runs when `userData` changes
+   // ✅ Runs when `userData` changes
 
+  // Show StudentReport or TeacherProfile based on state
   if (showReport) {
-    return <StudentReport student={showReport} onBack={handleBackToList} />;
+    return <StudentReport student={showReport} onBack={handleBackToList1} />;
+  }
+
+  if (showTeacherProfile) {
+    return <TeacherProfile onBack={handleBackToList2} />;
   }
 
   return (
     <div style={styles.container}>
+      {/* Green Fixed Header */}
       <div style={styles.header}>
         <div style={styles.searchContainer}>
+          {/* Search Bar */}
           <div
             style={{
               ...styles.searchBox,
@@ -105,27 +119,26 @@ const StudentList = ({ userData }) => {
             <IoSearchOutline style={styles.searchIcon} />
           </div>
 
+          {/* Icons */}
           <div style={styles.iconWrapper}>
             <img src={bellIcon} alt="Bell Icon" style={{ width: "22px", height: "22px" }} />
-            <img src={userIcon} alt="User Icon" style={{ width: "22px", height: "22px" }} />
+            <img src={userIcon} alt="User Icon" onClick={handleProfile} style={{ width: "22px", height: "22px" }} />
           </div>
         </div>
+        {/* Title */}
         <h2 style={styles.title}>Student List</h2>
       </div>
 
+      {/* Student List */}
       <div style={styles.listContainer}>
         {filteredStudents.length > 0 ? (
           filteredStudents.map((student, index) => (
-            <div
-              key={index}
-              style={styles.listItem}
-              onClick={() => handleShowReport(student)}
-            >
+            <div key={index} style={styles.listItem} onClick={() => handleReport(student)}>
               {student.name}
             </div>
           ))
         ) : (
-          <div style={styles.noResults}>Loading Students...</div>
+          <div style={styles.noResults}>No students found</div>
         )}
       </div>
     </div>

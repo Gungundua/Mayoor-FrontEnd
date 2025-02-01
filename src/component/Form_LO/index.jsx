@@ -29,7 +29,7 @@ const Form_LO = ({ closeForm, userData, loadLO }) => {
       console.log('Body:', body);
 
       const response = await axios.post(
-        'http://10.33.0.41:8000/api/learning-outcome',
+        `${process.env.REACT_APP_API_URL}/api/learning-outcome`,
         body,
         { headers }
       );

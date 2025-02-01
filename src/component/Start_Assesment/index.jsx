@@ -75,7 +75,7 @@ const Assessment = ({ selectedAssessment, onBack, userData }) => {
     // Console log the data before sending it
     console.log("Data being sent to the backend:", requestBody);
     try {
-      const response = await axios.post('http://10.33.0.41:8000/api/assessment-criteria-score', requestBody, { headers });
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/assessment-criteria-score`, requestBody, { headers });
       console.log("Response from backend:", response.data);
       alert("Marks submitted successfully!");
     } catch (error) {

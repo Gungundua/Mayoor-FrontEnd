@@ -37,7 +37,7 @@ const LOlist = ({ acItems, setAcItems, userData }) => {
 
     console.log("Headers:", headers);
     try {
-      const response = await axios.get('http://10.33.0.41:8000/api/learning-outcome', { headers });
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/learning-outcome`, { headers });
       const data = response.data;
 
       console.log("API Response Data:", data);
