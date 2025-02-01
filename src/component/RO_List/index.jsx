@@ -5,6 +5,7 @@ import List from '../images/list.png';
 import axios from 'axios';
 import bellIcon from "../assets/bell.png";
 import userIcon from "../assets/user.png";
+import menuIcon from "../assets/menu.png";
 
 const ROlist = ({ loItems, setLoItems, userData }) => {
   const [activeIndex, setActiveIndex] = useState(null);
@@ -67,11 +68,11 @@ const ROlist = ({ loItems, setLoItems, userData }) => {
 
   return (
     <Wrapper>
-      {/* Search Bar */}
+      
       <div className="search-container">
         <input
           type="text"
-          placeholder="Search RO"
+          placeholder="Search RO..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="search-bar"
@@ -79,10 +80,10 @@ const ROlist = ({ loItems, setLoItems, userData }) => {
         <div className="icon">
             <img src={bellIcon} alt="Bell Icon" style={{ width: "22px", height: "22px" }} />
             <img src={userIcon} alt="User Icon" style={{ width: "22px", height: "22px" }} />
-          </div>
+            <img className="menu" src={menuIcon} alt="Menu Icon" style={{ width: "22px", height: "31px" }} />
+        </div>
       </div>
 
-      {/* RO List */}
       {filteredRoList.length > 0 ? (
         <ul className="ro-list">
           {filteredRoList.map((item, index) => (

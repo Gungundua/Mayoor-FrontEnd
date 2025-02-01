@@ -17,21 +17,21 @@ const StudentList = ({ userData }) => {
 
   const handleReport = (student) => {
     setShowReport(student); // Set the clicked student
-  };
+  }
 
   const handleProfile = () => {
     setShowTeacherProfile(true);
-  };
+  }
 
   const handleBackToList1 = () => {
     setShowReport(null); // Back to student list from report
-  };
+  }
 
   const handleBackToList2 = () => {
     setShowTeacherProfile(false); // Back to student list from teacher profile
-  };
+  }
 
-  // ✅ Update filtered students when `students` or `searchTerm` changes
+   
   useEffect(() => {
     const handler = setTimeout(() => {
       setFilteredStudents(
@@ -40,18 +40,17 @@ const StudentList = ({ userData }) => {
               student.name.toLowerCase().includes(searchTerm.toLowerCase())
             )
           : []
-      );
-    }, 300);
+      )
+    }, 300)
 
     return () => clearTimeout(handler);
   }, [searchTerm, students]);
 
-  // ✅ Fetch student data when `userData` changes
   useEffect(() => {
     const loadStudents = async () => {
       try {
         const headers = {
-          Authorization: "Bearer YOUR_ACCESS_TOKEN", // Replace with actual token
+          Authorization: "Bearer YOUR_ACCESS_TOKEN",
           "Content-Type": "application/json",
           year: userData.year,
           classname: userData.class,
@@ -81,12 +80,10 @@ const StudentList = ({ userData }) => {
     if (storedStudents) {
       setStudents(JSON.parse(storedStudents));
     } else if (Object.keys(userData).length > 0) {
-      loadStudents(); // Fetch only if no stored data
+      loadStudents();
     }
-  }, [userData]); // ✅ Runs when `userData` changes
-   // ✅ Runs when `userData` changes
+  }, [userData])
 
-  // Show StudentReport or TeacherProfile based on state
   if (showReport) {
     return <StudentReport student={showReport} onBack={handleBackToList1} />;
   }
@@ -97,10 +94,9 @@ const StudentList = ({ userData }) => {
 
   return (
     <div style={styles.container}>
-      {/* Green Fixed Header */}
+      
       <div style={styles.header}>
         <div style={styles.searchContainer}>
-          {/* Search Bar */}
           <div
             style={{
               ...styles.searchBox,
@@ -119,13 +115,12 @@ const StudentList = ({ userData }) => {
             <IoSearchOutline style={styles.searchIcon} />
           </div>
 
-          {/* Icons */}
           <div style={styles.iconWrapper}>
             <img src={bellIcon} alt="Bell Icon" style={{ width: "22px", height: "22px" }} />
             <img src={userIcon} alt="User Icon" onClick={handleProfile} style={{ width: "22px", height: "22px" }} />
           </div>
         </div>
-        {/* Title */}
+        
         <h2 style={styles.title}>Student List</h2>
       </div>
 

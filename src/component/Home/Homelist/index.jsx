@@ -2,20 +2,19 @@ import React, { useState, useEffect } from 'react';
 import Wrapper from './style';
 import notification from "./bell.png";
 import student from './user.png';
-
+import menu from "./menu.png";
 const HomeList = ({ user, setIndex, setUserData }) => {
-  // Clear sessionStorage on tab refresh
   useEffect(() => {
     const clearSessionStorageOnRefresh = () => {
-      sessionStorage.clear();
-    };
+      sessionStorage.clear()
+    }
 
     window.addEventListener("beforeunload", clearSessionStorageOnRefresh);
     
     return () => {
       window.removeEventListener("beforeunload", clearSessionStorageOnRefresh);
-    };
-  }, []);
+    }
+  }, [])
 
   const [selectedYear, setSelectedYear] = useState(sessionStorage.getItem("year") || '');
   const [selectedClass, setSelectedClass] = useState(sessionStorage.getItem("class") || '');
@@ -24,9 +23,9 @@ const HomeList = ({ user, setIndex, setUserData }) => {
   const [selectedSubject, setSelectedSubject] = useState(sessionStorage.getItem("subject") || '');
 
   const updateSessionStorage = (key, value, setter) => {
-    sessionStorage.setItem(key, value);
-    setter(value);
-  };
+    sessionStorage.setItem(key, value)
+    setter(value)
+  }
 
   const handleClick = () => {
     const updatedUserdata = {
@@ -35,23 +34,24 @@ const HomeList = ({ user, setIndex, setUserData }) => {
       section: selectedSection,
       quarter: parseInt(selectedQuarter, 10),
       subject: parseInt(selectedSubject, 10),
-    };
+    }
 
     sessionStorage.setItem("userData", JSON.stringify(updatedUserdata));
     setUserData(updatedUserdata);
-  };
+  }
 
   return (
     <Wrapper>
       <div id="user">
         <div id="detail">
-          <h2>Hi ,</h2>
+          <p id="hi">Hi ,</p>
           <h1 id="name">{user.name}</h1>
-          <p>Please select your choices!</p>
+          {/* <p>Please select your choices!</p> */}
         </div>
         <div id="image">
           <img id="notification" src={notification} alt="Notification" />
           <img id="profile" src={student} alt="User" />
+          <img id="menu" src={menu} alt="Menu" />
         </div>
       </div>
 

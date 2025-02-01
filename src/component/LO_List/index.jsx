@@ -8,6 +8,7 @@ import axios from "axios";
 import Form_LO from "../Form_LO";
 import bellIcon from "../assets/bell.png";
 import userIcon from "../assets/user.png";
+import menuIcon from "../assets/menu.png";
 
 const LOlist = ({ acItems, setAcItems, userData }) => {
   const [activeIndex, setActiveIndex] = useState(null);
@@ -95,11 +96,10 @@ const LOlist = ({ acItems, setAcItems, userData }) => {
 
   return (
     <Wrapper>
-      {/* Search Bar */}
       <div className="search-container">
         <input
           type="text"
-          placeholder="Search LO"
+          placeholder="Search LO..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="search-bar"
@@ -107,11 +107,10 @@ const LOlist = ({ acItems, setAcItems, userData }) => {
         <div className="icon">
             <img src={bellIcon} alt="Bell Icon" style={{ width: "22px", height: "22px" }} />
             <img src={userIcon} alt="User Icon" style={{ width: "22px", height: "22px" }} />
-          </div>
-
+            <img className="menu" src={menuIcon} alt="Menu Icon" style={{ width: "22px", height: "31px" }} />
+        </div>
       </div>
 
-      {/* LO List */}
       {filteredLoList.length > 0 ? (
         <ul className="lo-list">
           {filteredLoList.map((item, index) => (

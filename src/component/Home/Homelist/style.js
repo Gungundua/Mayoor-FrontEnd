@@ -13,12 +13,18 @@ const Wrapper = styled.section`
         padding: 40px 20px 50px 30px;
         font-size: 17px;
         color: black;
-        /* font-family: Poppins; */
     }
+
     #user-content {
         display: flex;
         flex-direction: column;
     }
+
+    #hi{
+    font-size:19px;
+    font-weight:bold;
+    }
+    
     #image {
         display: flex;
         gap: 15px;
@@ -28,13 +34,21 @@ const Wrapper = styled.section`
     #profile{
         height: 30px;
         width: 30px;
+        margin-top: -70px;
     }
     #notification{
         height: 30px;
         width: 30px;
+        margin-top: -70px;
     }
+    #menu{
+    height: 47px;
+    width: 40px;
+    margin-top: -70px;
+    }
+
     #name {
-        font-size: 25px;
+        font-size: 33px;
         font-weight: bold;
     }
     p {

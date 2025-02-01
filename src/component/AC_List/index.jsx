@@ -8,6 +8,7 @@ import Form_AC from "../Form_AC";
 import Assessment from "../Start_Assesment/index.jsx";
 import bellIcon from "../assets/bell.png";
 import userIcon from "../assets/user.png";
+import menuIcon from "../assets/menu.png";
 
 const AC_List = ({ userData }) => {
   const [acList, setAcList] = useState([]);  
@@ -89,11 +90,11 @@ const AC_List = ({ userData }) => {
 
   return (
     <Wrapper>
-      {/* Search Bar */}
-      <div className="search-container">
+     
+     <div className="search-container">
         <input
           type="text"
-          placeholder="Search AC"
+          placeholder="Search AC..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="search-bar"
@@ -101,10 +102,10 @@ const AC_List = ({ userData }) => {
         <div className="icon">
             <img src={bellIcon} alt="Bell Icon" style={{ width: "22px", height: "22px" }} />
             <img src={userIcon} alt="User Icon" style={{ width: "22px", height: "22px" }} />
+            <img className="menu" src={menuIcon} alt="Menu Icon" style={{ width: "22px", height: "31px" }} />
         </div>
       </div>
 
-      {/* AC List */}
       {filteredAcList.length > 0 ? (
         <ul className="ac-list">
           {filteredAcList.map((item, index) => (
