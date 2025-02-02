@@ -3,104 +3,39 @@ import Wrapper from "./style";
 import Form_LO from "../Form_LO/index"
 import axios from "axios";
 
-const LOMapping = ({userData, roId}) => {
-  // const [loList, setLoList] = useState([
-  //   { id: 1, priority: "" , description:"title"},
-  //   { id: 2, priority: "" , description:"title"},
-  //   { id: 3, priority: "" , description:"title"},
-  //   { id: 4, priority: "" , description:"title"},
-  //   { id: 5, priority: "" , description:"title"},
-  //   { id: 6, priority: "" , description:"title"},
-  //   { id: 6, priority: "" , description:"title"},
-  //   { id: 6, priority: "" , description:"title"},
-  //   { id: 6, priority: "" , description:"title"},
-  //   { id: 6, priority: "" , description:"title"},
-  //   { id: 6, priority: "" , description:"title"},
-  //   { id: 6, priority: "" , description:"title"},
-  //   { id: 6, priority: "" , description:"title"},
-  //   { id: 6, priority: "" , description:"title"},
-  //   { id: 6, priority: "" , description:"title"},
-  // ]);
-
-  const [loList, setLoList] = useState([]);
-  const [showForm, setShowForm] = useState(false);
+const LOMapping = ({userData, roId , loItems}) => {
   const [priorityMapping, setPriorityMapping] = useState({}); // Stores priorities by roId and acId
+  const [showForm, setShowForm] = useState(false);
 
-  useEffect(() => {
-      // Retrieve stored AC list from localStorage
-      const storedAcList = localStorage.getItem("loList");
-      if (storedAcList) {
-        setLoList(JSON.parse(storedAcList));
-      } else {
-        console.warn("No LO List found in localStorage");
-      }
-
-      const savedPriorityMapping = localStorage.getItem(`priorityMapping_${roId}`);
-    if (savedPriorityMapping) {
-      setPriorityMapping(JSON.parse(savedPriorityMapping));
-    }
-    }, [roId]);
-
-  
   const handleform = () => {
-    setShowForm(true); // Set to true when button is clicked
+    setShowForm(true);
   };
 
   const handleClick = (loid, priority) => {
-    if (priorityMapping[roId]?.isLocked) return; // Prevent changes if it's locked
-
     setPriorityMapping((prev) => {
       const updatedPriorityMapping = { ...prev };
 
-      // Initialize loid Data if it doesn't exist
+      // Initialize roId object if it doesn't exist
       if (!updatedPriorityMapping[roId]) {
-        updatedPriorityMapping[roId] = { Data: {}, isLocked: false }; // Add `isLocked` to prevent further changes
+        updatedPriorityMapping[roId] = { Data: {} }; // Directly initialize roId with Data
       }
 
-      const loidData = updatedPriorityMapping[roId].Data;
-
       // Toggle the priority for the acId (if it's already selected, deselect it)
-      loidData[loid] = loidData[loid] === priority ? "" : priority;
+      updatedPriorityMapping[roId].Data[loid] = updatedPriorityMapping[roId].Data[loid] === priority ? "" : priority;
 
       return updatedPriorityMapping;
     });
   };
 
   const handleDone = async () => {
-    // Lock the priority mapping after the user is done
-    setPriorityMapping((prev) => {
-      const updatedPriorityMapping = { ...prev };
-      updatedPriorityMapping[roId].isLocked = true; // Lock the selection
-
-      // Save to localStorage
-      localStorage.setItem(`priorityMapping_${roId}`, JSON.stringify(updatedPriorityMapping));
-
-      return updatedPriorityMapping;
-    });
-
-    // Filter out empty priorities in priorityMapping
-    const filteredPriorityMapping = { ...priorityMapping };
-
-    Object.keys(filteredPriorityMapping).forEach((loIdKey) => {
-      const loidData = filteredPriorityMapping[loIdKey].Data;
-      Object.keys(loidData).forEach((loid) => {
-        if (!loidData[loid]) {
-          delete loidData[loid]; // Remove entry with empty priority
-        }
-      });
-
-      // If no data remains for this roId, delete the roId entry itself
-      if (Object.keys(loidData).length === 0) {
-        delete filteredPriorityMapping[loIdKey];
-      }
-    });
-
-    // Log the filtered priority mapping
-    console.log("Filtered Priority Data:", filteredPriorityMapping);
-
+    // Prepare the data to send in the required format
     const body = {
-      data: filteredPriorityMapping
+      roId: roId,  // Include roId directly
+      Data: priorityMapping[roId]?.Data || {}, // Get the Data for the specific roId
     };
+
+    // Log the body data to check the format
+    console.log("Data to be sent:", body);
 
     const headers = {
       Authorization: 'Bearer YOUR_ACCESS_TOKEN', // Replace with the actual token
@@ -108,12 +43,14 @@ const LOMapping = ({userData, roId}) => {
       year: userData.year,
       subject: userData.subject,
       quarter: userData.quarter,
+      section: userData.section,
+      classname: userData.class,
     };
 
-    // Make the POST request to send the filtered priorityMapping data via Axios
+    // Make the POST request to send the priorityMapping data via Axios
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/report-outcomes-mapping`, // Replace with your actual API URL
+        `${process.env.REACT_APP_API_URL}/api/report-outcome-mapping`, // Replace with your actual API URL
         body,
         { headers }
       );
@@ -129,7 +66,7 @@ const LOMapping = ({userData, roId}) => {
     <Wrapper>
       <div className="lo-list-container">
         <div className="lo-list">
-          {loList.map((lo, index) => (
+          {loItems.map((lo, index) => (
             <div key={lo.id} className="lo-item">
               <div>
                 {/* <h2>LO {index + 1}</h2> */}
@@ -157,7 +94,6 @@ const LOMapping = ({userData, roId}) => {
                 <button
                   className={`priority-button ${
                     priorityMapping[roId]?.Data[lo.id] === "L" ? "l" : ""
-
                   }`}
                   onClick={() => handleClick(lo.id, "L")}
                   disabled={priorityMapping[roId]?.isLocked} // Disable button if locked

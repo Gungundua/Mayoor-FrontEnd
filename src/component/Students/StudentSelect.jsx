@@ -7,7 +7,7 @@ import axios from "axios";
 import StudentReport from "../Student_report/StudentReport.jsx";
 import TeacherProfile from "../TeacherProfile/index.jsx";
 
-const StudentList = ({ userData }) => {
+const StudentList = ({ userData, onStudentsData }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [students, setStudents] = useState([]); // Stores API student list
   const [filteredStudents, setFilteredStudents] = useState([]); // Stores search-filtered students
@@ -31,7 +31,6 @@ const StudentList = ({ userData }) => {
     setShowTeacherProfile(false); // Back to student list from teacher profile
   }
 
-   
   useEffect(() => {
     const handler = setTimeout(() => {
       setFilteredStudents(
@@ -62,27 +61,22 @@ const StudentList = ({ userData }) => {
         console.log("Response Data:", response.data);
   
         if (response.data && Array.isArray(response.data.students)) {
-          setStudents(response.data.students);
-          localStorage.setItem("students", JSON.stringify(response.data.students)); // Store in localStorage
+          setStudents(response.data.students); // Directly set the new student data
+          onStudentsData(response.data.students); // Pass the data to parent
         } else {
           console.warn("Expected an array but received:", response.data);
-          setStudents([]);
-          localStorage.removeItem("students"); // Clear storage if data is invalid
+          setStudents([]); // Clear students if invalid response
         }
       } catch (error) {
         console.error("Error fetching students:", error.response || error.message);
-        setStudents([]);
+        setStudents([]); // Clear the students if there's an error
       }
     };
   
-    // Retrieve from localStorage first
-    const storedStudents = localStorage.getItem("students");
-    if (storedStudents) {
-      setStudents(JSON.parse(storedStudents));
-    } else if (Object.keys(userData).length > 0) {
-      loadStudents();
+    if (Object.keys(userData).length > 0) {
+      loadStudents(); // Fetch new students data only when userData is available
     }
-  }, [userData])
+  }, [userData, onStudentsData]);
 
   if (showReport) {
     return <StudentReport student={showReport} onBack={handleBackToList1} />;

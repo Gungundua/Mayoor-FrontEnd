@@ -7,17 +7,17 @@ import userIcon from './user.png';
 import axios from "axios";
 import menuIcon from "../assets/menu.png";
 
-const Assessment = ({ selectedAssessment, onBack, userData }) => {
+const Assessment = ({ selectedAssessment, onBack, userData , studentsData}) => {
   const [searchQuery, setSearchQuery] = useState('')
   const [acData, setAcData] = useState([])
   const [students, setStudents] = useState([]);
 
-  useEffect(() => {
-    const storedStudents = localStorage.getItem("students");
-    if (storedStudents) {
-      setStudents(JSON.parse(storedStudents)); // ✅ Get from localStorage
-    }
-  }, [])
+  // useEffect(() => {
+  //   const storedStudents = localStorage.getItem("students");
+  //   if (storedStudents) {
+  //     setStudents(JSON.parse(storedStudents)); // ✅ Get from localStorage
+  //   }
+  // }, [])
   useEffect(() => {
     const storedData = localStorage.getItem("assessmentData")
     if (storedData) {
@@ -110,7 +110,7 @@ const Assessment = ({ selectedAssessment, onBack, userData }) => {
         </div>
       </div>
       <div className="ac-container">
-        {students.map((stu) => (
+        {studentsData.map((stu) => (
           <div className="ac-box" key={stu.id}>
             <img src={Student} alt="Profile" className="profile-image"/>
             <h3>{stu.name}</h3>

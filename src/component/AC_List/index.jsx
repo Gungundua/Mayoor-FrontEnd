@@ -10,7 +10,7 @@ import bellIcon from "../assets/bell.png";
 import userIcon from "../assets/user.png";
 import menuIcon from "../assets/menu.png";
 
-const AC_List = ({ userData }) => {
+const AC_List = ({ userData, acItems, setAcItems, handleAcItems, studentsData }) => {
   const [acList, setAcList] = useState([]);  
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredAcList, setFilteredAcList] = useState([]);
@@ -38,32 +38,27 @@ const AC_List = ({ userData }) => {
       const data = response.data;
 
       if (Array.isArray(data.assessments)) {
-        setAcList(data.assessments);
-        setFilteredAcList(data.assessments); // Initialize filtered list
-        localStorage.setItem("acList", JSON.stringify(data.assessments));
+        setAcList(data.assessments); 
+        setFilteredAcList(data.assessments); 
+        setAcItems(data.assessments); // Share data with parent
       } else {
-        setAcList([]);
-        setFilteredAcList([]);
+        setAcList([]); 
+        setFilteredAcList([]); 
+        setAcItems([]); // Clear parent state if API response is invalid
         console.warn("Unexpected API response format:", data);
       }
     } catch (error) {
       console.error("Error fetching assessment criteria:", error.response?.data || error.message);
-      setAcList([]);
-      setFilteredAcList([]);
+      setAcList([]); 
+      setFilteredAcList([]); 
+      setAcItems([]);
     }
   };
 
   useEffect(() => {
-    const storedACList = localStorage.getItem("acList");
-    if (storedACList) {
-      setAcList(JSON.parse(storedACList));
-      setFilteredAcList(JSON.parse(storedACList)); // Retrieve and set data
-    } else {
-      loadAC();
-    }
+    loadAC();
   }, [userData]);
 
-  // Search filter logic
   useEffect(() => {
     if (!searchQuery) {
       setFilteredAcList(acList);
@@ -76,7 +71,6 @@ const AC_List = ({ userData }) => {
   }, [searchQuery, acList]);
 
   const handleStartAssessment = (item) => {
-    console.log("Item clicked:", item);
     setSelectedAssessment(item);
   };
 
@@ -85,13 +79,12 @@ const AC_List = ({ userData }) => {
   };
 
   if (selectedAssessment) {
-    return <Assessment selectedAssessment={selectedAssessment} onBack={handleBackToList} userData={userData} />;
+    return <Assessment selectedAssessment={selectedAssessment} onBack={handleBackToList} userData={userData} studentsData={studentsData}/>;
   }
 
   return (
     <Wrapper>
-     
-     <div className="search-container">
+      <div className="search-container">
         <input
           type="text"
           placeholder="Search AC..."
@@ -108,7 +101,7 @@ const AC_List = ({ userData }) => {
 
       {filteredAcList.length > 0 ? (
         <ul className="ac-list">
-          {filteredAcList.map((item, index) => (
+          {filteredAcList.map((item) => (
             <li key={item.id} className="ac-list-item" onClick={() => handleStartAssessment(item)}>
               <div className="ac-header">
                 <div className="list-icon-containers">
