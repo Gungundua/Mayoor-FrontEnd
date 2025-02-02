@@ -96,9 +96,9 @@ const HomeList = ({ user, setIndex, setUserData }) => {
           disabled={!selectedClass}
         >
           <option value="" disabled>-- Select section --</option>
-          <option value="A">A</option>
-          <option value="B">B</option>
-          <option value="C">C</option>
+          <option value="Orchid">Orchid</option>
+          <option value="Tulip">Tulip</option>
+          <option value="Daffodil">Daffodil</option>
         </select>
 
         <label htmlFor="quarter">Quarter</label>
@@ -125,8 +125,18 @@ const HomeList = ({ user, setIndex, setUserData }) => {
           <option value="" disabled>-- Select subject --</option>
           <option value="1">English</option>
           <option value="2">Hindi</option>
-          <option value="3">Maths</option>
-          <option value="4">Computers</option>
+          <option value="3">Mathematics</option>
+          <option value="4">Science</option>
+          <option value="5">Computer Sc.</option>
+          <option value="6">Social Studies</option>
+          <option value="7">III Language</option>
+          <option value="8">GP Values</option>
+          <option value="9">Music</option>
+          <option value="10">Dance/Dramatics</option>
+          <option value="11">Art</option>
+          <option value="12">Sports</option>
+          <option value="13">Discipline</option>
+          <option value="14">Attendance</option>
         </select>
 
         <button
