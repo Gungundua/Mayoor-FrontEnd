@@ -20,13 +20,12 @@ const Home = ({ user }) => {
   ]);
   const [loItems, setLoItems] = useState([]);
   const [acItems, setAcItems] = useState([]);
-  const [userData, setUserData] = useState({});
   const [studentsData, setStudentsData] = useState([]); // New state to store students data
 
   // Function passed to HomeList to update user data in the parent component
-  const handleUserData = (data) => {
-    setUserData(data);
-  };
+  // const handleUserData = (data) => {
+  //   setUserData(data);
+  // };
 
   // Function passed to LOlist to update loItems in the parent component
   const handleLoItems = (data) => {
@@ -46,15 +45,15 @@ const Home = ({ user }) => {
     <Wrapper>
       <div className="screen">
         {index === 1 ? (
-          <HomeList user={user} setIndex={setIndex} setUserData={handleUserData} userdata={userData} />
+          <HomeList user={user} setIndex={setIndex} />
         ) : index === 2 ? (
-          <StudentList userData={userData} onStudentsData={handleStudentsData} />
+          <StudentList  onStudentsData={handleStudentsData} />
         ) : index === 3 ? (
-          <ROlist loItems={loItems} setLoItems={setLoItems} userData={userData} />
+          <ROlist loItems={loItems} setLoItems={setLoItems} />
         ) : index === 4 ? (
-          <LOlist loItems={loItems} handleLoItems={handleLoItems} acItems={acItems} setAcItems={setAcItems} userData={userData} />
+          <LOlist loItems={loItems} handleLoItems={handleLoItems} acItems={acItems} setAcItems={setAcItems}  />
         ) : (
-          <AClist acItems={acItems} setAcItems={setAcItems} userData={userData} handleAcItems={handleAcItems} studentsData={studentsData}/>
+          <AClist acItems={acItems} setAcItems={setAcItems}  handleAcItems={handleAcItems} studentsData={studentsData}/>
         )}
       </div>
       {index !== 1 && (

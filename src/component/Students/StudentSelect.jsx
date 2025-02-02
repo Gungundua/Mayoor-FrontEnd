@@ -7,7 +7,7 @@ import axios from "axios";
 import StudentReport from "../Student_report/StudentReport.jsx";
 import TeacherProfile from "../TeacherProfile/index.jsx";
 
-const StudentList = ({ userData, onStudentsData }) => {
+const StudentList = ({ onStudentsData }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [students, setStudents] = useState([]); // Stores API student list
   const [filteredStudents, setFilteredStudents] = useState([]); // Stores search-filtered students
@@ -30,7 +30,13 @@ const StudentList = ({ userData, onStudentsData }) => {
   const handleBackToList2 = () => {
     setShowTeacherProfile(false); // Back to student list from teacher profile
   }
-
+  const [userData, setUserData] = useState(null);
+  useEffect(() => {
+    const userData = sessionStorage.getItem("userData");
+    if (userData) {
+      setUserData(JSON.parse(userData));
+    }
+  }, []);
   useEffect(() => {
     const handler = setTimeout(() => {
       setFilteredStudents(
@@ -51,32 +57,33 @@ const StudentList = ({ userData, onStudentsData }) => {
         const headers = {
           Authorization: "Bearer YOUR_ACCESS_TOKEN",
           "Content-Type": "application/json",
-          year: userData.year,
-          classname: userData.class,
-          section: userData.section,
-          subject: userData.subject,
+          year: userData?.year,  // Use optional chaining to prevent errors
+          classname: userData?.class,
+          section: userData?.section,
+          subject: userData?.subject,
         };
   
         const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/students`, { headers });
         console.log("Response Data:", response.data);
   
         if (response.data && Array.isArray(response.data.students)) {
-          setStudents(response.data.students); // Directly set the new student data
-          onStudentsData(response.data.students); // Pass the data to parent
+          setStudents(response.data.students);
+          onStudentsData(response.data.students);
         } else {
           console.warn("Expected an array but received:", response.data);
-          setStudents([]); // Clear students if invalid response
+          setStudents([]);
         }
       } catch (error) {
         console.error("Error fetching students:", error.response || error.message);
-        setStudents([]); // Clear the students if there's an error
+        setStudents([]);
       }
     };
   
-    if (Object.keys(userData).length > 0) {
-      loadStudents(); // Fetch new students data only when userData is available
+    if (userData && Object.keys(userData).length > 0) {
+      loadStudents();
     }
   }, [userData, onStudentsData]);
+  
 
   if (showReport) {
     return <StudentReport student={showReport} onBack={handleBackToList1} />;

@@ -1,27 +1,47 @@
 import React, { useState, useEffect } from "react";
 import Wrapper from "./style";
-import Form_LO from "../Form_LO/index"
+import Form_LO from "../Form_LO/index";
 import axios from "axios";
 
-const LOMapping = ({userData, roId , loItems}) => {
+const LOMapping = ({  roId, loItems }) => {
   const [priorityMapping, setPriorityMapping] = useState({}); // Stores priorities by roId and acId
   const [showForm, setShowForm] = useState(false);
 
+  const [userData, setUserData] = useState(null);
+      useEffect(() => {
+        const userData = sessionStorage.getItem("userData");
+        if (userData) {
+          setUserData(JSON.parse(userData));
+        }
+      }, []);
   const handleform = () => {
     setShowForm(true);
   };
 
   const handleClick = (loid, priority) => {
+    // Convert priority to lowercase before saving
+    const lowerCasePriority = priority.toLowerCase();
+
     setPriorityMapping((prev) => {
       const updatedPriorityMapping = { ...prev };
 
       // Initialize roId object if it doesn't exist
       if (!updatedPriorityMapping[roId]) {
-        updatedPriorityMapping[roId] = { Data: {} }; // Directly initialize roId with Data
+        updatedPriorityMapping[roId] = { Data: [] }; // Directly initialize roId with Data
       }
 
-      // Toggle the priority for the acId (if it's already selected, deselect it)
-      updatedPriorityMapping[roId].Data[loid] = updatedPriorityMapping[roId].Data[loid] === priority ? "" : priority;
+      // Find if the LO is already selected, then update or add new
+      const existingEntryIndex = updatedPriorityMapping[roId].Data.findIndex(
+        (entry) => entry.lo_id === loid
+      );
+
+      if (existingEntryIndex !== -1) {
+        // If already present, update the priority
+        updatedPriorityMapping[roId].Data[existingEntryIndex].priority = lowerCasePriority;
+      } else {
+        // If not present, add a new entry
+        updatedPriorityMapping[roId].Data.push({ lo_id: loid, priority: lowerCasePriority });
+      }
 
       return updatedPriorityMapping;
     });
@@ -30,8 +50,8 @@ const LOMapping = ({userData, roId , loItems}) => {
   const handleDone = async () => {
     // Prepare the data to send in the required format
     const body = {
-      roId: roId,  // Include roId directly
-      Data: priorityMapping[roId]?.Data || {}, // Get the Data for the specific roId
+      ro_id: roId,  // Include roId directly
+      data: priorityMapping[roId]?.Data || [], // Get the Data for the specific roId
     };
 
     // Log the body data to check the format
@@ -75,7 +95,11 @@ const LOMapping = ({userData, roId , loItems}) => {
               <div className="priority-buttons">
                 <button
                   className={`priority-button ${
-                    priorityMapping[roId]?.Data[lo.id] === "H" ? "h" : ""
+                    priorityMapping[roId]?.Data.find(
+                      (entry) => entry.lo_id === lo.id
+                    )?.priority === "h"
+                      ? "h"
+                      : ""
                   }`}
                   onClick={() => handleClick(lo.id, "H")}
                   disabled={priorityMapping[roId]?.isLocked} // Disable button if locked
@@ -84,7 +108,11 @@ const LOMapping = ({userData, roId , loItems}) => {
                 </button>
                 <button
                   className={`priority-button ${
-                    priorityMapping[roId]?.Data[lo.id] === "M" ? "m" : ""
+                    priorityMapping[roId]?.Data.find(
+                      (entry) => entry.lo_id === lo.id
+                    )?.priority === "m"
+                      ? "m"
+                      : ""
                   }`}
                   onClick={() => handleClick(lo.id, "M")}
                   disabled={priorityMapping[roId]?.isLocked} // Disable button if locked
@@ -93,7 +121,11 @@ const LOMapping = ({userData, roId , loItems}) => {
                 </button>
                 <button
                   className={`priority-button ${
-                    priorityMapping[roId]?.Data[lo.id] === "L" ? "l" : ""
+                    priorityMapping[roId]?.Data.find(
+                      (entry) => entry.lo_id === lo.id
+                    )?.priority === "l"
+                      ? "l"
+                      : ""
                   }`}
                   onClick={() => handleClick(lo.id, "L")}
                   disabled={priorityMapping[roId]?.isLocked} // Disable button if locked
@@ -105,11 +137,11 @@ const LOMapping = ({userData, roId , loItems}) => {
           ))}
         </div>
         <div className="btns">
-          <input type="button" value="Add New LO" className="add" onClick={handleform}/>
-          <input type="button" value="Done" className="btn" onClick={handleDone}/>
+          <input type="button" value="Add New LO" className="add" onClick={handleform} />
+          <input type="button" value="Done" className="btn" onClick={handleDone} />
         </div>
-    </div>
-    {showForm && (
+      </div>
+      {showForm && (
         <div className="popup-overlay">
           <div className="popup-content">
             <Form_LO closeForm={() => setShowForm(false)} />

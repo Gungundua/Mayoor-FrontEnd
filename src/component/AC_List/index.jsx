@@ -10,50 +10,59 @@ import bellIcon from "../assets/bell.png";
 import userIcon from "../assets/user.png";
 import menuIcon from "../assets/menu.png";
 
-const AC_List = ({ userData, acItems, setAcItems, handleAcItems, studentsData }) => {
+const AC_List = ({acItems, setAcItems, handleAcItems, studentsData }) => {
   const [acList, setAcList] = useState([]);  
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredAcList, setFilteredAcList] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [selectedAssessment, setSelectedAssessment] = useState(null);
 
-  const loadAC = async () => {
-    if (!userData.year || !userData.class || !userData.section || !userData.subject || !userData.quarter) {
-      console.warn("Missing user data, skipping API call.");
-      return;
-    }
-
-    const headers = {
-      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-      "Content-Type": "application/json",
-      year: userData.year,
-      classname: userData.class,
-      section: userData.section,
-      subject: userData.subject,
-      quarter: userData.quarter,
-    };
-
-    try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/assessment-criteria`, { headers });
-      const data = response.data;
-
-      if (Array.isArray(data.assessments)) {
-        setAcList(data.assessments); 
-        setFilteredAcList(data.assessments); 
-        setAcItems(data.assessments); // Share data with parent
-      } else {
-        setAcList([]); 
-        setFilteredAcList([]); 
-        setAcItems([]); // Clear parent state if API response is invalid
-        console.warn("Unexpected API response format:", data);
+  const [userData, setUserData] = useState(null);
+    useEffect(() => {
+      const userData = sessionStorage.getItem("userData");
+      if (userData) {
+        setUserData(JSON.parse(userData));
       }
-    } catch (error) {
-      console.error("Error fetching assessment criteria:", error.response?.data || error.message);
-      setAcList([]); 
-      setFilteredAcList([]); 
-      setAcItems([]);
-    }
-  };
+    }, []);
+
+    const loadAC = async () => {
+      if (!userData || !userData.year || !userData.class || !userData.section || !userData.subject || !userData.quarter) {
+        console.warn("Missing user data, skipping API call.");
+        return;
+      }
+    
+      const headers = {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        "Content-Type": "application/json",
+        year: userData.year,
+        classname: userData.class,
+        section: userData.section,
+        subject: userData.subject,
+        quarter: userData.quarter,
+      };
+    
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/assessment-criteria`, { headers });
+        const data = response.data;
+    
+        if (Array.isArray(data.assessments)) {
+          setAcList(data.assessments);
+          setFilteredAcList(data.assessments);
+          setAcItems(data.assessments);
+        } else {
+          setAcList([]);
+          setFilteredAcList([]);
+          setAcItems([]);
+          console.warn("Unexpected API response format:", data);
+        }
+      } catch (error) {
+        console.error("Error fetching assessment criteria:", error.response?.data || error.message);
+        setAcList([]);
+        setFilteredAcList([]);
+        setAcItems([]);
+      }
+    };
+    
 
   useEffect(() => {
     loadAC();
@@ -79,7 +88,7 @@ const AC_List = ({ userData, acItems, setAcItems, handleAcItems, studentsData })
   };
 
   if (selectedAssessment) {
-    return <Assessment selectedAssessment={selectedAssessment} onBack={handleBackToList} userData={userData} studentsData={studentsData}/>;
+    return <Assessment selectedAssessment={selectedAssessment} onBack={handleBackToList} studentsData={studentsData}/>;
   }
 
   return (

@@ -3,7 +3,8 @@ import Wrapper from './style';
 import notification from "./bell.png";
 import student from './user.png';
 import menu from "./menu.png";
-const HomeList = ({ user, setIndex, setUserData }) => {
+const HomeList = ({ user, setIndex}) => {
+  const [userData, setUserData] = useState({});
   useEffect(() => {
     const clearSessionStorageOnRefresh = () => {
       sessionStorage.clear()

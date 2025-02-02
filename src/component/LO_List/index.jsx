@@ -10,7 +10,7 @@ import bellIcon from '../assets/bell.png';
 import userIcon from '../assets/user.png';
 import menuIcon from '../assets/menu.png';
 
-const LOlist = ({ acItems, setAcItems, userData, loItems, setLoItems, handleLoItems }) => {
+const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems }) => {
   const [activeIndex, setActiveIndex] = useState(null);
   const [filteredLoList, setFilteredLoList] = useState([]);
   const [showForm, setShowForm] = useState(false);
@@ -24,6 +24,13 @@ const LOlist = ({ acItems, setAcItems, userData, loItems, setLoItems, handleLoIt
     setShowForm(true);
   };
 
+  const [userData, setUserData] = useState(null);
+    useEffect(() => {
+      const userData = sessionStorage.getItem("userData");
+      if (userData) {
+        setUserData(JSON.parse(userData));
+      }
+    }, []);
   const loadLO = async (userData) => {
     const headers = {
       Authorization: 'Bearer YOUR_ACCESS_TOKEN',
@@ -103,7 +110,7 @@ const LOlist = ({ acItems, setAcItems, userData, loItems, setLoItems, handleLoIt
               </div>
               <div className={`lo-dropdown-content ${activeIndex === index ? 'show' : 'hide'}`}>
                 {activeIndex === index && (
-                  <ACMapping acItems={acItems} setAcItems={setAcItems} userData={userData} loId={item.id} />
+                  <ACMapping acItems={acItems} setAcItems={setAcItems} loId={item.id} />
                 )}
               </div>
             </li>
@@ -119,7 +126,7 @@ const LOlist = ({ acItems, setAcItems, userData, loItems, setLoItems, handleLoIt
       {showForm && (
         <div className="popup-overlay">
           <div className="popup-content">
-            <Form_LO closeForm={() => setShowForm(false)} userData={userData} loadLO={loadLO} />
+            <Form_LO closeForm={() => setShowForm(false)} loadLO={loadLO} />
           </div>
         </div>
       )}

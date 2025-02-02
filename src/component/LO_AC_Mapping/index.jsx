@@ -1,66 +1,78 @@
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import Wrapper from "./style";
 import Form_AC from "../Form_AC/index";
 import axios from "axios"; // Import axios
 
-const ACMapping = ({ userData, loId, acItems }) => {
+const ACMapping = ({  loId, acItems }) => {
   const [priorityMapping, setPriorityMapping] = useState({}); // Stores priorities by loId and acId
   const [showForm, setShowForm] = useState(false);
 
+  const [userData, setUserData] = useState(null);
+      useEffect(() => {
+        const userData = sessionStorage.getItem("userData");
+        if (userData) {
+          setUserData(JSON.parse(userData));
+        }
+      }, []);
   const handleform = () => {
     setShowForm(true);
   };
 
   const handleClick = (acid, priority) => {
+    const lowerCasePriority = priority.toLowerCase();
+  
     setPriorityMapping((prev) => {
       const updatedPriorityMapping = { ...prev };
-
-      // Initialize loId object if it doesn't exist
+  
+      // Ensure loId exists before accessing its Data property
       if (!updatedPriorityMapping[loId]) {
-        updatedPriorityMapping[loId] = { Data: {} }; // Directly initialize loId with Data
+        updatedPriorityMapping[loId] = { Data: [] };
       }
-
-      // Toggle the priority for the acId (if it's already selected, deselect it)
-      updatedPriorityMapping[loId].Data[acid] = updatedPriorityMapping[loId].Data[acid] === priority ? "" : priority;
-
+  
+      const existingEntryIndex = updatedPriorityMapping[loId].Data.findIndex(
+        (entry) => entry.ac_id === acid
+      );
+  
+      if (existingEntryIndex !== -1) {
+        updatedPriorityMapping[loId].Data[existingEntryIndex].priority = lowerCasePriority;
+      } else {
+        updatedPriorityMapping[loId].Data.push({ ac_id: acid, priority: lowerCasePriority });
+      }
+  
       return updatedPriorityMapping;
     });
   };
-
+  
   const handleDone = async () => {
-    // Prepare the data to send in the required format
     const body = {
-      loId: loId,  // Include loId directly
-      Data: priorityMapping[loId]?.Data || {}, // Get the Data for the specific loId
+      lo_id: loId, // Correct key name
+      data: priorityMapping[loId]?.Data || [],
     };
-
-    // Log the body data to check the format
+  
     console.log("Data to be sent:", body);
-
+  
     const headers = {
-      Authorization: 'Bearer YOUR_ACCESS_TOKEN', // Replace with the actual token
+      Authorization: 'Bearer YOUR_ACCESS_TOKEN',
       'Content-Type': 'application/json',
-      year: userData.year,
-      subject: userData.subject,
-      quarter: userData.quarter,
-      section: userData.section,
-      classname: userData.class,
+      year: userData?.year,
+      subject: userData?.subject,
+      quarter: userData?.quarter,
+      section: userData?.section,
+      classname: userData?.class,
     };
-
-    // Make the POST request to send the priorityMapping data via Axios
+  
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/learning-outcome-mapping`, // Replace with your actual API URL
+        `${process.env.REACT_APP_API_URL}/api/learning-outcome-mapping`,
         body,
         { headers }
       );
-      // Handle the response from the API (if needed)
       console.log("API Response:", response.data);
     } catch (error) {
-      // Handle error if request fails
       console.error("Error sending data:", error);
     }
   };
+  
 
   return (
     <Wrapper>
@@ -72,29 +84,44 @@ const ACMapping = ({ userData, loId, acItems }) => {
                 <span className="name">{ac.name}</span>
               </div>
               <div className="priority-buttons">
-                <button
+              <button
                   className={`priority-button ${
-                    priorityMapping[loId]?.Data[ac.id] === "H" ? "h" : ""
+                    priorityMapping[loId]?.Data.find(
+                      (entry) => entry.ac_id === ac.id
+                    )?.priority === "h"
+                      ? "h"
+                      : ""
                   }`}
                   onClick={() => handleClick(ac.id, "H")}
+                  disabled={priorityMapping[loId]?.isLocked} // Disable button if locked
                 >
                   H
                 </button>
                 <button
                   className={`priority-button ${
-                    priorityMapping[loId]?.Data[ac.id] === "M" ? "m" : ""
+                    priorityMapping[loId]?.Data.find(
+                      (entry) => entry.ac_id === ac.id
+                    )?.priority === "m"
+                      ? "m"
+                      : ""
                   }`}
                   onClick={() => handleClick(ac.id, "M")}
+                  disabled={priorityMapping[loId]?.isLocked} // Disable button if locked
                 >
                   M
                 </button>
                 <button
                   className={`priority-button ${
-                    priorityMapping[loId]?.Data[ac.id] === "L" ? "l" : ""
+                    priorityMapping[loId]?.Data.find(
+                      (entry) => entry.ac_id === ac.id
+                    )?.priority === "l"
+                      ? "l"
+                      : ""
                   }`}
                   onClick={() => handleClick(ac.id, "L")}
+                  disabled={priorityMapping[loId]?.isLocked} // Disable button if locked
                 >
-                  L
+                   L
                 </button>
               </div>
             </div>

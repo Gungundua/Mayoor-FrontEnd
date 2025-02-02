@@ -7,7 +7,7 @@ import bellIcon from "../assets/bell.png";
 import userIcon from "../assets/user.png";
 import menuIcon from "../assets/menu.png";
 
-const ROlist = ({ loItems, setLoItems, userData }) => {
+const ROlist = ({ loItems, setLoItems}) => {
   const [activeIndex, setActiveIndex] = useState(null);
   const [roList, setRoList] = useState([]);     // Full RO list from API
   const [searchQuery, setSearchQuery] = useState(""); // Stores search input
@@ -16,6 +16,14 @@ const ROlist = ({ loItems, setLoItems, userData }) => {
   const toggleDropdown = (index) => {
     setActiveIndex(activeIndex === index ? null : index);
   };
+
+  const [userData, setUserData] = useState(null);
+    useEffect(() => {
+      const userData = sessionStorage.getItem("userData");
+      if (userData) {
+        setUserData(JSON.parse(userData));
+      }
+    }, []);
 
   useEffect(() => {
     const loadRO = async (userdata) => {
@@ -49,7 +57,7 @@ const ROlist = ({ loItems, setLoItems, userData }) => {
       }
     };
 
-    if (Object.keys(userData).length > 0) {
+    if (userData && Object.keys(userData).length > 0) {
       loadRO(userData);
     }
   }, [userData]);

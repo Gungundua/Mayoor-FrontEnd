@@ -7,11 +7,18 @@ import userIcon from './user.png';
 import axios from "axios";
 import menuIcon from "../assets/menu.png";
 
-const Assessment = ({ selectedAssessment, onBack, userData , studentsData}) => {
+const Assessment = ({ selectedAssessment, onBack, studentsData}) => {
   const [searchQuery, setSearchQuery] = useState('')
   const [acData, setAcData] = useState([])
   const [students, setStudents] = useState([]);
 
+  const [userData, setUserData] = useState(null);
+      useEffect(() => {
+        const userData = sessionStorage.getItem("userData");
+        if (userData) {
+          setUserData(JSON.parse(userData));
+        }
+      }, []);
   // useEffect(() => {
   //   const storedStudents = localStorage.getItem("students");
   //   if (storedStudents) {
