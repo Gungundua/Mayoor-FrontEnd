@@ -41,11 +41,11 @@ const Student_report = ({ student, onBack, id }) => {
   const renderScoreComponent = () => {
     switch(activeComponent) {
       case 'ac':
-        return <div className="score-component"><AcScores /></div>;
+        return <div className="score-component"><AcScores student={student} /></div>;
       case 'lo':
-        return <div className="score-component"><LoScores /></div>;
+        return <div className="score-component"><LoScores student={student}/></div>;
       case 'ro':
-        return <div className="score-component"><RoScores /></div>;
+        return <div className="score-component"><RoScores student={student}/></div>;
       default:
         return null;
     }

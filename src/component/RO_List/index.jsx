@@ -7,12 +7,15 @@ import bellIcon from "../assets/bell.png";
 import userIcon from "../assets/user.png";
 import menuIcon from "../assets/menu.png";
 
-const ROlist = ({ loItems, setLoItems}) => {
+const ROlist = ({ loItems, setLoItems, setIndex}) => {
   const [activeIndex, setActiveIndex] = useState(null);
   const [roList, setRoList] = useState([]);     // Full RO list from API
   const [searchQuery, setSearchQuery] = useState(""); // Stores search input
   const [filteredRoList, setFilteredRoList] = useState([]); // Filtered RO list
 
+  const handleClick = () => {
+    setIndex(1)
+  }
   const toggleDropdown = (index) => {
     setActiveIndex(activeIndex === index ? null : index);
   };
@@ -88,7 +91,7 @@ const ROlist = ({ loItems, setLoItems}) => {
         <div className="icon">
             <img src={bellIcon} alt="Bell Icon" style={{ width: "22px", height: "22px" }} />
             <img src={userIcon} alt="User Icon" style={{ width: "22px", height: "22px" }} />
-            <img className="menu" src={menuIcon} alt="Menu Icon" style={{ width: "22px", height: "31px" }} />
+            <img className="menu" src={menuIcon} alt="Menu Icon" style={{ width: "22px", height: "31px" }} onClick={handleClick}/>
         </div>
       </div>
 

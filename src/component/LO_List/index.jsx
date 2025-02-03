@@ -10,11 +10,15 @@ import bellIcon from '../assets/bell.png';
 import userIcon from '../assets/user.png';
 import menuIcon from '../assets/menu.png';
 
-const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems }) => {
+const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIndex }) => {
   const [activeIndex, setActiveIndex] = useState(null);
   const [filteredLoList, setFilteredLoList] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+
+  const handleClick = () => {
+    setIndex(1)
+  }
 
   const toggleDropdown = (index) => {
     setActiveIndex((prevIndex) => (prevIndex === index ? null : index));
@@ -92,7 +96,7 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems }) => 
         <div className="icon">
           <img src={bellIcon} alt="Bell Icon" style={{ width: '22px', height: '22px' }} />
           <img src={userIcon} alt="User Icon" style={{ width: '22px', height: '22px' }} />
-          <img className="menu" src={menuIcon} alt="Menu Icon" style={{ width: '22px', height: '31px' }} />
+          <img className="menu" src={menuIcon} alt="Menu Icon" style={{ width: '22px', height: '31px' }} onClick={handleClick}/>
         </div>
       </div>
 

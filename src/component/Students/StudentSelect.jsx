@@ -5,7 +5,7 @@ import userIcon from "../assets/user.png";
 import { IoSearchOutline } from "react-icons/io5";
 import axios from "axios";
 import StudentReport from "../Student_report/StudentReport.jsx";
-import TeacherProfile from "../TeacherProfile/index.jsx";
+import TeacherProfile from "../TeacherProfile/index.jsx"
 
 const StudentList = ({ onStudentsData }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -53,11 +53,13 @@ const StudentList = ({ onStudentsData }) => {
 
   useEffect(() => {
     const loadStudents = async () => {
+      if (!userData || students.length > 0) return; // Prevent unnecessary API calls
+  
       try {
         const headers = {
           Authorization: "Bearer YOUR_ACCESS_TOKEN",
           "Content-Type": "application/json",
-          year: userData?.year,  // Use optional chaining to prevent errors
+          year: userData?.year,  
           classname: userData?.class,
           section: userData?.section,
           subject: userData?.subject,
@@ -79,10 +81,11 @@ const StudentList = ({ onStudentsData }) => {
       }
     };
   
-    if (userData && Object.keys(userData).length > 0) {
+    if (userData && Object.keys(userData).length > 0 && students.length === 0) {
       loadStudents();
     }
-  }, [userData, onStudentsData]);
+  }, [userData]);  // Removed `onStudentsData` from dependencies
+  
   
 
   if (showReport) {

@@ -10,13 +10,16 @@ import bellIcon from "../assets/bell.png";
 import userIcon from "../assets/user.png";
 import menuIcon from "../assets/menu.png";
 
-const AC_List = ({acItems, setAcItems, handleAcItems, studentsData }) => {
+const AC_List = ({acItems, setAcItems, handleAcItems, studentsData , setIndex}) => {
   const [acList, setAcList] = useState([]);  
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredAcList, setFilteredAcList] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [selectedAssessment, setSelectedAssessment] = useState(null);
 
+  const handleClick = () => {
+    setIndex(1)
+  }
   const [userData, setUserData] = useState(null);
     useEffect(() => {
       const userData = sessionStorage.getItem("userData");
@@ -104,7 +107,7 @@ const AC_List = ({acItems, setAcItems, handleAcItems, studentsData }) => {
         <div className="icon">
             <img src={bellIcon} alt="Bell Icon" style={{ width: "22px", height: "22px" }} />
             <img src={userIcon} alt="User Icon" style={{ width: "22px", height: "22px" }} />
-            <img className="menu" src={menuIcon} alt="Menu Icon" style={{ width: "22px", height: "31px" }} />
+            <img className="menu" src={menuIcon} alt="Menu Icon" style={{ width: "22px", height: "31px" }} onClick={handleClick} />
         </div>
       </div>
 
