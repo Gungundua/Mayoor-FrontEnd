@@ -71,7 +71,7 @@ const StudentList = ({student}) => {
             setFilteredAcScoreList([]);
           }
         } catch (error) {
-          console.error('Error fetching report outcomes:', error.response || error.message);
+          console.error('Error fetching ac score:', error.response || error.message);
           setAcScoreList([]);
           setFilteredAcScoreList([]);
         }

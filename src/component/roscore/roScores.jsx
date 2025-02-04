@@ -4,7 +4,7 @@ import axios from 'axios';
 // import bellIcon from './bell.png';  
 // import userIcon from './user.png';
 
-const StudentList = (student) => {
+const StudentList = ({student}) => {
   const [profile] = useState({
     name: 'John Doe',
     studentId: '1234567',
@@ -51,14 +51,14 @@ const StudentList = (student) => {
         console.log(headers);
         
         try {
-          const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/learning-outcome-score`, { headers });
+          const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/report-outcome-score`, { headers });
           const data = response.data;
   
           console.log('Response Data:', data);
   
-          if (data && Array.isArray(data.ro)) {
-            setRoScoreList(data.ro);
-            setFilteredRoScoreList(data.ro); // Initialize filtered list with full data
+          if (data && Array.isArray(data.ro_scores)) {
+            setRoScoreList(data.ro_scores);
+            setFilteredRoScoreList(data.ro_scores); // Initialize filtered list with full data
           } else {
             console.warn('Expected an array but received:', data);
             setRoScoreList([]);
@@ -88,11 +88,11 @@ const StudentList = (student) => {
             <div className="ProfileInfo">
               <div className="ProfileRow">
                 <span className="Label">Name:</span>
-                <span className="Value">{profile.name}</span>
+                <span className="Value">{student.name}</span>
               </div>
               <div className="ProfileRow">
-                <span className="Label">Student ID:</span>
-                <span className="Value">{profile.studentId}</span>
+                <span className="Label">Roll No.:</span>
+                <span className="Value">{student.id}</span>
               </div>
               <div className="ProfileRow">
                 <span className="Label">Subject:</span>
@@ -110,10 +110,10 @@ const StudentList = (student) => {
                 </tr>
               </thead>
               <tbody>
-                {scores.map((item, index) => (
+                {roScoreList.map((item, index) => (
                   <tr key={index}>
-                    <td className="TableDataCell">{item.ro}</td>
-                    <td className="TableDataCell">{item.score}</td>
+                    <td className="TableDataCell">{item.ro_id}</td>
+                    <td className="TableDataCell">{item.value}</td>
                   </tr>
                 ))}
               </tbody>

@@ -4,7 +4,7 @@ import bellIcon from '../assets/bell.png';
 import userIcon from '../assets/user.png';
 import axios from 'axios';
 
-const StudentList = (student) => {
+const StudentList = ({student}) => {
   const [profile] = useState({
     name: 'John Doe',
     studentId: '1234567',
@@ -61,9 +61,9 @@ const StudentList = (student) => {
     
           console.log('Response Data:', data);
     
-          if (data && Array.isArray(data.ac_scores)) {
-            setLoScoreList(data.ac_scores);
-            setFilteredLoScoreList(data.ac_scores);
+          if (data && Array.isArray(data.lo_scores)) {
+            setLoScoreList(data.lo_scores);
+            setFilteredLoScoreList(data.lo_scores);
           } else {
             console.warn('Expected an array but received:', data);
             setLoScoreList([]);

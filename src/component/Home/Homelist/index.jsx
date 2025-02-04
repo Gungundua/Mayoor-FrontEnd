@@ -99,20 +99,20 @@ const HomeList = ({ user, setIndex, msg }) => {
         </div>
         <label htmlFor="subject" onClick={toggle}>Subject ({selectedSubject})</label>
         <div className="options subjects">
-          <Ripples><div tabIndex={0} className={`option ${selectedClass === 1 ? 'active' : ''}`} onClick={e => setSelectedClass(1)}>English</div></Ripples>
-          <Ripples><div tabIndex={0} className={`option ${selectedClass === 2 ? 'active' : ''}`} onClick={e => setSelectedClass(2)}>Hindi</div></Ripples>
-          <Ripples><div tabIndex={0} className={`option ${selectedClass === 3 ? 'active' : ''}`} onClick={e => setSelectedClass(3)}>Mathematics</div></Ripples>
-          <Ripples><div tabIndex={0} className={`option ${selectedClass === 4 ? 'active' : ''}`} onClick={e => setSelectedClass(4)}>Science</div></Ripples>
-          <Ripples><div tabIndex={0} className={`option ${selectedClass === 5 ? 'active' : ''}`} onClick={e => setSelectedClass(5)}>Computer Sc.</div></Ripples>
-          <Ripples><div tabIndex={0} className={`option ${selectedClass === 6 ? 'active' : ''}`} onClick={e => setSelectedClass(6)}>Social Studies</div></Ripples>
-          <Ripples><div tabIndex={0} className={`option ${selectedClass === 7 ? 'active' : ''}`} onClick={e => setSelectedClass(7)}>III Language</div></Ripples>
-          <Ripples><div tabIndex={0} className={`option ${selectedClass === 8 ? 'active' : ''}`} onClick={e => setSelectedClass(8)}>GP Values</div></Ripples>
-          <Ripples><div tabIndex={0} className={`option ${selectedClass === 9 ? 'active' : ''}`} onClick={e => setSelectedClass(9)}>Music</div></Ripples>
-          <Ripples><div tabIndex={0} className={`option ${selectedClass === 10 ? 'active' : ''}`} onClick={e => setSelectedClass(10)}>Dance/Dramatics</div></Ripples>
-          <Ripples><div tabIndex={0} className={`option ${selectedClass === 11 ? 'active' : ''}`} onClick={e => setSelectedClass(11)}>Art</div></Ripples>
-          <Ripples><div tabIndex={0} className={`option ${selectedClass === 12 ? 'active' : ''}`} onClick={e => setSelectedClass(12)}>Sports</div></Ripples>
-          <Ripples><div tabIndex={0} className={`option ${selectedClass === 13 ? 'active' : ''}`} onClick={e => setSelectedClass(13)}>Discipline</div></Ripples>
-          <Ripples><div tabIndex={0} className={`option ${selectedClass === 14 ? 'active' : ''}`} onClick={e => setSelectedClass(14)}>Attendance</div></Ripples>
+          <Ripples><div tabIndex={0} className={`option ${selectedSubject === "1" ? 'active' : ''}`} onClick={e => setSelectedSubject('1')}>English</div></Ripples>
+          <Ripples><div tabIndex={0} className={`option ${selectedSubject === "2" ? 'active' : ''}`} onClick={e => setSelectedSubject('2')}>Hindi</div></Ripples>
+          <Ripples><div tabIndex={0} className={`option ${selectedSubject === '3' ? 'active' : ''}`} onClick={e => setSelectedSubject('3')}>Mathematics</div></Ripples>
+          <Ripples><div tabIndex={0} className={`option ${selectedSubject === '4' ? 'active' : ''}`} onClick={e => setSelectedSubject('4')}>Science</div></Ripples>
+          <Ripples><div tabIndex={0} className={`option ${selectedSubject === '5' ? 'active' : ''}`} onClick={e => setSelectedSubject('5')}>Computer Sc.</div></Ripples>
+          <Ripples><div tabIndex={0} className={`option ${selectedSubject === '6' ? 'active' : ''}`} onClick={e => setSelectedSubject('6')}>Social Studies</div></Ripples>
+          <Ripples><div tabIndex={0} className={`option ${selectedSubject === '7' ? 'active' : ''}`} onClick={e => setSelectedSubject('7')}>III Language</div></Ripples>
+          <Ripples><div tabIndex={0} className={`option ${selectedSubject === '8' ? 'active' : ''}`} onClick={e => setSelectedSubject('8')}>GP Values</div></Ripples>
+          <Ripples><div tabIndex={0} className={`option ${selectedSubject === '9' ? 'active' : ''}`} onClick={e => setSelectedSubject('9')}>Music</div></Ripples>
+          <Ripples><div tabIndex={0} className={`option ${selectedSubject === '10' ? 'active' : ''}`} onClick={e => setSelectedSubject('10')}>Dance/Dramatics</div></Ripples>
+          <Ripples><div tabIndex={0} className={`option ${selectedSubject === '11' ? 'active' : ''}`} onClick={e => setSelectedSubject('11')}>Art</div></Ripples>
+          <Ripples><div tabIndex={0} className={`option ${selectedSubject === '12' ? 'active' : ''}`} onClick={e => setSelectedSubject('12')}>Sports</div></Ripples>
+          <Ripples><div tabIndex={0} className={`option ${selectedSubject === '13' ? 'active' : ''}`} onClick={e => setSelectedSubject('13')}>Discipline</div></Ripples>
+          <Ripples><div tabIndex={0} className={`option ${selectedSubject === '14' ? 'active' : ''}`} onClick={e => setSelectedSubject('14')}>Attendance</div></Ripples>
         </div>
         <Ripples><button
           className="get-started"
