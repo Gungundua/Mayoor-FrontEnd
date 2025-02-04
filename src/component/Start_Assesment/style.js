@@ -152,6 +152,9 @@ font-family: Sans-sarif;
   margin: auto;
   width:150px;
 }
+.studentName{
+ height: 47px;
+}
 .ac-container {
   display: flex;
   overflow-x: auto;
@@ -189,7 +192,8 @@ font-family: Sans-sarif;
   border-radius: 10px;
   border: 1px solid #ccc;
   box-sizing: border-box;
-  margin-top: 40px;
+  margin-top: 50px;
+  bottom: 0;
 }
 .ac-container::-webkit-scrollbar {
   display: none;

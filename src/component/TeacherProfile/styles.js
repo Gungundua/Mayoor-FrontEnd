@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 const Wrapper = styled.section`
-    font-family: 'Poppins', sans-serif;
     margin: 0;
     padding: 0;
     background-color: #21C3BC;

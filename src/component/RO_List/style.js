@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 const Wrapper = styled.section`
-    font-family:sans-serif;
     width: 100%;
     height: 90vh; /* Fix the height to the viewport size */
     display: flex;

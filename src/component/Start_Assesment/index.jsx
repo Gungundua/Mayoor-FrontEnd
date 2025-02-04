@@ -107,10 +107,10 @@ const Assessment = ({ selectedAssessment, onBack, studentsData }) => {
         {studentsData.map((stu) => (
           <div className="ac-box" key={stu.id}>
             <img src={Student} alt="Profile" className="profile-image" />
-            <h3>{stu.name}</h3>
+            <h3 className="studentName">{stu.name}</h3>
             <p className="roll-number">Roll Number: {stu.id}</p>
             <input
-              type="text"
+              type="number"
               value={stu.marks}
               onChange={(e) => handleMarksChange(e, stu.id)}  // Pass student ID to the handler
               placeholder="Enter Marks"
