@@ -49,7 +49,9 @@ const ACMapping = ({  loId, acItems }) => {
       data: priorityMapping[loId]?.Data || [],
     };
   
-    console.log("Data to be sent:", body);
+    console.log("Data to be sent:", JSON.stringify(body, null, 2));
+    console.log('data', body);
+    
   
     const headers = {
       Authorization: 'Bearer YOUR_ACCESS_TOKEN',
@@ -58,7 +60,7 @@ const ACMapping = ({  loId, acItems }) => {
       subject: userData?.subject,
       quarter: userData?.quarter,
       section: userData?.section,
-      classname : userData?.class,
+      classname: userData?.class,
     };
   
     try {
@@ -72,7 +74,6 @@ const ACMapping = ({  loId, acItems }) => {
       console.error("Error sending data:", error);
     }
   };
-  
 
   return (
     <Wrapper>

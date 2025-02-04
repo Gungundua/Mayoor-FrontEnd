@@ -100,6 +100,7 @@ const Assessment = ({ selectedAssessment, onBack, studentsData }) => {
 
         <div className="info-container">
           <h1 className="name">{selectedAssessment ? selectedAssessment.name : "AC-1"}</h1>
+          <p>Max Marks : {selectedAssessment.max_marks}</p>
         </div>
       </div>
 
@@ -115,6 +116,9 @@ const Assessment = ({ selectedAssessment, onBack, studentsData }) => {
               onChange={(e) => handleMarksChange(e, stu.id)}  // Pass student ID to the handler
               placeholder="Enter Marks"
               className="marks-input"
+              min="1" // Ensure the input value is at least 1
+              max={selectedAssessment?.max_marks || 100}
+              required
             />
           </div>
         ))}
