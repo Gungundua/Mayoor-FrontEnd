@@ -5,6 +5,36 @@ const Wrapper = styled.section`
     flex-direction: column;
     background-color: #21C2BA;
     font-family: Poppins;
+
+    .options{
+        display : flex;
+        gap : 10px;
+        width : 100%;
+        flex-wrap: wrap;
+        .option{
+            flex : 1;
+            background : #21C2BA;
+            color : #FFFFFF;
+            padding : 20px 30px;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            text-align: center;
+            opacity : 0.5;
+            &.active{
+                opacity: 1;
+                box-shadow: 2px 2px 2px #ccc;
+            }
+        }
+    }
+
+    .subjects{
+        .option{
+            width : 80px;
+            flex : auto;
+            white-space: nowrap;
+        }
+    }
+
     // padding: 20px;
     #user {
         display: flex;
@@ -58,13 +88,17 @@ const Wrapper = styled.section`
     form {
         background-color: #FFFFF0;
         border-radius: 30px 30px 0 0;
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        align-items: center;
         padding: 50px 20px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         flex : 1;
+        max-width: 500px;
+        margin: auto;
+        width: 100%;
+        box-sizing: border-box;
+        label{
+            display: block;
+            padding : 20px 0 10px 0;
+        }
     }
     select {
         appearance: none; /* Removes default browser styles */
@@ -92,28 +126,19 @@ const Wrapper = styled.section`
         opacity: 0.6;
     }
     label {
-        align-self: flex-start;
-        padding-left: 6%;
         font-weight: bold;
-        font-size: 14px;
     }
-    #submit {
-        width: 25%;
-        padding: 15px;
-        border-radius: 50px;
-        background-color: #409FF3;
-        color: white;
-        font-weight: bold;
-        cursor: pointer;
-        border: none;
-        transition: 0.3s;
-    }
-    #submit:hover {
-        background-color: #3078C0;
-    }
-    #submit:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
+    
+    .get-started{
+        background : #21C2BA;
+        color : #000;
+        padding : 15px 30px;
+        border-radius: 5px;
+        border : none;
+        margin-top : 30px;
+        width: 100%;
+        font-weight : bold;
+        border-bottom : solid 3px #00a098;
     }
 `;
 export default Wrapper;
