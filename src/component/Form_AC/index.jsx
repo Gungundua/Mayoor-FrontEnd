@@ -1,11 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Wrapper from "./style";
 import axios from "axios";
 
-const Form_AC = ({ closeForm, userData, loadAC }) => {
+const Form_AC = ({ closeForm, loadAC }) => {
   const [acName, setAcName] = useState("");
   const [maxMarks, setMaxMarks] = useState("");
-
+  const [userData, setUserData] = useState(null);
+    useEffect(() => {
+      const userData = sessionStorage.getItem("userData");
+      if (userData) {
+        setUserData(JSON.parse(userData));
+      }
+    }, []);
   const handleSubmit = async () => {
     if (!acName.trim() || !maxMarks) {
       alert("Please fill in all fields.");
@@ -34,7 +40,7 @@ const Form_AC = ({ closeForm, userData, loadAC }) => {
 
     try {
       const response = await axios.post(
-        "http://10.33.0.41:8000/api/assessment-criteria",
+        `${process.env.REACT_APP_API_URL}/api/assessment-criteria`,
         body,
         { headers }
       );

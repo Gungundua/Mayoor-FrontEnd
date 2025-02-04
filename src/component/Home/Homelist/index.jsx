@@ -65,9 +65,9 @@ const HomeList = ({ user, setIndex, msg }) => {
           onChange={(e) => updateSessionStorage("year", e.target.value, setSelectedYear)}
         >
           <option value="" disabled>-- Select year --</option>
-          <option value="2023">2023</option>
-          <option value="2024">2024</option>
-          <option value="2025">2025</option>
+          {/* <option value="2023">2023</option> */}
+          <option value="2024">2024-25</option>
+          {/* <option value="2025">2025</option> */}
         </select>
         <label htmlFor="class">Class</label>
         <select

@@ -51,34 +51,36 @@ const StudentList = (student) => {
           classname: userdata.class,
           section: userdata.section,
           subject: userdata.subject,
+          quarter: userdata.quarter // Use userdata instead of user
         };
         console.log(headers);
-        
+    
         try {
           const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/learning-outcome-score`, { headers });
           const data = response.data;
-  
+    
           console.log('Response Data:', data);
-  
-          if (data && Array.isArray(data.ro)) {
-            setLoScoreList(data.ro);
-            setFilteredLoScoreList(data.ro); // Initialize filtered list with full data
+    
+          if (data && Array.isArray(data.ac_scores)) {
+            setLoScoreList(data.ac_scores);
+            setFilteredLoScoreList(data.ac_scores);
           } else {
             console.warn('Expected an array but received:', data);
             setLoScoreList([]);
             setFilteredLoScoreList([]);
           }
         } catch (error) {
-          console.error('Error fetching report outcomes:', error.response || error.message);
+          console.error('Error fetching lo scores:', error.response || error.message);
           setLoScoreList([]);
           setFilteredLoScoreList([]);
         }
       };
-  
+    
       if (userData && Object.keys(userData).length > 0) {
-        loadLoScore(userData);
+        loadLoScore(userData); // Corrected: Pass userData instead of user
       }
     }, [userData]);
+    
   return (
     <Wrapper>
       <div className="AppContainer">
@@ -115,10 +117,10 @@ const StudentList = (student) => {
                 </tr>
               </thead>
               <tbody>
-                {scores.map((item, index) => (
+                {loScoreList.map((item, index) => (
                   <tr key={index}>
-                    <td className="TableDataCell">{item.lo}</td>
-                    <td className="TableDataCell">{item.score}</td>
+                    <td className="TableDataCell">{item.lo_id}</td>
+                    <td className="TableDataCell">{item.value}</td>
                   </tr>
                 ))}
               </tbody>

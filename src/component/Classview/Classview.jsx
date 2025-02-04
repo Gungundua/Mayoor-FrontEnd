@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import { Line } from "react-chartjs-2";
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend } from "chart.js";
 import "./ClassViewStyle"
 
 import imgUser from "../assets/user.png";
-import imgBack from "../assets/Vector.png";
-import imgMenu from "../assets/List.png";
+// import imgBack from "../assets/Vector.png";
+import imgMenu from "../assets/menu.png";
 import imgBell from "../assets/bell.png";
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend);
@@ -68,11 +68,19 @@ const options = {
   },
 };
 
-const ClassView = ({setIndex}) => {
+const ClassView = ({setIndex, user}) => {
   const [selectedChart, setSelectedChart] = useState("ac");
   const handleClick = () => {
     setIndex(1)
   }
+
+  const [userData, setUserData] = useState('');
+      useEffect(() => {
+        const userData = sessionStorage.getItem("userData");
+        if (userData) {
+          setUserData(JSON.parse(userData));
+        }
+      }, []);
   return (
     <div className="class-container">
       <div className="class-header">
@@ -83,7 +91,7 @@ const ClassView = ({setIndex}) => {
           <div className="right-icons">
             <img src={imgUser} alt="User" className="header-image" />
             <img src={imgBell} alt="Bell" className="header-image" />
-            <img src={imgMenu} alt="Menu" className="header-image" onClick={handleClick}/>
+            <img src={imgMenu} alt="Menu" className="header-image-menu" onClick={handleClick} />
           </div>
         </div>
         <div className="class-overview">
@@ -94,21 +102,21 @@ const ClassView = ({setIndex}) => {
       <div className="info-box">
         <div className="info-text">
           <p>
-            <strong>Class:</strong> III
+            <strong>Class:</strong> {userData.class}
           </p>
           <p>
-            <strong>Year:</strong> 2023
+            <strong>Year:</strong> {userData.year}
           </p>
           <p>
-            <strong>Subject:</strong> English
+            <strong>Subject:</strong> {userData.subject}
           </p>
         </div>
         <div className="info-text">
           <p>
-            <strong>Section:</strong> Tulip
+            <strong>Section:</strong> {userData.section}
           </p>
           <p>
-            <strong>Quarter:</strong> Q2
+            <strong>Quarter:</strong> {userData.quarter}
           </p>
         </div>
       </div>

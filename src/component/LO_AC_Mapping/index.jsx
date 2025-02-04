@@ -58,7 +58,7 @@ const ACMapping = ({  loId, acItems }) => {
       subject: userData?.subject,
       quarter: userData?.quarter,
       section: userData?.section,
-      classname: userData?.class,
+      classname : userData?.class,
     };
   
     try {

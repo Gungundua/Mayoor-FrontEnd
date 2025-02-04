@@ -48,7 +48,7 @@ const Home = ({ user }) => {
         {index === 1 ? (
           <HomeList user={user} setIndex={setIndex}  />
         ) : index === 2 ? (
-          <ClassView setIndex={setIndex}/>
+          <ClassView setIndex={setIndex} user={user}/>
         ) : index === 3 ? (
           <StudentList onStudentsData={handleStudentsData} setIndex={setIndex}/>
         ) : index === 4 ? (

@@ -91,6 +91,10 @@ const styles = `
     width: 24px;
     height: 24px;
   }
+  .header-image-menu {
+    width: 34px;
+    height: 34px;
+  }
 `;
 
 const styleSheet = document.createElement("style");
