@@ -1,9 +1,10 @@
 import styled from "styled-components";
+import peacock from "./peacock.png"
 const Wrapper = styled.section`
     flex: 1;
     display: flex;
     flex-direction: column;
-    background-color: #21C2BA;
+    background: #21C2BA;
     font-family: Poppins;
 
     .options{
@@ -43,6 +44,10 @@ const Wrapper = styled.section`
         padding: 40px 20px 50px 30px;
         font-size: 17px;
         color: black;
+        background: no-repeat 150% center;
+        background-image: linear-gradient( rgba(33,194, 186, 0.7),rgba(33,194, 186, 0.7) ), url(${peacock});
+        
+        background-size: auto 130%;
     }
 
     #user-content {

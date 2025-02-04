@@ -2,7 +2,6 @@ import styled from "styled-components";
 
 const Wrapper = styled.section`
     width: 100%;
-    height: 90vh; /* Fix the height to the viewport size */
     display: flex;
     flex-direction: column;
     overflow: hidden; /* Prevent overflowing of the container */

@@ -3,6 +3,7 @@ import Wrapper from './style';
 import notification from "./bell.png";
 import student from './user.png';
 import menu from "./menu.png";
+import Ripples from 'react-ripples'
 
 
 const HomeList = ({ user, setIndex, msg }) => {
@@ -55,7 +56,7 @@ const HomeList = ({ user, setIndex, msg }) => {
           <h1 id="name">{user.name}</h1>
         </div>
         <div id="image">
-          <img id="notification" src={notification} alt="Notification" />
+          {/* <img id="notification" src={notification} alt="Notification" /> */}
           <img id="profile" src={student} alt="User" />
           <img id="menu" src={menu} alt="Menu" />
         </div>
@@ -64,54 +65,56 @@ const HomeList = ({ user, setIndex, msg }) => {
         <label htmlFor="year" onClick={toggle}>Year ({selectedYear})</label>
 
         <div className="options">
+          <Ripples>
           <div tabIndex={0} className={selectedYear === 2025 ? "option active" : "option"} onClick={e => setSelectedYear(2025)}>2025</div>
-          <div tabIndex={0} className={selectedYear === 2024 ? "option active" : "option"} onClick={e => setSelectedYear(2024)}>2024</div>
+            </Ripples>
+          <Ripples><div tabIndex={0} className={selectedYear === 2024 ? "option active" : "option"} onClick={e => setSelectedYear(2024)}>2024</div></Ripples>
         </div>
 
         <label htmlFor="class" onClick={toggle}>Class ({selectedClass})</label>
         <div className="options">
-          <div tabIndex={0} className={`option ${selectedClass === 1 ? 'active' : ''}`} onClick={e => setSelectedClass(1)}>1</div>
-          <div tabIndex={0} className={`option ${selectedClass === 2 ? 'active' : ''}`} onClick={e => setSelectedClass(2)}>2</div>
-          <div tabIndex={0} className={`option ${selectedClass === 3 ? 'active' : ''}`} onClick={e => setSelectedClass(3)}>3</div>
-          <div tabIndex={0} className={`option ${selectedClass === 4 ? 'active' : ''}`} onClick={e => setSelectedClass(4)}>4</div>
-          <div tabIndex={0} className={`option ${selectedClass === 5 ? 'active' : ''}`} onClick={e => setSelectedClass(5)}>5</div>
-          <div tabIndex={0} className={`option ${selectedClass === 6 ? 'active' : ''}`} onClick={e => setSelectedClass(6)}>6</div>
-          <div tabIndex={0} className={`option ${selectedClass === 7 ? 'active' : ''}`} onClick={e => setSelectedClass(7)}>7</div>
-          <div tabIndex={0} className={`option ${selectedClass === 8 ? 'active' : ''}`} onClick={e => setSelectedClass(8)}>8</div>
+          <Ripples><div tabIndex={0} className={`option ${selectedClass === 1 ? 'active' : ''}`} onClick={e => setSelectedClass(1)}>1</div></Ripples>
+          <Ripples><div tabIndex={0} className={`option ${selectedClass === 2 ? 'active' : ''}`} onClick={e => setSelectedClass(2)}>2</div></Ripples>
+          <Ripples><div tabIndex={0} className={`option ${selectedClass === 3 ? 'active' : ''}`} onClick={e => setSelectedClass(3)}>3</div></Ripples>
+          <Ripples><div tabIndex={0} className={`option ${selectedClass === 4 ? 'active' : ''}`} onClick={e => setSelectedClass(4)}>4</div></Ripples>
+          <Ripples><div tabIndex={0} className={`option ${selectedClass === 5 ? 'active' : ''}`} onClick={e => setSelectedClass(5)}>5</div></Ripples>
+          <Ripples><div tabIndex={0} className={`option ${selectedClass === 6 ? 'active' : ''}`} onClick={e => setSelectedClass(6)}>6</div></Ripples>
+          <Ripples><div tabIndex={0} className={`option ${selectedClass === 7 ? 'active' : ''}`} onClick={e => setSelectedClass(7)}>7</div></Ripples>
+          <Ripples><div tabIndex={0} className={`option ${selectedClass === 8 ? 'active' : ''}`} onClick={e => setSelectedClass(8)}>8</div></Ripples>
         </div>
         
         <label htmlFor="section" onClick={toggle}>Section ({selectedSection})</label>
         <div className="options">
-          <div tabIndex={0} className={selectedSection === "Orchid" ? "option active" : "option"} onClick={e => setSelectedSection("Orchid")}>Orchid</div>
-          <div tabIndex={0} className={selectedSection === "Tulip" ? "option active" : "option"} onClick={e => setSelectedSection("Tulip")}>Tulip</div>
-          <div tabIndex={0} className={selectedSection === "Daffodil" ? "option active" : "option"} onClick={e => setSelectedSection("Daffodil")}>Daffodil</div>
+          <Ripples><div tabIndex={0} className={selectedSection === "Orchid" ? "option active" : "option"} onClick={e => setSelectedSection("Orchid")}>Orchid</div></Ripples>
+          <Ripples><div tabIndex={0} className={selectedSection === "Tulip" ? "option active" : "option"} onClick={e => setSelectedSection("Tulip")}>Tulip</div></Ripples>
+          <Ripples><div tabIndex={0} className={selectedSection === "Daffodil" ? "option active" : "option"} onClick={e => setSelectedSection("Daffodil")}>Daffodil</div></Ripples>
         </div>
         
         <label htmlFor="quarter" onClick={toggle}>Quarter ({selectedQuarter})</label>
         <div className="options">
-          <div tabIndex={0} className={selectedQuarter === "1" ? "option active" : "option"} onClick={e => setSelectedQuarter("1")}>I</div>
-          <div tabIndex={0} className={selectedQuarter === "2" ? "option active" : "option"} onClick={e => setSelectedQuarter("2")}>II</div>
-          <div tabIndex={0} className={selectedQuarter === "3" ? "option active" : "option"} onClick={e => setSelectedQuarter("3")}>III</div>
-          <div tabIndex={0} className={selectedQuarter === "4" ? "option active" : "option"} onClick={e => setSelectedQuarter("4")}>IV</div>
+          <Ripples><div tabIndex={0} className={selectedQuarter === "1" ? "option active" : "option"} onClick={e => setSelectedQuarter("1")}>I</div></Ripples>
+          <Ripples><div tabIndex={0} className={selectedQuarter === "2" ? "option active" : "option"} onClick={e => setSelectedQuarter("2")}>II</div></Ripples>
+          <Ripples><div tabIndex={0} className={selectedQuarter === "3" ? "option active" : "option"} onClick={e => setSelectedQuarter("3")}>III</div></Ripples>
+          <Ripples><div tabIndex={0} className={selectedQuarter === "4" ? "option active" : "option"} onClick={e => setSelectedQuarter("4")}>IV</div></Ripples>
         </div>
         <label htmlFor="subject" onClick={toggle}>Subject ({selectedSubject})</label>
         <div className="options subjects">
-          <div tabIndex={0} className={`option ${selectedClass === 1 ? 'active' : ''}`} onClick={e => setSelectedClass(1)}>English</div>
-          <div tabIndex={0} className={`option ${selectedClass === 2 ? 'active' : ''}`} onClick={e => setSelectedClass(2)}>Hindi</div>
-          <div tabIndex={0} className={`option ${selectedClass === 3 ? 'active' : ''}`} onClick={e => setSelectedClass(3)}>Mathematics</div>
-          <div tabIndex={0} className={`option ${selectedClass === 4 ? 'active' : ''}`} onClick={e => setSelectedClass(4)}>Science</div>
-          <div tabIndex={0} className={`option ${selectedClass === 5 ? 'active' : ''}`} onClick={e => setSelectedClass(5)}>Computer Sc.</div>
-          <div tabIndex={0} className={`option ${selectedClass === 6 ? 'active' : ''}`} onClick={e => setSelectedClass(6)}>Social Studies</div>
-          <div tabIndex={0} className={`option ${selectedClass === 7 ? 'active' : ''}`} onClick={e => setSelectedClass(7)}>III Language</div>
-          <div tabIndex={0} className={`option ${selectedClass === 8 ? 'active' : ''}`} onClick={e => setSelectedClass(8)}>GP Values</div>
-          <div tabIndex={0} className={`option ${selectedClass === 9 ? 'active' : ''}`} onClick={e => setSelectedClass(9)}>Music</div>
-          <div tabIndex={0} className={`option ${selectedClass === 10 ? 'active' : ''}`} onClick={e => setSelectedClass(10)}>Dance/Dramatics</div>
-          <div tabIndex={0} className={`option ${selectedClass === 11 ? 'active' : ''}`} onClick={e => setSelectedClass(11)}>Art</div>
-          <div tabIndex={0} className={`option ${selectedClass === 12 ? 'active' : ''}`} onClick={e => setSelectedClass(12)}>Sports</div>
-          <div tabIndex={0} className={`option ${selectedClass === 13 ? 'active' : ''}`} onClick={e => setSelectedClass(13)}>Discipline</div>
-          <div tabIndex={0} className={`option ${selectedClass === 14 ? 'active' : ''}`} onClick={e => setSelectedClass(14)}>Attendance</div>
+          <Ripples><div tabIndex={0} className={`option ${selectedClass === 1 ? 'active' : ''}`} onClick={e => setSelectedClass(1)}>English</div></Ripples>
+          <Ripples><div tabIndex={0} className={`option ${selectedClass === 2 ? 'active' : ''}`} onClick={e => setSelectedClass(2)}>Hindi</div></Ripples>
+          <Ripples><div tabIndex={0} className={`option ${selectedClass === 3 ? 'active' : ''}`} onClick={e => setSelectedClass(3)}>Mathematics</div></Ripples>
+          <Ripples><div tabIndex={0} className={`option ${selectedClass === 4 ? 'active' : ''}`} onClick={e => setSelectedClass(4)}>Science</div></Ripples>
+          <Ripples><div tabIndex={0} className={`option ${selectedClass === 5 ? 'active' : ''}`} onClick={e => setSelectedClass(5)}>Computer Sc.</div></Ripples>
+          <Ripples><div tabIndex={0} className={`option ${selectedClass === 6 ? 'active' : ''}`} onClick={e => setSelectedClass(6)}>Social Studies</div></Ripples>
+          <Ripples><div tabIndex={0} className={`option ${selectedClass === 7 ? 'active' : ''}`} onClick={e => setSelectedClass(7)}>III Language</div></Ripples>
+          <Ripples><div tabIndex={0} className={`option ${selectedClass === 8 ? 'active' : ''}`} onClick={e => setSelectedClass(8)}>GP Values</div></Ripples>
+          <Ripples><div tabIndex={0} className={`option ${selectedClass === 9 ? 'active' : ''}`} onClick={e => setSelectedClass(9)}>Music</div></Ripples>
+          <Ripples><div tabIndex={0} className={`option ${selectedClass === 10 ? 'active' : ''}`} onClick={e => setSelectedClass(10)}>Dance/Dramatics</div></Ripples>
+          <Ripples><div tabIndex={0} className={`option ${selectedClass === 11 ? 'active' : ''}`} onClick={e => setSelectedClass(11)}>Art</div></Ripples>
+          <Ripples><div tabIndex={0} className={`option ${selectedClass === 12 ? 'active' : ''}`} onClick={e => setSelectedClass(12)}>Sports</div></Ripples>
+          <Ripples><div tabIndex={0} className={`option ${selectedClass === 13 ? 'active' : ''}`} onClick={e => setSelectedClass(13)}>Discipline</div></Ripples>
+          <Ripples><div tabIndex={0} className={`option ${selectedClass === 14 ? 'active' : ''}`} onClick={e => setSelectedClass(14)}>Attendance</div></Ripples>
         </div>
-        <button
+        <Ripples><button
           className="get-started"
           onClick={(e) => {
             e.preventDefault();
@@ -120,7 +123,7 @@ const HomeList = ({ user, setIndex, msg }) => {
           disabled={!selectedSubject}
         >
           Get Started
-        </button>
+        </button></Ripples>
       </form>
     </Wrapper>
   );
