@@ -89,12 +89,15 @@ const ClassView = ({setIndex, user}) => {
   return (
     <div className="class-container">
       <div className="class-header">
+      <div className="class-overview">
+          <div className="class-title">Class Overview</div>
+        </div>
         <div className="header-icons">
           <div className="back-icon">
             {/* <img src={imgBack} alt="Back" className="header-image" /> */}
           </div>
           <div className="right-icons">
-            <img src={imgBell} alt="Bell" className="header-image" />
+            {/* <img src={imgBell} alt="Bell" className="header-image" /> */}
           <Menu
              onProfileClick={handleProfileClick}
              onSettingsClick={handleSettingsClick}
@@ -102,9 +105,6 @@ const ClassView = ({setIndex, user}) => {
              onReturnClick={handleClick}
           />
           </div>
-        </div>
-        <div className="class-overview">
-          <div className="class-title">Class Overview</div>
         </div>
       </div>
 

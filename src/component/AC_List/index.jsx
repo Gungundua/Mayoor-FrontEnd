@@ -16,7 +16,7 @@ const AC_List = ({acItems, setAcItems, handleAcItems, studentsData , setIndex,us
   const [filteredAcList, setFilteredAcList] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [selectedAssessment, setSelectedAssessment] = useState(null);
-
+  const [loading, setLoading] = useState(false)
   const handleClick = () => {
     setIndex(1)
   }
@@ -37,6 +37,7 @@ const AC_List = ({acItems, setAcItems, handleAcItems, studentsData , setIndex,us
         console.warn("Missing user data, skipping API call.");
         return;
       }
+      setLoading(true)
     
       const headers = {
         Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
@@ -68,6 +69,8 @@ const AC_List = ({acItems, setAcItems, handleAcItems, studentsData , setIndex,us
         setAcList([]);
         setFilteredAcList([]);
         setAcItems([]);
+      } finally{
+        setLoading(false)
       }
     };
     
@@ -95,6 +98,7 @@ const AC_List = ({acItems, setAcItems, handleAcItems, studentsData , setIndex,us
     setSelectedAssessment(null);
   };
 
+
   if (selectedAssessment) {
     return <Assessment selectedAssessment={selectedAssessment} onBack={handleBackToList} studentsData={studentsData}/>;
   }
@@ -109,7 +113,7 @@ const AC_List = ({acItems, setAcItems, handleAcItems, studentsData , setIndex,us
           className="search-bar"
         />
         <div className="icon">
-            <img src={bellIcon} alt="Bell Icon" style={{ width: "22px", height: "22px" }} />
+            {/* <img src={bellIcon} alt="Bell Icon" style={{ width: "22px", height: "22px" }} /> */}
             {/* <img src={userIcon} alt="User Icon" style={{ width: "22px", height: "22px" }} /> */}
             {/* <img className="menu" src={menuIcon} alt="Menu Icon" style={{ width: "22px", height: "31px" }} onClick={handleClick} /> */}
             <Menu
@@ -121,9 +125,13 @@ const AC_List = ({acItems, setAcItems, handleAcItems, studentsData , setIndex,us
         </div>
       </div>
 
-      {filteredAcList.length > 0 ? (
-        <ul className="ac-list">
-          {filteredAcList.map((item) => (
+      <ul className="ac-list">
+        {loading ? (
+          <li className="loading-message">
+            <p>Loading....</p>
+          </li>
+        ) : filteredAcList.length > 0 ? (
+          filteredAcList.map((item) => (
             <li key={item.id} className="ac-list-item" onClick={() => handleStartAssessment(item)}>
               <div className="ac-header">
                 <div className="list-icon-containers">
@@ -134,15 +142,15 @@ const AC_List = ({acItems, setAcItems, handleAcItems, studentsData , setIndex,us
                 </div>
               </div>
             </li>
-          ))}
-        </ul>
-      ) : (
-        <div className="no-results">
-          <p className="no_results">No Results Found</p>
-        </div>
-      )}
+          ))
+        ) : (
+          <li className="no-results">
+            <p className="no_results">No Data Available</p>
+          </li>
+        )}
+      </ul>
 
-      <div className="add" onClick={() => setShowForm(true)}>+</div>
+      <div className="add" onClick={() => setShowForm(true)}><span className="plus">+</span></div>
 
       {showForm && (
         <div className="popup-overlay">

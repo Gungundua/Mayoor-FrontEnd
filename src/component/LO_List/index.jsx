@@ -98,7 +98,7 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
           className="search-bar"
         />
         <div className="icon">
-          <img src={bellIcon} alt="Bell Icon" style={{ width: '22px', height: '22px' }} />
+          {/* <img src={bellIcon} alt="Bell Icon" style={{ width: '22px', height: '22px' }} /> */}
           {/* <img src={userIcon} alt="User Icon" style={{ width: '22px', height: '22px' }} /> */}
           {/* <img className="menu" src={menuIcon} alt="Menu Icon" style={{ width: '22px', height: '31px' }} onClick={handleClick}/> */}
           <Menu
@@ -136,7 +136,7 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
         </div>
       )}
 
-      <div className="add" onClick={handleform}>+</div>
+      <div className="add" onClick={handleform}><span className='plus'>+</span></div>
       {showForm && (
         <div className="popup-overlay">
           <div className="popup-content">

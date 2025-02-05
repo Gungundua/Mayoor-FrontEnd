@@ -12,6 +12,7 @@ const ROlist = ({ loItems, setLoItems, setIndex}) => {
   const [roList, setRoList] = useState([]);     // Full RO list from API
   const [searchQuery, setSearchQuery] = useState(""); // Stores search input
   const [filteredRoList, setFilteredRoList] = useState([]); // Filtered RO list
+  const [loading, setLoading] = useState(false)
 
   const handleClick = () => {
     setIndex(1)
@@ -34,6 +35,7 @@ const ROlist = ({ loItems, setLoItems, setIndex}) => {
  
   useEffect(() => {
     const loadRO = async (userdata) => {
+      setLoading(true)
       const headers = {
         Authorization: 'Bearer YOUR_ACCESS_TOKEN', // Replace with actual token
         'Content-Type': 'application/json',
@@ -61,6 +63,8 @@ const ROlist = ({ loItems, setLoItems, setIndex}) => {
         console.error('Error fetching report outcomes:', error.response || error.message);
         setRoList([]);
         setFilteredRoList([]);
+      } finally{
+        setLoading(false)
       }
     };
 
@@ -93,7 +97,7 @@ const ROlist = ({ loItems, setLoItems, setIndex}) => {
           className="search-bar"
         />
         <div className="icon">
-            <img src={bellIcon} alt="Bell Icon" style={{ width: "22px", height: "22px" }} />
+            {/* <img src={bellIcon} alt="Bell Icon" style={{ width: "22px", height: "22px" }} /> */}
             {/* <img src={userIcon} alt="User Icon" style={{ width: "22px", height: "22px" }} /> */}
             {/* <img className="menu" src={menuIcon} alt="Menu Icon" style={{ width: "22px", height: "31px" }} onClick={handleClick}/> */}
             <Menu

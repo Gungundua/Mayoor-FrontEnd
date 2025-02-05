@@ -55,7 +55,7 @@ const handlers = useSwipeable({
         ) : index === 2 ? (
           <ClassView setIndex={setIndex} user={user}/>
         ) : index === 3 ? (
-          <StudentList onStudentsData={handleStudentsData} setIndex={setIndex}/>
+          <StudentList onStudentsData={handleStudentsData} setIndex={setIndex} />
         ) : index === 4 ? (
           <AClist acItems={acItems} setAcItems={setAcItems} handleAcItems={handleAcItems} studentsData={studentsData} setIndex={setIndex} user={user}/>
         ) : index === 5 ? (
