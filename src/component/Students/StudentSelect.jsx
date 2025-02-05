@@ -6,7 +6,6 @@ import { IoSearchOutline } from "react-icons/io5";
 import axios from "axios";
 import StudentReport from "../Student_report/StudentReport.jsx";
 import TeacherProfile from "../TeacherProfile/index.jsx"
-import loading from "./loading.gif";
 import Menu from "../MenuBar";
 
 const StudentList = ({ onStudentsData, setIndex }) => {
@@ -16,7 +15,7 @@ const StudentList = ({ onStudentsData, setIndex }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [showReport, setShowReport] = useState(null);
   const [showTeacherProfile, setShowTeacherProfile] = useState(false);
- 
+
   const handleProfileClick = () => alert("Go to Profile");
   const handleSettingsClick = () => alert("Open Settings");
   const handleLogoutClick = () => alert("Logging Out...");

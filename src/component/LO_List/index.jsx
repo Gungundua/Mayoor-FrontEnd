@@ -16,7 +16,7 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
   const [filteredLoList, setFilteredLoList] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-
+  const [loading, setLoading] = useState(false)
   const handleClick = () => {
     setIndex(1)
   }
@@ -40,6 +40,7 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
       }
     }, []);
   const loadLO = async (userData) => {
+    setLoading(true)
     const headers = {
       Authorization: 'Bearer YOUR_ACCESS_TOKEN',
       'Content-Type': 'application/json',
@@ -67,6 +68,8 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
       setFilteredLoList(finalData);
     } catch (error) {
       console.error('Error fetching report outcomes:', error);
+    }finally{
+      setLoading(false)
     }
   };
 
@@ -109,10 +112,13 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
           />
         </div>
       </div>
-
-      {filteredLoList.length > 0 ? (
         <ul className="lo-list">
-          {filteredLoList.map((item, index) => (
+          {loading ? (
+            <li className="loading-message">
+            <p>Loading....</p>
+            </li>
+          ) : filteredLoList.length > 0 ? (
+          filteredLoList.map((item, index) => (
             <li key={item.id} className={`lo-list-item ${activeIndex === index ? 'active' : ''}`}>
               <div className="lo-header" onClick={() => toggleDropdown(index)}>
                 <div className="list-icon-containers">
@@ -128,13 +134,13 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
                 )}
               </div>
             </li>
-          ))}
-        </ul>
-      ) : (
-        <div className="no-results">
+          ))
+        ) : (
+          <li className="no-results">
           <p className="no_results">No Results Found</p>
-        </div>
+        </li>
       )}
+      </ul>
 
       <div className="add" onClick={handleform}><span className='plus'>+</span></div>
       {showForm && (

@@ -108,10 +108,13 @@ const ROlist = ({ loItems, setLoItems, setIndex}) => {
           />
         </div>
       </div>
-
-      {filteredRoList.length > 0 ? (
         <ul className="ro-list">
-          {filteredRoList.map((item, index) => (
+          {loading ? (
+            <li className="loading-message">
+              <p>Loading....</p>
+            </li>
+          ) : filteredRoList.length > 0 ? (
+          filteredRoList.map((item, index) => (
             <li key={item.id} className="ro-list-item">
               <div className="ro-header" onClick={() => toggleDropdown(index)}>
                 <div className="list-icon-containers">
@@ -127,13 +130,13 @@ const ROlist = ({ loItems, setLoItems, setIndex}) => {
                 </div>
               )}
             </li>
-          ))}
-        </ul>
+          ))
       ) : (
-        <div className="no-results">
+        <li className="no-results">
           <p className="no_results">No Results Found</p>
-        </div> 
+        </li> 
       )}
+      </ul>
     </Wrapper>
   );
 };
