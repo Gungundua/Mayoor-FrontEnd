@@ -40,10 +40,10 @@ const Home = ({ user }) => {
 // console.log(user)
 const handlers = useSwipeable({
   onSwipedLeft: () => {
-    if (index !== 1) setIndex((prevIndex) => (prevIndex < 6 ? prevIndex + 1 : prevIndex));
+    if (index !== 1 && index !== 4) setIndex((prevIndex) => (prevIndex < 6 ? prevIndex + 1 : prevIndex));
   },
   onSwipedRight: () => {
-    if (index !== 1) setIndex((prevIndex) => (prevIndex > 1 ? prevIndex - 1 : prevIndex));
+    if (index !== 1 && index !== 4) setIndex((prevIndex) => (prevIndex > 1 ? prevIndex - 1 : prevIndex));
   },
   trackMouse: true,
 });
