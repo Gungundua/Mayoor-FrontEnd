@@ -4,8 +4,8 @@ import LOMapping from '../RO_LO_Mapping';
 import List from '../images/list.png';
 import axios from 'axios';
 import bellIcon from "../assets/bell.png";
-import userIcon from "../assets/user.png";
-import menuIcon from "../assets/menu.png";
+
+import Menu from '../MenuBar';
 
 const ROlist = ({ loItems, setLoItems, setIndex}) => {
   const [activeIndex, setActiveIndex] = useState(null);
@@ -28,6 +28,10 @@ const ROlist = ({ loItems, setLoItems, setIndex}) => {
       }
     }, []);
 
+    const handleProfileClick = () => alert("Go to Profile");
+    const handleSettingsClick = () => alert("Open Settings");
+    const handleLogoutClick = () => alert("Logging Out...");
+ 
   useEffect(() => {
     const loadRO = async (userdata) => {
       const headers = {
@@ -90,8 +94,14 @@ const ROlist = ({ loItems, setLoItems, setIndex}) => {
         />
         <div className="icon">
             <img src={bellIcon} alt="Bell Icon" style={{ width: "22px", height: "22px" }} />
-            <img src={userIcon} alt="User Icon" style={{ width: "22px", height: "22px" }} />
-            <img className="menu" src={menuIcon} alt="Menu Icon" style={{ width: "22px", height: "31px" }} onClick={handleClick}/>
+            {/* <img src={userIcon} alt="User Icon" style={{ width: "22px", height: "22px" }} /> */}
+            {/* <img className="menu" src={menuIcon} alt="Menu Icon" style={{ width: "22px", height: "31px" }} onClick={handleClick}/> */}
+            <Menu
+             onProfileClick={handleProfileClick}
+             onSettingsClick={handleSettingsClick}
+             onLogoutClick={handleLogoutClick}
+             onReturnClick={handleClick}
+          />
         </div>
       </div>
 

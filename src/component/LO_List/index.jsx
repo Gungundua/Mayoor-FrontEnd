@@ -9,6 +9,7 @@ import Form_LO from '../Form_LO';
 import bellIcon from '../assets/bell.png';
 import userIcon from '../assets/user.png';
 import menuIcon from '../assets/menu.png';
+import Menu from '../MenuBar';
 
 const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIndex }) => {
   const [activeIndex, setActiveIndex] = useState(null);
@@ -28,6 +29,9 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
     setShowForm(true);
   };
 
+  const handleProfileClick = () => alert("Go to Profile");
+  const handleSettingsClick = () => alert("Open Settings");
+  const handleLogoutClick = () => alert("Logging Out...");
   const [userData, setUserData] = useState(null);
     useEffect(() => {
       const userData = sessionStorage.getItem("userData");
@@ -95,8 +99,14 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
         />
         <div className="icon">
           <img src={bellIcon} alt="Bell Icon" style={{ width: '22px', height: '22px' }} />
-          <img src={userIcon} alt="User Icon" style={{ width: '22px', height: '22px' }} />
-          <img className="menu" src={menuIcon} alt="Menu Icon" style={{ width: '22px', height: '31px' }} onClick={handleClick}/>
+          {/* <img src={userIcon} alt="User Icon" style={{ width: '22px', height: '22px' }} /> */}
+          {/* <img className="menu" src={menuIcon} alt="Menu Icon" style={{ width: '22px', height: '31px' }} onClick={handleClick}/> */}
+          <Menu
+             onProfileClick={handleProfileClick}
+             onSettingsClick={handleSettingsClick}
+             onLogoutClick={handleLogoutClick}
+             onReturnClick={handleClick}
+          />
         </div>
       </div>
 

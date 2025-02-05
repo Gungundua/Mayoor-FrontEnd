@@ -2,143 +2,136 @@ import React, { useState, useEffect } from "react";
 import Wrapper from "./style";
 import Form_LO from "../Form_LO/index";
 import axios from "axios";
-
-const LOMapping = ({  roId, loItems }) => {
-  const [priorityMapping, setPriorityMapping] = useState({}); // Stores priorities by roId and acId
+const LOMapping = ({ roId, loItems }) => {
+  const [priorityMapping, setPriorityMapping] = useState({});
+  const [isLocked, setIsLocked] = useState(false);
   const [showForm, setShowForm] = useState(false);
-
   const [userData, setUserData] = useState(null);
-      useEffect(() => {
-        const userData = sessionStorage.getItem("userData");
-        if (userData) {
-          setUserData(JSON.parse(userData));
-        }
-      }, []);
+  useEffect(() => {
+    const userData = sessionStorage.getItem("userData");
+    if (userData) {
+      setUserData(JSON.parse(userData));
+    }
+  }, []);
   const handleform = () => {
     setShowForm(true);
   };
-
   const handleClick = (loid, priority) => {
-    // Convert priority to lowercase before saving
-    const lowerCasePriority = priority.toLowerCase();
-
-    setPriorityMapping((prev) => {
-      const updatedPriorityMapping = { ...prev };
-
-      // Initialize roId object if it doesn't exist
-      if (!updatedPriorityMapping[roId]) {
-        updatedPriorityMapping[roId] = { Data: [] }; // Directly initialize roId with Data
-      }
-
-      // Find if the LO is already selected, then update or add new
-      const existingEntryIndex = updatedPriorityMapping[roId].Data.findIndex(
-        (entry) => entry.lo_id === loid
-      );
-
-      if (existingEntryIndex !== -1) {
-        // If already present, update the priority
-        updatedPriorityMapping[roId].Data[existingEntryIndex].priority = lowerCasePriority;
-      } else {
-        // If not present, add a new entry
-        updatedPriorityMapping[roId].Data.push({ lo_id: loid, priority: lowerCasePriority });
-      }
-
-      return updatedPriorityMapping;
-    });
+    if (isLocked) return;
+    setPriorityMapping((prev) => ({
+      ...prev,
+      [loid]: priority.toLowerCase(),
+    }));
   };
-
   const handleDone = async () => {
-    // Prepare the data to send in the required format
+    if (isLocked) return;
     const body = {
-      ro_id: roId,  // Include roId directly
-      data: priorityMapping[roId]?.Data || [], // Get the Data for the specific roId
+      ro_id: roId,
+      data: Object.entries(priorityMapping).map(([lo_id, priority]) => ({
+        lo_id: Number(lo_id),
+        priority,
+      })),
     };
-
-    // Log the body data to check the format
     console.log("Data to be sent:", body);
-
     const headers = {
-      Authorization: 'Bearer YOUR_ACCESS_TOKEN', // Replace with the actual token
+      Authorization: 'Bearer YOUR_ACCESS_TOKEN',
       'Content-Type': 'application/json',
-      year: userData.year,
-      subject: userData.subject,
-      quarter: userData.quarter,
-      section: userData.section,
-      classname: userData.class,
+      year: userData?.year,
+      subject: userData?.subject,
+      quarter: userData?.quarter,
+      section: userData?.section,
+      classname: userData?.class,
     };
-
-    // Make the POST request to send the priorityMapping data via Axios
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/report-outcome-mapping`, // Replace with your actual API URL
+        `${process.env.REACT_APP_API_URL}/api/report-outcome-mapping`,
         body,
         { headers }
       );
-      // Handle the response from the API (if needed)
       console.log("API Response:", response.data);
     } catch (error) {
-      // Handle error if request fails
       console.error("Error sending data:", error);
     }
   };
-
+  useEffect(() => {
+    const loadLoAcMapping = async () => {
+      if (!userData) return;
+      const headers = {
+        Authorization: "Bearer YOUR_ACCESS_TOKEN",
+        "Content-Type": "application/json",
+        ro_id: roId,
+        year: userData.year,
+        classname: userData.class,
+        section: userData.section,
+        subject: userData.subject,
+        quarter: userData.quarter,
+      };
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/report-outcome-mapping`,
+          { headers }
+        );
+        const { data } = response.data;
+        console.log("Response Come Data:", data);
+        if (data.length > 0) {
+          setIsLocked(true);
+          const newPriorityMapping = {};
+          data.forEach(({ lo_id, priority }) => {
+            newPriorityMapping[lo_id] = priority.toLowerCase();
+          });
+          setPriorityMapping(newPriorityMapping);
+        } else {
+          setIsLocked(false);
+        }
+      } catch (error) {
+        console.error("Error fetching ac score:", error.response || error.message);
+        setPriorityMapping({});
+        setIsLocked(false);
+      }
+    };
+    loadLoAcMapping();
+  }, [userData, roId]);
   return (
     <Wrapper>
       <div className="lo-list-container">
         <div className="lo-list">
-          {loItems.map((lo, index) => (
+          {loItems.map((lo) => {
+            const selectedPriority = priorityMapping[lo.id] || "";
+            return(
             <div key={lo.id} className="lo-item">
               <div>
-                {/* <h2>LO {index + 1}</h2> */}
                 <span className="name">{lo.name}</span>
               </div>
               <div className="priority-buttons">
-                <button
-                  className={`priority-button ${
-                    priorityMapping[roId]?.Data.find(
-                      (entry) => entry.lo_id === lo.id
-                    )?.priority === "h"
-                      ? "h"
-                      : ""
-                  }`}
-                  onClick={() => handleClick(lo.id, "H")}
-                  disabled={priorityMapping[roId]?.isLocked} // Disable button if locked
-                >
+              <button
+                    className={`priority-button ${selectedPriority === "h" ? "h" : ""}`}
+                    onClick={() => handleClick(lo.id, "H")}
+                    disabled={isLocked}
+                  >
                   H
                 </button>
                 <button
-                  className={`priority-button ${
-                    priorityMapping[roId]?.Data.find(
-                      (entry) => entry.lo_id === lo.id
-                    )?.priority === "m"
-                      ? "m"
-                      : ""
-                  }`}
-                  onClick={() => handleClick(lo.id, "M")}
-                  disabled={priorityMapping[roId]?.isLocked} // Disable button if locked
-                >
+                    className={`priority-button ${selectedPriority === "m" ? "m" : ""}`}
+                    onClick={() => handleClick(lo.id, "M")}
+                    disabled={isLocked}
+                  >
                   M
                 </button>
                 <button
-                  className={`priority-button ${
-                    priorityMapping[roId]?.Data.find(
-                      (entry) => entry.lo_id === lo.id
-                    )?.priority === "l"
-                      ? "l"
-                      : ""
-                  }`}
-                  onClick={() => handleClick(lo.id, "L")}
-                  disabled={priorityMapping[roId]?.isLocked} // Disable button if locked
-                >
+                    className={`priority-button ${selectedPriority === "l" ? "l" : ""}`}
+                    onClick={() => handleClick(lo.id, "L")}
+                    disabled={isLocked}
+                  >
                   L
                 </button>
               </div>
             </div>
-          ))}
+            )
+          })}
         </div>
         <div className="btns">
-          <input type="button" value="Add New LO" className="add" onClick={handleform} />
-          <input type="button" value="Done" className="btn" onClick={handleDone} />
+          <input type="button" value="Add New LO" className="add" onClick={handleform} disabled={isLocked} />
+          <input type="button" value="Done" className="btn" onClick={handleDone} disabled={isLocked} />
         </div>
       </div>
       {showForm && (
@@ -151,5 +144,4 @@ const LOMapping = ({  roId, loItems }) => {
     </Wrapper>
   );
 };
-
 export default LOMapping;

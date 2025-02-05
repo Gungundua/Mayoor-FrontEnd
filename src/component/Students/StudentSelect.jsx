@@ -7,6 +7,7 @@ import axios from "axios";
 import StudentReport from "../Student_report/StudentReport.jsx";
 import TeacherProfile from "../TeacherProfile/index.jsx"
 import loading from "./loading.gif";
+import menu from "../assets/menu.png";
 
 const StudentList = ({ onStudentsData }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -124,11 +125,12 @@ const StudentList = ({ onStudentsData }) => {
 
           <div style={styles.iconWrapper}>
             <img src={bellIcon} alt="Bell Icon" style={{ width: "22px", height: "22px" }} />
-            <img src={userIcon} alt="User Icon" onClick={handleProfile} style={{ width: "22px", height: "22px" }} />
+            {/* <img src={userIcon} alt="User Icon" onClick={handleProfile} style={{ width: "22px", height: "22px" }} /> */}
+            <img src={menu} alt="" />
           </div>
         </div>
         
-        <h2 style={styles.title}>Student List</h2>
+        {/* <h2 style={styles.title}>Student List</h2> */}
       </div>
 
       {/* Student List */}
@@ -141,7 +143,7 @@ const StudentList = ({ onStudentsData }) => {
           ))
         ) : (
           <div style={styles.noResults}>
-            <img src={loading} alt="" className="loading"/>
+            Loading...
           </div>
         )}
       </div>

@@ -7,10 +7,10 @@ import axios from "axios";
 import Form_AC from "../Form_AC";
 import Assessment from "../Start_Assesment/index.jsx";
 import bellIcon from "../assets/bell.png";
-import userIcon from "../assets/user.png";
-import menuIcon from "../assets/menu.png";
+import Menu from "../MenuBar/index.jsx";
+import HomeList from "../Home/Homelist/index.jsx";
 
-const AC_List = ({acItems, setAcItems, handleAcItems, studentsData , setIndex}) => {
+const AC_List = ({acItems, setAcItems, handleAcItems, studentsData , setIndex,user}) => {
   const [acList, setAcList] = useState([]);  
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredAcList, setFilteredAcList] = useState([]);
@@ -27,6 +27,10 @@ const AC_List = ({acItems, setAcItems, handleAcItems, studentsData , setIndex}) 
         setUserData(JSON.parse(userData));
       }
     }, []);
+    const handleProfileClick = () => alert("Go to Profile");
+    const handleSettingsClick = () => alert("Open Settings");
+    const handleLogoutClick = () => alert("Logging Out...");
+
 
     const loadAC = async () => {
       if (!userData || !userData.year || !userData.class || !userData.section || !userData.subject || !userData.quarter) {
@@ -94,7 +98,6 @@ const AC_List = ({acItems, setAcItems, handleAcItems, studentsData , setIndex}) 
   if (selectedAssessment) {
     return <Assessment selectedAssessment={selectedAssessment} onBack={handleBackToList} studentsData={studentsData}/>;
   }
-
   return (
     <Wrapper>
       <div className="search-container">
@@ -107,8 +110,14 @@ const AC_List = ({acItems, setAcItems, handleAcItems, studentsData , setIndex}) 
         />
         <div className="icon">
             <img src={bellIcon} alt="Bell Icon" style={{ width: "22px", height: "22px" }} />
-            <img src={userIcon} alt="User Icon" style={{ width: "22px", height: "22px" }} />
-            <img className="menu" src={menuIcon} alt="Menu Icon" style={{ width: "22px", height: "31px" }} onClick={handleClick} />
+            {/* <img src={userIcon} alt="User Icon" style={{ width: "22px", height: "22px" }} /> */}
+            {/* <img className="menu" src={menuIcon} alt="Menu Icon" style={{ width: "22px", height: "31px" }} onClick={handleClick} /> */}
+            <Menu
+             onProfileClick={handleProfileClick}
+             onSettingsClick={handleSettingsClick}
+             onLogoutClick={handleLogoutClick}
+             onReturnClick={handleClick}
+          />
         </div>
       </div>
 

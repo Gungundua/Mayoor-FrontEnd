@@ -93,9 +93,11 @@ const styles = {
     fontSize: "16px",
     marginTop: "10px",
   },
-  loading:{
-    height: "20px",
-    width: "20px",
+  loading: {
+    height: "30px",  
+    width: "30px",
+    display: "block", 
+    margin: "auto",   
   },
 };
 
