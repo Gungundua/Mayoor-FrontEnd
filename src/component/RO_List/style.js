@@ -119,8 +119,9 @@ const Wrapper = styled.section`
     border-radius: 8px;
     margin-bottom: 10px;
     overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     padding: 10px;
+    border-radius: 20px;
   }
 
   .ro-header {
@@ -139,17 +140,15 @@ const Wrapper = styled.section`
   }
 
   .ro-dropdown-content {
-    padding: 10px;
+    // padding: 10px;
     background: #eee;
-    color: #004d40;
+    color:#1a302d
   }
   
 .list-icons{
   height: 20px;
- // background-color: #21c3bc;
 }
 .list-icon-containers{
- // background-color: #21c3bc;
   margin-right: 10px;
   border-radius: 5px;
   padding: 2px;

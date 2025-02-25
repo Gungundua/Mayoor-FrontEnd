@@ -130,7 +130,7 @@ const LOMapping = ({ roId, loItems }) => {
           })}
         </div>
         <div className="btns">
-          <input type="button" value="Add New LO" className="add" onClick={handleform} disabled={isLocked} />
+          <input type="button" value="Add" className="add" onClick={handleform} disabled={isLocked} />
           <input type="button" value="Done" className="btn" onClick={handleDone} disabled={isLocked} />
         </div>
       </div>

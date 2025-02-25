@@ -1,12 +1,10 @@
 import styled from "styled-components";
-
 const Wrapper = styled.section`
     width: 100%;
     display: flex;
     flex-direction: column;
     overflow: hidden; /* Prevent overflowing of the container */
-    background-color: #21c3bc;
-
+    background-color: #21C3BC;
     .search-container {
       display: flex;
       gap: 60px;
@@ -46,7 +44,6 @@ const Wrapper = styled.section`
     .search-bar::placeholder {
       color: #aaa
        }
-
     .no-results{
     list-style: none;
     flex: 1; /* Allow the list to grow and take up available space */
@@ -58,35 +55,28 @@ const Wrapper = styled.section`
     background-color: #fff;
     padding: 10px;
   }
-
-
     .no_results{
       color: gray;
       text-align: center;
     }
-
     .list-icon-container {
       position: absolute;
       left: 10px; /* Position the search icon inside the input */
       top: 50%;
       transform: translateY(-50%);
     }
-
     .list-icon {
       width: 18px;
       height: 18px;
       opacity: 0.7;
     }
-
-  
-    .lo-list-title {
-    text-align: center;
-    color: white;
-    margin-bottom: 10px;
-    padding: 15px;
-    height: 50px;
-  }
-
+  //   .lo-list-title {
+  //   text-align: center;
+  //   color: white;
+  //   margin-bottom: 10px;
+  //   padding: 15px;
+  //   height: 50px;
+  // }
   .lo-list {
     list-style: none;
     flex: 1; /* Allow the list to grow and take up available space */
@@ -98,55 +88,54 @@ const Wrapper = styled.section`
     background-color: #fff;
     padding: 10px;
   }
-
   .lo-list::-webkit-scrollbar {
     width: 8px; /* Width of the scrollbar for WebKit browsers */
   }
-
   .lo-list::-webkit-scrollbar-thumb {
     background-color: #ccc; /* Color of the scrollbar thumb */
     border-radius: 4px;
   }
-
   .lo-list-item {
     background: white;
     border: 1px solid #ddd;
     border-radius: 8px;
     margin-bottom: 10px;
-    overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    // overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     padding: 10px;
+    border-radius: 20px;
   }
-
   .lo-header {
     display: flex;
     align-items: center;
     cursor: pointer;
   }
-
   .lo-info {
     flex: 1;
+    display: flex;
+    flex-direction: row;
   }
-
   .lo-dropdown-icon {
     font-size: 18px;
-    color: #00796b;
+    color: #00796B;
   }
-
   .lo-dropdown-content {
     padding: 10px;
     background: #eee;
-    color: #004d40;
+    color: #004D40;
     display : none;
     &.show{
       display : block;
     }
   }
+    .dots{
+    height: 40px;
+    }
     .loading-message{
-    height: 30px;  
+    height: 30px;
     width: 30px;
-    display: block; 
-    margin: auto; 
+    display: block;
+    margin: auto;
     color: grey;
     }
     .plus{
@@ -154,7 +143,7 @@ const Wrapper = styled.section`
     color: rgb(26, 24, 24)
     }
   .add{
-    background-color: #21c3bc;
+    background-color: #21C3BC;
     opacity: 0.7;
     font-weight: bold;
     width: 60px;
@@ -185,12 +174,15 @@ const Wrapper = styled.section`
   margin-right: 5px;
   color: green;
 }
+  .popup-menu{
+  background-color: beige
+  }
 .list-icons{
   height: 20px;
- // background-color: #21c3bc;
+ // background-color: #21C3BC;
 }
 .list-icon-containers{
- // background-color: #21c3bc;
+ // background-color: #21C3BC;
   margin-right: 10px;
   border-radius: 5px;
   padding: 2px;
@@ -210,7 +202,6 @@ const Wrapper = styled.section`
   align-items: center;
   z-index: 1000;
 }
-
 .popup-content {
   background: white;
   padding: 20px;
@@ -219,7 +210,6 @@ const Wrapper = styled.section`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   animation: popup 0.3s ease-in-out;
 }
-
 @keyframes popup {
   from {
     transform: scale(0.8);
@@ -230,7 +220,6 @@ const Wrapper = styled.section`
     opacity: 1;
   }
 }
-
 .form-container button {
   margin-top: 10px;
   padding: 5px 10px;
@@ -238,10 +227,14 @@ const Wrapper = styled.section`
   border-radius: 5px;
   cursor: pointer;
 }
-
 .form-container button:hover {
-  background-color: #f0f0f0;
+  background-color: #F0F0F0;
 }
 `
-
 export default Wrapper;
+
+
+
+
+
+

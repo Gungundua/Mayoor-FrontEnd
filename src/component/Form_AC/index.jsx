@@ -86,8 +86,8 @@ const Form_AC = ({ closeForm, loadAC }) => {
         onKeyDown={handleKeyDown} // Listen for Enter key press
       />
       <div className="buttons">
-        <button onClick={closeForm} className="closebtn">Cancel</button>
-        <button onClick={handleSubmit} className="savebtn">Submit</button>
+        <button onClick={closeForm} className="closebtn">Close</button>
+        <button onClick={handleSubmit} className="savebtn">Add</button>
       </div>
     </Wrapper>
   );

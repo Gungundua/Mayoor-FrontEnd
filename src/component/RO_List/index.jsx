@@ -3,7 +3,7 @@ import Wrapper from './style';
 import LOMapping from '../RO_LO_Mapping';
 import List from '../images/list.png';
 import axios from 'axios';
-import bellIcon from "../assets/bell.png";
+import noData from "../assets/noData.png";
 
 import Menu from '../MenuBar';
 
@@ -133,7 +133,7 @@ const ROlist = ({ loItems, setLoItems, setIndex}) => {
           ))
       ) : (
         <li className="no-results">
-          <p className="no_results">No Results Found</p>
+          <img className='no-results' src={noData} />
         </li> 
       )}
       </ul>

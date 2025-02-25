@@ -15,9 +15,9 @@ const Home = ({ user }) => {
   const [tabs, setTabs] = useState([
     { id: 2, title: 'Home', icon: homeIcon },
     { id: 3, title: 'Students', icon: stuIcon },
-    { id: 4, title: 'AC', icon: listIcon },
-    { id: 5, title: 'LO', icon: listIcon },
-    { id: 6 , title: 'RO', icon: listIcon },
+    { id: 4, title: 'LO', icon: listIcon },
+    { id: 5, title: 'RO', icon: listIcon },
+    { id: 6 , title: 'AC', icon: listIcon },
   ]);
   const [loItems, setLoItems] = useState([]);
   const [acItems, setAcItems] = useState([]);
@@ -40,10 +40,10 @@ const Home = ({ user }) => {
 // console.log(user)
 const handlers = useSwipeable({
   onSwipedLeft: () => {
-    if (index !== 1 && index !== 4) setIndex((prevIndex) => (prevIndex < 6 ? prevIndex + 1 : prevIndex));
+    if (index !== 1 && index !== 6) setIndex((prevIndex) => (prevIndex < 6 ? prevIndex + 1 : prevIndex));
   },
   onSwipedRight: () => {
-    if (index !== 1 && index !== 4) setIndex((prevIndex) => (prevIndex > 1 ? prevIndex - 1 : prevIndex));
+    if (index !== 1 && index !== 6) setIndex((prevIndex) => (prevIndex > 1 ? prevIndex - 1 : prevIndex));
   },
   trackMouse: true,
 });
@@ -57,11 +57,11 @@ const handlers = useSwipeable({
         ) : index === 3 ? (
           <StudentList onStudentsData={handleStudentsData} setIndex={setIndex} />
         ) : index === 4 ? (
-          <AClist acItems={acItems} setAcItems={setAcItems} handleAcItems={handleAcItems} studentsData={studentsData} setIndex={setIndex} user={user}/>
-        ) : index === 5 ? (
           <LOlist loItems={loItems} handleLoItems={handleLoItems} acItems={acItems} setAcItems={setAcItems} setIndex={setIndex}/>
-        ) : (
+        ) : index === 5 ? (
           <ROlist loItems={loItems} setLoItems={setLoItems} setIndex={setIndex}/>
+        ) : (
+          <AClist acItems={acItems} setAcItems={setAcItems} handleAcItems={handleAcItems} studentsData={studentsData} setIndex={setIndex} user={user}/>
         )}
       </div>
       {index !== 1 && (

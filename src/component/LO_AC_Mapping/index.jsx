@@ -130,7 +130,7 @@ const ACMapping = ({ loId, acItems }) => {
           })}
         </div>
         <div className="btns">
-          <input type="button" value="Add New AC" className="addBtn" onClick={handleform} disabled={isLocked} />
+          <input type="button" value="Add" className="addBtn" onClick={handleform} disabled={isLocked} />
           <input type="button" value="Done" className="btn" onClick={handleDone} disabled={isLocked} />
         </div>
       </div>

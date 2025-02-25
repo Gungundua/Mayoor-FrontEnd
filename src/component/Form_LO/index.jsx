@@ -82,7 +82,7 @@ const Form_LO = ({ closeForm, loadLO }) => {
           />
             <input
             type="button"
-            value="Submit"
+            value="Add"
             className="submitbtn"
             onClick={handleSubmit}
           />

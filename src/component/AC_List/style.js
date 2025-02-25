@@ -110,9 +110,9 @@ const Wrapper = styled.section`
     border: 1px solid #ddd;
     border-radius: 8px;
     margin-bottom: 10px;
-    overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     padding: 10px;
+    border-radius: 20px;
   }
 
   .ac-header {

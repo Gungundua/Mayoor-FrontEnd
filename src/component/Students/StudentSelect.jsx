@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from "react";
 import styles from "./StudentSelectStyles"; // Importing styles
-import bellIcon from "../assets/bell.png";
-import userIcon from "../assets/user.png";
-// import { IoSearchOutline } from "react-icons/io5";
 import axios from "axios";
 import StudentReport from "../Student_report/StudentReport.jsx";
 import TeacherProfile from "../TeacherProfile/index.jsx"
