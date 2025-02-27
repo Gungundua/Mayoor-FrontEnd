@@ -14,13 +14,18 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
   const [showForm, setShowForm] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
-  const [pendingMapping, setPendingMapping] = useState({}); // State to hold pending counts
+  const [acList, setAcList] = useState([]);
+  const [filteredAcList, setFilteredAcList] = useState([]);
 
   const handleClick = () => setIndex(1);
 
   const toggleDropdown = (index) => {
+    if (activeMenuIndex !== null) {
+      return; // Prevent toggling when MenuDots is open
+    }
     setActiveIndex((prevIndex) => (prevIndex === index ? null : index));
   };
+  
 
   const handleProfileClick = () => alert("Go to Profile");
   const handleSettingsClick = () => alert("Open Settings");
@@ -59,24 +64,11 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
       }
       handleLoItems(finalData);
       setFilteredLoList(finalData);
-      calculatePendingMapping(finalData);
     } catch (error) {
       console.error('Error fetching report outcomes:', error);
     } finally {
       setLoading(false);
     }
-  };
-
-  // Calculate Pending Mapping for each LO
-  const calculatePendingMapping = (loList) => {
-    const pendingCounts = {};
-    loList.forEach((lo) => {
-      // Example logic: Calculate how many ACs are not mapped for this LO
-      const relatedACs = acItems.filter((ac) => ac.loId === lo.id);
-      const notMappedCount = relatedACs.filter((ac) => !ac.mapped).length;
-      pendingCounts[lo.id] = notMappedCount;
-    });
-    setPendingMapping(pendingCounts);
   };
 
   useEffect(() => {
@@ -96,6 +88,127 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
     }
   }, [searchQuery, loItems]);
 
+  const loadAC = async () => {
+    if (!userData || !userData.year || !userData.class || !userData.section || !userData.subject || !userData.quarter) {
+      console.warn("Missing user data, skipping API call.");
+      return;
+    }
+    setLoading(true);
+
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      "Content-Type": "application/json",
+      year: userData.year,
+      classname: userData.class,
+      section: userData.section,
+      subject: userData.subject,
+      quarter: userData.quarter,
+    };
+
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/assessment-criteria`, { headers });
+      console.log("Response Data:", response.data);
+      const data = response.data;
+
+      if (Array.isArray(data.assessments)) {
+        setAcList(data.assessments);
+        setFilteredAcList(data.assessments);
+        setAcItems(data.assessments);
+      } else {
+        setAcList([]);
+        setFilteredAcList([]);
+        setAcItems([]);
+        console.warn("Unexpected API response format:", data);
+      }
+    } catch (error) {
+      console.error("Error fetching assessment criteria:", error.response?.data || error.message);
+      setAcList([]);
+      setFilteredAcList([]);
+      setAcItems([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadAC();
+  }, [userData]);
+
+  const handleDelete = async (loId) => {
+    if (!window.confirm("Are you sure you want to delete this Learning Outcome?")) {
+      return;
+    }
+  
+    setLoading(true);
+    
+    try {
+      const headers = {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      "Content-Type": "application/json",
+      year: userData.year,
+      classname: userData.class,
+      section: userData.section,
+      subject: userData.subject,
+      quarter: userData.quarter,
+      };
+  
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/learning-outcome/${loId}`, { headers });
+  
+      // Update the list after deletion
+      const updatedLoItems = loItems.filter(item => item.id !== loId);
+      setLoItems(updatedLoItems);
+      setFilteredLoList(updatedLoItems);
+  
+      alert("Learning Outcome deleted successfully.");
+    } catch (error) {
+      console.error("Error deleting Learning Outcome:", error.response?.data || error.message);
+      alert("Failed to delete Learning Outcome. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  const handleEdit = async (loId, updatedName) => {
+    const newName = prompt("Enter new name for Learning Outcome:", updatedName);
+    if (!newName || newName.trim() === "") {
+      alert("Name cannot be empty.");
+      return;
+    }
+  
+    setLoading(true);
+  
+    try {
+      const headers = {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        "Content-Type": "application/json",
+        year: userData.year,
+        classname: userData.class,
+        section: userData.section,
+        subject: userData.subject,
+        quarter: userData.quarter,
+      };
+  
+      const requestBody = { name: newName };
+  
+      await axios.put(`${process.env.REACT_APP_API_URL}/api/learning-outcome/${loId}`, requestBody, { headers });
+  
+      // Update local state
+      const updatedLoItems = loItems.map(item =>
+        item.id === loId ? { ...item, name: newName } : item
+      );
+      
+      setLoItems(updatedLoItems);
+      setFilteredLoList(updatedLoItems);
+  
+      alert("Learning Outcome updated successfully.");
+    } catch (error) {
+      console.error("Error updating Learning Outcome:", error.response?.data || error.message);
+      alert("Failed to update Learning Outcome. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+  
   return (
     <Wrapper>
       <div className="search-container">
@@ -129,21 +242,21 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
                 </div>
                 <div className="lo-info">
                   <p className="item-title">{item.name}</p>
-
                 </div>
+                <div className='mapCounter'>1</div>
                 <div>
                   <MenuDots
                     index={index}
                     activeMenuIndex={activeMenuIndex}
                     setActiveMenuIndex={setActiveMenuIndex}
-                    onEditClick={() => alert(`Editing LO: ${item.name}`)}
-                    onDeleteClick={() => alert(`Deleting LO: ${item.name}`)}
+                    onEditClick={() => handleEdit(item.id, item.name)}
+                    onDeleteClick={() => handleDelete(item.id)}
                   />
                 </div>
               </div>
               <div className={`lo-dropdown-content ${activeIndex === index ? 'show' : 'hide'}`}>
                 {activeIndex === index && (
-                  <ACMapping acItems={acItems} setAcItems={setAcItems} loId={item.id} />
+                  <ACMapping acItems={acItems} setAcItems={setAcItems} loId={item.id} acList={acList} setAcList={setAcList}/>
                 )}
               </div>
             </li>

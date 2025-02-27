@@ -86,7 +86,11 @@ const AC_List = ({ acItems, setAcItems, handleAcItems, studentsData, setIndex, u
     }
   }, [searchQuery, acList]);
 
+  // ✅ Prevents opening Assessment when MenuDots is active
   const handleStartAssessment = (item) => {
+    if (activeMenuIndex !== null) {
+      return; // If menu is open, do nothing
+    }
     setSelectedAssessment(item);
   };
 
@@ -97,6 +101,80 @@ const AC_List = ({ acItems, setAcItems, handleAcItems, studentsData, setIndex, u
   if (selectedAssessment) {
     return <Assessment selectedAssessment={selectedAssessment} onBack={handleBackToList} studentsData={studentsData} />;
   }
+
+  const handleDelete = async (acId) => {
+    if (!window.confirm("Are you sure you want to delete this Assessment Criteria?")) {
+      return;
+    }
+  
+    setLoading(true);
+    
+    try {
+      const headers = {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        "Content-Type": "application/json",
+        year: userData.year,
+        classname: userData.class,
+        section: userData.section,
+        subject: userData.subject,
+        quarter: userData.quarter,
+      };
+  
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/assessment-criteria/${acId}`, { headers });
+  
+      const updatedAcItems = acItems.filter(item => item.id !== acId);
+      setAcItems(updatedAcItems);
+      setFilteredAcList(updatedAcItems);
+  
+      alert("Assessment Criteria deleted successfully.");
+    } catch (error) {
+      console.error("Error deleting Assessment Criteria:", error.response?.data || error.message);
+      alert("Failed to delete Assessment Criteria. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleEdit = async (acId, updatedName) => {
+    const newName = prompt("Enter new name for Assessment Criteria:", updatedName);
+    if (!newName || newName.trim() === "") {
+      alert("Name cannot be empty.");
+      return;
+    }
+  
+    setLoading(true);
+  
+    try {
+      const headers = {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        "Content-Type": "application/json",
+        year: userData.year,
+        classname: userData.class,
+        section: userData.section,
+        subject: userData.subject,
+        quarter: userData.quarter,
+      };
+  
+      const requestBody = { name: newName };
+  
+      await axios.put(`${process.env.REACT_APP_API_URL}/api/assessment-criteria/${acId}`, requestBody, { headers });
+  
+      const updatedAcItems = acItems.map(item =>
+        item.id === acId ? { ...item, name: newName } : item
+      );
+      
+      setAcItems(updatedAcItems);
+      setFilteredAcList(updatedAcItems);
+  
+      alert("Assessment Criteria updated successfully.");
+    } catch (error) {
+      console.error("Error updating Assessment Criteria:", error.response?.data || error.message);
+      alert("Failed to update Assessment Criteria. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Wrapper>
       <div className="search-container">
@@ -132,13 +210,17 @@ const AC_List = ({ acItems, setAcItems, handleAcItems, studentsData, setIndex, u
                 <div className="ac-info">
                   <p className="item-title">{item.name}</p>
                 </div>
+                <div className='mapCounter'>1</div>
                 <div>
                   <MenuDots
                     index={index}
                     activeMenuIndex={activeMenuIndex}
-                    setActiveMenuIndex={setActiveMenuIndex}
-                    onEditClick={() => alert(`Editing LO: ${item.name}`)}
-                    onDeleteClick={() => alert(`Deleting LO: ${item.name}`)}
+                    setActiveMenuIndex={(index) => {
+                      setSelectedAssessment(null); // Close Assessment when menu is clicked
+                      setActiveMenuIndex(index);
+                    }}
+                    onEditClick={() => handleEdit(item.id, item.name)}
+                    onDeleteClick={() => handleDelete(item.id)}
                   />
                 </div>
               </div>
@@ -150,13 +232,11 @@ const AC_List = ({ acItems, setAcItems, handleAcItems, studentsData, setIndex, u
           </li>
         )}
       </ul>
-
-      <div className="add" onClick={() => setShowForm(true)}><span className="plus">+</span></div>
-
+      <div className="add" onClick={() => setShowForm(true)}><span className='plus'>+</span></div>
       {showForm && (
         <div className="popup-overlay">
           <div className="popup-content">
-            <Form_AC closeForm={() => setShowForm(false)} userData={userData} loadAC={loadAC} />
+            <Form_AC closeForm={() => setShowForm(false)} />
           </div>
         </div>
       )}

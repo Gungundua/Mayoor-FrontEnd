@@ -59,7 +59,7 @@ const handlers = useSwipeable({
         ) : index === 4 ? (
           <LOlist loItems={loItems} handleLoItems={handleLoItems} acItems={acItems} setAcItems={setAcItems} setIndex={setIndex}/>
         ) : index === 5 ? (
-          <ROlist loItems={loItems} setLoItems={setLoItems} setIndex={setIndex}/>
+          <ROlist loItems={loItems} setLoItems={setLoItems} setIndex={setIndex} handleLoItems={handleLoItems} acItems={acItems}/>
         ) : (
           <AClist acItems={acItems} setAcItems={setAcItems} handleAcItems={handleAcItems} studentsData={studentsData} setIndex={setIndex} user={user}/>
         )}

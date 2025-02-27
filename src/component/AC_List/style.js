@@ -7,6 +7,16 @@ const Wrapper = styled.section`
     overflow: hidden; /* Prevent overflowing of the container */
     background-color: #21c3bc;
 
+    /* .search-container {
+      display: flex;
+      gap: 60px;
+      align-items: center;
+      position: relative;
+      // width: 100%;
+      margin: 15px 0;
+      padding-left: 12px;
+      padding-right:12px;
+    } */
     .search-container {
       display: flex;
       gap: 60px;
@@ -20,7 +30,7 @@ const Wrapper = styled.section`
       
     // .menu{
     // margin-right: 20px;
-    // }
+    /* // }
     .search-bar {
       // width: 100%;
       padding: 10px 40px 10px 15px;
@@ -32,8 +42,31 @@ const Wrapper = styled.section`
       outline: none;
       transition: border-color 0.3s, box-shadow 0.3s;
       margin: 10px;
+    } */
+      
+    .menu{
+    padding-right:17px;
     }
-       .search-bar:focus {
+    .icon{
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding-right: 15px;
+    }
+      
+    .search-bar {
+      width: 100%;
+      padding: 10px 40px 10px 15px; /* Padding for space for the search icon */
+      font-size: 16px;
+      border-radius: 25px;
+      border: 1px solid #ddd; /* Same border color as other elements */
+      background-color: #A6E0DD; /* White background for consistency */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow for subtle depth */
+      outline: none;
+      transition: border-color 0.3s, box-shadow 0.3s; /* Smooth transition */
+      margin: 10px;
+    }
+      .search-bar:focus {
       border-color: #00796B;
       box-shadow: 0 2px 4px rgba(0, 121, 107, 0.2);
       background-color: white;
@@ -110,8 +143,8 @@ const Wrapper = styled.section`
     border: 1px solid #ddd;
     border-radius: 8px;
     margin-bottom: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    padding: 12px 12px;
     border-radius: 20px;
   }
 
@@ -205,10 +238,10 @@ const Wrapper = styled.section`
 }
 
 .popup-content {
-  background: white;
+  /* background: white; */
   padding: 20px;
   border-radius: 10px;
-  width: 400px;
+  width: max-content;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   animation: popup 0.3s ease-in-out;
 }
@@ -230,6 +263,16 @@ const Wrapper = styled.section`
   border: none;
   border-radius: 5px;
   cursor: pointer;
+}
+.mapCounter{
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background-color: gray;
+  text-align: center;
+  color: #fff;
+  margin-right: 5px;
+  padding: 2px;
 }
 `
 

@@ -3,8 +3,8 @@ import dotsIcon from "../assets/dots.png";
 import Wrapper from "./style";
 import pen from '../assets/edit.png';
 import deletebtn from "../assets/delete.png";
+
 const MenuDots = ({ onEditClick, onDeleteClick, index, activeMenuIndex, setActiveMenuIndex }) => {
-  
   const isActive = activeMenuIndex === index;
 
   // Handle menu toggle
@@ -39,8 +39,8 @@ const MenuDots = ({ onEditClick, onDeleteClick, index, activeMenuIndex, setActiv
         {/* Popup Menu */}
         {isActive && (
           <div className="popup-menu">
-            <button><img src={pen} className="pen"/></button>
-            <button><img src={deletebtn} className="deletebtn" /></button>
+            <button onClick={onEditClick}><img src={pen} className="pen" alt="Edit" /></button>
+            <button onClick={onDeleteClick}><img src={deletebtn} className="deletebtn" alt="Delete" /></button>
           </div>
         )}
       </div>

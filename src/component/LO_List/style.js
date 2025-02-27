@@ -101,8 +101,8 @@ const Wrapper = styled.section`
     border-radius: 8px;
     margin-bottom: 10px;
     // overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    padding: 12px 12px;
     border-radius: 20px;
   }
   .lo-header {
@@ -229,6 +229,16 @@ const Wrapper = styled.section`
 }
 .form-container button:hover {
   background-color: #F0F0F0;
+}
+.mapCounter{
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background-color: gray;
+  text-align: center;
+  color: #fff;
+  margin-right: 5px;
+  padding: 2px;
 }
 `
 export default Wrapper;
