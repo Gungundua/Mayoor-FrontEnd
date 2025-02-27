@@ -146,8 +146,8 @@ const Wrapper = styled.section`
     padding: 15px;
     border-radius: 30px 30px 0 0;
     color: #6C6C6C;
-    overflow: hidden;
-    z-index: -1;
+    // overflow: hidden;
+    // z-index: -1;
   }
 
   .ac-header {
