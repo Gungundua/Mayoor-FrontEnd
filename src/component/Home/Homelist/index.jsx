@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Wrapper from './style';
-// import notification from "./bell.png";
-// import student from './user.png';
-// import menu from "./menu.png";
 import Ripples from 'react-ripples'
 const HomeList = ({ user, setIndex, msg }) => {
-  console.log(user)
   const [userData, setUserData] = useState({});
   useEffect(() => {
     const clearSessionStorageOnRefresh = () => {

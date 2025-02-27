@@ -174,7 +174,7 @@ const Wrapper = styled.section`
     }
   .add{
     background-color: #21c3bc;
-    opacity: 0.7;
+    opacity: 0.9;
     font-weight: bold;
     width: 60px;
     height: 60px;
@@ -237,14 +237,14 @@ const Wrapper = styled.section`
   z-index: 1000;
 }
 
-.popup-content {
-  /* background: white; */
-  padding: 20px;
-  border-radius: 10px;
-  width: max-content;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  animation: popup 0.3s ease-in-out;
-}
+// .popup-content {
+//   /* background: white; */
+//   padding: 20px;
+//   border-radius: 10px;
+//   width: max-content;
+//   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+//   animation: popup 0.3s ease-in-out;
+// }
 
 @keyframes popup {
   from {

@@ -32,7 +32,7 @@ const Wrapper = styled.section`
   }
   form input[type="text"],
   form input[type="number"] {
-    width: 100%;
+    width: 95%;
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #ccc;
@@ -53,6 +53,9 @@ const Wrapper = styled.section`
     border: 1px solid #ddd;
     border-radius: 8px;
     background: white;
+     &::-webkit-scrollbar {
+    display: none;
+  }
   }
   .lo-list-item {
     background: white;

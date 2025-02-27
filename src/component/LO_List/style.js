@@ -144,7 +144,7 @@ const Wrapper = styled.section`
     }
   .add{
     background-color: #21C3BC;
-    opacity: 0.7;
+    opacity: 0.9;
     font-weight: bold;
     width: 60px;
     height: 60px;
@@ -206,7 +206,7 @@ const Wrapper = styled.section`
   background: white;
   padding: 20px;
   border-radius: 10px;
-  width: 400px;
+  width: 300px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   animation: popup 0.3s ease-in-out;
 }
