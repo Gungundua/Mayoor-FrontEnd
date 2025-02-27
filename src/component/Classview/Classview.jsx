@@ -143,25 +143,18 @@ const ClassView = ({ setIndex, user }) => {
   return (
     <div className="class-container">
       <div className="class-header">
-      <div className="class-overview">
-          <div className="class-title">Class Overview</div>
-        </div>
-        <div className="header-icons">
-          <div className="back-icon">
-            {/* <img src={imgBack} alt="Back" className="header-image" /> */}
-          </div>
-          <div className="right-icons">
-            {/* <img src={imgBell} alt="Bell" className="header-image" /> */}
-          <Menu
+      {/* <div className="class-overview"> */}
+      {/* <div className="right-icons"> */}
+          <Menu 
              onProfileClick={handleProfileClick}
              onSettingsClick={handleSettingsClick}
              onLogoutClick={handleLogoutClick}
              onReturnClick={handleClick}
           />
-          </div>
-        </div>
+      
+          <h2 className="class-title">Class Overview</h2>
+        {/* </div> */}
       </div>
-
       <div className="info-box">
         <div className="info-text">
           <p>

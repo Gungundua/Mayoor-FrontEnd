@@ -212,14 +212,7 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
   return (
     <Wrapper>
       <div className="search-container">
-        <input
-          type="text"
-          placeholder="Search LO..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="search-bar"
-        />
-        <div className="icon">
+      <div className="icon">
           <Menu
             onProfileClick={handleProfileClick}
             onSettingsClick={handleSettingsClick}
@@ -227,6 +220,13 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
             onReturnClick={handleClick}
           />
         </div>
+        <input
+          type="text"
+          placeholder="Search LO..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="search-bar"
+        />
       </div>
       <ul className="lo-list">
         {loading ? (

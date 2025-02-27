@@ -178,14 +178,7 @@ const AC_List = ({ acItems, setAcItems, handleAcItems, studentsData, setIndex, u
   return (
     <Wrapper>
       <div className="search-container">
-        <input
-          type="text"
-          placeholder="Search AC..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="search-bar"
-        />
-        <div className="icon">
+      <div className="icon">
           <Menu
             onProfileClick={() => alert("Go to Profile")}
             onSettingsClick={() => alert("Open Settings")}
@@ -193,6 +186,13 @@ const AC_List = ({ acItems, setAcItems, handleAcItems, studentsData, setIndex, u
             onReturnClick={handleClick}
           />
         </div>
+        <input
+          type="text"
+          placeholder="Search AC..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="search-bar"
+        />
       </div>
 
       <ul className="ac-list">

@@ -124,14 +124,7 @@ const ROlist = ({ loItems, setLoItems, setIndex, handleLoItems, acItems }) => {
   return (
     <Wrapper>
       <div className="search-container">
-        <input
-          type="text"
-          placeholder="Search RO..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="search-bar"
-        />
-        <div className="icon">
+      <div className="icon">
           <Menu
             onProfileClick={handleProfileClick}
             onSettingsClick={handleSettingsClick}
@@ -139,6 +132,14 @@ const ROlist = ({ loItems, setLoItems, setIndex, handleLoItems, acItems }) => {
             onReturnClick={handleClick}
           />
         </div>
+        <input
+          type="text"
+          placeholder="Search RO..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="search-bar"
+        />
+        
       </div>
       <ul className="ro-list">
         {loading ? (
