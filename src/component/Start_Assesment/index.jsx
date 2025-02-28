@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import Wrapper from "./style";
-import { FaArrowDown, FaArrowLeft, FaArrowUp } from "react-icons/fa";
+import {FaArrowLeft} from "react-icons/fa";
 import Student from "./Student.avif";
 import axios from "axios";
+import Done from "../assets/check.png";
 const Assessment = ({ selectedAssessment, onBack, studentsData }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [userData, setUserData] = useState(null);
@@ -14,17 +15,15 @@ const Assessment = ({ selectedAssessment, onBack, studentsData }) => {
     }
   }, [])
   const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
+    setSearchQuery(e.target.value)
   }
   const handleMarksChange = (e, studentId) => {
-    let value = parseInt(e.target.value, 10);
+    let value = e.target.value
     const maxMarks = selectedAssessment?.max_marks || 100;
     if (value > maxMarks || value < 0) {
       alert("Invalid")
+      e.target.value = ""
     }
-    const updatedStudents = studentsData.map((student) =>
-      student.id === studentId ? { ...student, marks: value } : student
-    )
   }
   const handleSubmit = async () => {
     const payload = studentsData
@@ -32,10 +31,10 @@ const Assessment = ({ selectedAssessment, onBack, studentsData }) => {
       .map((student) => ({
         student_id: student.id,
         obtained_marks: student.marks,
-      }));
+      }))
     if (payload.length === 0) {
       alert("No marks entered!");
-      return;
+      return
     }
     const headers = {
       Authorization: "Bearer YOUR_ACCESS_TOKEN",
@@ -45,32 +44,22 @@ const Assessment = ({ selectedAssessment, onBack, studentsData }) => {
       section: userData?.section,
       quarter: userData?.quarter,
       subject: userData?.subject,
-    };
+    }
     const requestBody = {
       ac_id: selectedAssessment?.id,
       scores: payload,
-    };
+    }
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}/api/assessment-criteria-score`,
         requestBody,
         { headers }
-      );
+      )
       alert("Marks submitted successfully!");
     } catch (error) {
       alert("Failed to submit marks. Please try again.");
     }
-  };
-  const scrollUp = () => {
-    if (containerRef.current) {
-      containerRef.current.scrollBy({ top: -200, behavior: "smooth" });
-    }
-  };
-  const scrollDown = () => {
-    if (containerRef.current) {
-      containerRef.current.scrollBy({ top: 200, behavior: "smooth" });
-    }
-  };
+  }
   return (
     <Wrapper>
       <div className="profile-section">
@@ -96,13 +85,13 @@ const Assessment = ({ selectedAssessment, onBack, studentsData }) => {
         </div>
       </div>
       <div className="ac-container">
-        <button className="scroll-up" onClick={scrollUp}>
-          <FaArrowUp />
-        </button>
         <div className="student-list" ref={containerRef}>
           {studentsData.map((stu) => (
             <div className="ac-box" key={stu.id}>
+              <div>
               <img src={Student} alt="Profile" className="profile-image" />
+              </div>
+              <div className="details">
               <h3 className="studentName">{stu.name}</h3>
               <p className="roll-number">Roll Number: {stu.id}</p>
               <input
@@ -115,20 +104,19 @@ const Assessment = ({ selectedAssessment, onBack, studentsData }) => {
                 max={selectedAssessment?.max_marks || 100}
                 required
               />
+              </div>
             </div>
           ))}
         </div>
-        <button className="scroll-down" onClick={scrollDown}>
-          <FaArrowDown />
-        </button>
-        <input
+        <img src={Done} alt="Done" className="done-button" onClick={handleSubmit}/>
+        {/* <input
           className="done-button"
           type="button"
           value="Done"
           onClick={handleSubmit}
-        />
+        /> */}
       </div>
     </Wrapper>
-  );
-};
-export default Assessment;
+  )
+}
+export default Assessment

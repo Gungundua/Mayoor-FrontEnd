@@ -139,7 +139,6 @@ const ROlist = ({ loItems, setLoItems, setIndex, handleLoItems, acItems }) => {
           onChange={(e) => setSearchQuery(e.target.value)}
           className="search-bar"
         />
-        
       </div>
       <ul className="ro-list">
         {loading ? (

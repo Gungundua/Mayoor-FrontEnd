@@ -2,24 +2,21 @@ import React, { useState, useEffect } from "react";
 import Wrapper from "./style";
 import Form_LO from "../Form_LO/index";
 import axios from "axios";
-
 const LOMapping = ({ roId, loItems }) => {
   const [priorityMapping, setPriorityMapping] = useState({});
   const [lockedPriorities, setLockedPriorities] = useState({}); // Store locked priorities
   const [showForm, setShowForm] = useState(false);
   const [userData, setUserData] = useState(null);
-
+  const [filteredRoListMapping, setFilteredRoListMapping] = useState([]);
   useEffect(() => {
     const userData = sessionStorage.getItem("userData");
     if (userData) {
       setUserData(JSON.parse(userData));
     }
   }, []);
-
   const handleform = () => {
     setShowForm(true);
   };
-
   const handleClick = (loid, priority) => {
     if (lockedPriorities[loid]) return; // Lock only specific LO priorities
     setPriorityMapping((prev) => {
@@ -31,7 +28,33 @@ const LOMapping = ({ roId, loItems }) => {
       return { ...prev, [loid]: priority.toLowerCase() };
     });
   };
-
+  const loadROMapping = async (userData) => {
+      console.log("Fetching RO Mapping for user:", userData);
+      try {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/report-outcome-mapping`, {
+          headers: {
+            Authorization: 'Bearer YOUR_ACCESS_TOKEN',
+            'Content-Type': 'application/json',
+            year: userData.year,
+            classname: userData.class,
+            section: userData.section,
+            subject: userData.subject,
+            quarter: userData.quarter,
+            ro_id: roId,
+          },
+        });
+        const data = await response.json();
+        console.log("Fetched RO Mapping Data:", data);
+        setFilteredRoListMapping(data);
+      } catch (error) {
+        console.error("Error fetching RO Mapping:", error);
+      }
+    };
+    useEffect(() => {
+      if (userData) {
+        loadROMapping(userData);
+      }
+    }, [userData]);
   return (
     <Wrapper>
       <div className="lo-list-container">
@@ -85,5 +108,4 @@ const LOMapping = ({ roId, loItems }) => {
     </Wrapper>
   );
 };
-
 export default LOMapping;

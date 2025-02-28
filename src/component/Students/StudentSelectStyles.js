@@ -1,152 +1,125 @@
-import { RxPadding } from "react-icons/rx";
+import styled from "styled-components";
 
-const styles = {
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    backgroundColor: "#ffffff",
-    width: "100vw",
-    alignItems: "center",
-    maxWidth: "100%",
-    boxSizing: "border-box",
-    overflowX: "hidden",
-  },
-  
-  header: {
-    backgroundColor: "#20B2AA",
-    padding: "10px",
-    position: "sticky",
-    top: 0,
-    width: "100%",
-    textAlign: "center",
-    zIndex: 1000,
-    height: "100",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    maxWidth: "100%",
-    boxSizing: "border-box",
-    display: "flex",
-    flexDirection: "row", 
-    gap: "10px"
-  },
-    
-  studentlist: {
-    width: "100%",
-    backgroundColor: "white",
-    borderRadius: "30px 30px 0px 0px", /* Rounded top corners */
-    padding: "15px",
-    boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", /* Optional shadow for depth */
-    overflow: "hidden", /* Prevents child elements from overflowing */
-    zIndex:"-1",
-},
+const Wrapper = styled.section`
+position: fixed;
+  .container {
+    display: flex;
+    flex-direction: column;
+    background-color: #21c2ba;
+    width: 100vw;
+    align-items: center;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
 
-  searchContainer: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: "10px 20px",
-    width: "100%",
-    maxWidth: "600px",
-  },
-  searchBox: {
-    display: "flex",
-    alignItems: "center",
-    backgroundColor: "rgba(255, 255, 255, 0.6)",
-    borderRadius: "25px",
-    padding: "0px 16px",
-    width: "90%",
-    maxWidth: "450px",
-    boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-    transition: "all 0.3s ease",
-    position: "relative",
-  },
-  searchBoxActive: {
-    position: "absolute",
-    top: "10px",
-    left: "10px",
-    width: "300px",
-    zIndex: 2000, // Ensures it stays on top
-  },
-  searchInput: {
-    flex: 1,
-    border: "none",
-    outline: "none",
-    padding: "10px",
-    fontSize: "16px",
-    backgroundColor: "transparent",
-    transition: "all 0.3s ease",
-  },
-  searchInputActive: {
-    fontSize: "14px",
-    fontWeight: "bold",
-    textAlign: "left",
-  },
+  .header {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background-color: #21c2ba;
+  }
 
+  .search-container {
+    display: flex;
+    gap: 7px;
+    align-items: center;
+    position: relative;
+    margin-top: 17px;
+    padding: 10px;
+    width: 100%;
+  }
 
-  searchIcon: {
-    fontSize: "20px",
-    color: "#555",
-  },
-  iconWrapper: {
-    display: "flex",
-    gap: "12px",
-    alignItems: "center",
-  },
-  icon: {
-    fontSize: "22px",
-    color: "#ffffff",
-    cursor: "pointer",
-  },
-  title: {
-    color: "white",
-    fontSize: "20px",
-    fontWeight: "bold",
-    marginTop: "8px",
-  },
-  noResults: {
-    textAlign: "center",
-    color: "gray",
-    fontSize: "16px",
-    marginTop: "10px",
-  },
+  .icon {
+    display: flex;
+    align-items: center;
+    margin-left: 20px
+  }
 
-  // New styles for student items
-  studentItem: {
-    width: "95%",  // Makes it more rectangular
-    backgroundColor: "white",
-    padding: "10px",
-    // margin: "10px 10px", 
-    margin: "10px auto",
-    borderRadius: "20px 20px 20px 20px ",  // Less rounded edges
-    boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
-    display: "flex",
-    alignItems: "center",
-    gap: "15px",
-    minHeight: "50px",  // Ensures consistent height
-    zIndex: "1",
-  },
-  
-  studentAvatar: {
-    width: "40px",
-    height: "40px",
-    backgroundColor: "#20B2AA", // Match header theme
-    color: "white",
-    fontWeight: "bold",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: "50%",
-    width: "50px",
-    height: "50px",
-    borderRadius: "10px", 
-  },
-  studentName: {
-    fontSize: "14px",
-    color: "#6C6C6C",
-    // fontWeight: "bold",
-  },
-};
+  .search-bar {
+    width: 100%;
+    padding: 10px 40px 10px 15px;
+    font-size: 16px;
+    border-radius: 25px;
+    border: 1px solid #ddd;
+    background-color: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    margin: 10px;
+  }
 
-export default styles;
+  .search-bar:focus {
+    border-color: #00796b;
+    box-shadow: 0 2px 4px rgba(0, 121, 107, 0.2);
+    background-color: white;
+  }
+
+  .search-bar::placeholder {
+    color: #aaa;
+  }
+
+  .list-icon-container {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .list-icon {
+    width: 18px;
+    height: 18px;
+    opacity: 0.7;
+  }
+
+  .studentlist {
+    background-color: white;
+    padding: 15px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: -1px;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    position: relative;
+    width: 93%;
+  }
+
+  .student-item {
+    width: 95%;
+    background-color: white;
+    padding: 10px;
+    margin: 10px auto;
+    border-radius: 20px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    min-height: 50px;
+    cursor: pointer;
+  }
+
+  .student-avatar {
+    width: 50px;
+    height: 50px;
+    background-color: #20b2aa;
+    color: white;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+  }
+
+  .student-name {
+    font-size: 14px;
+    color: #6c6c6c;
+  }
+
+  .no-results {
+    text-align: center;
+    color: gray;
+    font-size: 16px;
+    margin-top: 10px;
+  }
+`;
+
+export default Wrapper;

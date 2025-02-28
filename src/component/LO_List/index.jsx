@@ -220,13 +220,17 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
             onReturnClick={handleClick}
           />
         </div>
+       <div>
         <input
           type="text"
           placeholder="Search LO..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="search-bar"
+          
         />
+        </div>
+        
       </div>
       <ul className="lo-list">
         {loading ? (

@@ -52,7 +52,7 @@ const Wrapper = styled.section`
     overflow-y: auto;
     border: 1px solid #ddd;
     border-radius: 8px;
-    background: white;
+    background: #eee;
      &::-webkit-scrollbar {
     display: none;
   }

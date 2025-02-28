@@ -14,7 +14,7 @@ const Wrapper = styled.div`
     padding-left: 19px;
   }
   .search-bar {
-    width: 200px;
+    width: 65%;
     padding: 10px 40px 10px 15px;
     font-size: 16px;
     border-radius: 25px;
@@ -41,6 +41,7 @@ const Wrapper = styled.div`
     color: #000000;
     margin-right: 15px;
     margin-left: 3px;
+    margin-right: 30px;
   }
   .profile-section {
     text-align: center;
@@ -52,7 +53,6 @@ const Wrapper = styled.div`
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    // justify-content: center;
   }
   .profile-image {
     width: 50px;
@@ -64,101 +64,86 @@ const Wrapper = styled.div`
   .name {
     font-family: sans-serif;
     font-size: 25px;
-    margin-top: 10px;
-    color: black;
+    // margin-top: 10px;
+    color: white;
   }
   .max-marks {
     font-size: 14px;
-    color: black;
-    margin-top: 5px;
-  }
-  .roll-number {
-    margin-top: 12px;
-    font-size: 11px;
+    color: white;
+    // margin-top: 5px;
   }
   .ac-container {
-    // position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
     width: 100%;
-    height: calc(100vh - 250px);
+    height: calc(100vh - 200px);
     max-width: 100%;
     border-top-left-radius: 40px;
     border-top-right-radius: 40px;
     background-color: white;
-    margin-top: -30px;
+    margin-top: -44px;
   }
   .ac-container::-webkit-scrollbar {
     display: none;
   }
   .student-list {
     width: 100%;
-    height: 200px;
+    height: 100%;
     overflow-y: auto;
     scroll-behavior: smooth;
     display: flex;
     flex-direction: column;
     align-items: center;
-  }
-  .scroll-up, .scroll-down {
-    background-color: #21C3BC;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    font-size: 20px;
-    cursor: pointer;
-    // display: flex;
-    // justify-content: center;
-    // align-items: center;
-    transition: transform 0.2s, background-color 0.3s;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-    margin: 10px;
-  }
-  .scroll-up {
-    top: 2px;
-  }
-  .scroll-down {
-    bottom: -10px;
+    margin-top: 20px;
   }
   .ac-box {
-    width: 180px;
-    height: 180px;
+    width: 85%;
+    height: 60px;
+    color: #6C6C6C;
     background-color: #FFFFFF;
-    border-radius: 15px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    text-align: center;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    box-shadow: 3px 4px 3px rgba(0, 0, 0, 0.1);
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    flex-direction: row;
     align-items: center;
-    margin: 10px 0;
-    padding: 10px;
+    gap: 30px;
+    margin: 10px 0px 10px 0px;
+    padding: 15px
+  }
+  .detail{
+     display: flex;
+     flex-direction: column;
+     gap: 2px;
   }
   .marks-input {
-    width: 80%;
-    padding: 7px;
+    width: 70%;
+    padding: 5px;
     font-size: 13px;
     text-align: center;
     border-radius: 10px;
     border: 1px solid #ccc;
     box-sizing: border-box;
-    margin-top: 20px;
+    margin-left: 10px;
+    text-align: center;
+    margin-top: 5px;
   }
   .done-button {
-    background-color: rgb(53, 114, 130);
-    color: white;
-    font-size: 17px;
-    font-weight: bold;
-    text-align: center;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 15px;
-    cursor: pointer;
-    margin: 20px auto;
-    width: 150px;
-  }`
-export default Wrapper
+  background-color:  #21C2BA;
+  font-size: 1px;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
+  border: none;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  position: fixed;
+  bottom: 85px;
+  left: 80%;
+  }
+`
+export default Wrapper;

@@ -141,54 +141,51 @@ const ClassView = ({ setIndex, user }) => {
       const handleSettingsClick = () => alert("Open Settings");
       const handleLogoutClick = () => alert("Logging Out...");
   return (
-    <div className="class-container">
-      <div className="class-header">
-      {/* <div className="class-overview"> */}
-      {/* <div className="right-icons"> */}
-          <Menu 
-             onProfileClick={handleProfileClick}
-             onSettingsClick={handleSettingsClick}
-             onLogoutClick={handleLogoutClick}
-             onReturnClick={handleClick}
-          />
-      
-          <h2 className="class-title">Class Overview</h2>
-        {/* </div> */}
-      </div>
-      <div className="info-box">
-        <div className="info-text">
-          <p>
-            <strong>Class:</strong> {userData.class}
-          </p>
-          <p>
-            <strong>Year:</strong> {userData.year}
-          </p>
-          <p>
-            <strong>Subject:</strong> {userData.subject}
-          </p>
-        </div>
-        <div className="info-text">
-          <p>
-            <strong>Section:</strong> {userData.section}
-          </p>
-          <p>
-            <strong>Quarter:</strong> {userData.quarter}
-          </p>
-        </div>
-      </div>
+    <>
+<div className="class-header">
+  <div className="icon">
+    <Menu
+      onProfileClick={handleProfileClick}
+      onSettingsClick={handleSettingsClick}
+      onLogoutClick={handleLogoutClick}
+      onReturnClick={handleClick}
+    />
+  </div>
+  <div className="class-title">
+    <h2>Class Overview</h2>
+  </div>
+</div>
 
-      <select className="chart-dropdown" onChange={(e) => setSelectedChart(e.target.value)}>
-        <option value="ac">AC Scores</option>
-        <option value="lo">LO Scores</option>
-        <option value="ro">RO Scores</option>
-      </select>
-
-      <div className="chart-wrapper">
-        <div className="chart-container">
-          <Line data={chartData[selectedChart]} options={options} />
-        </div>
-      </div>
+<div className="class-container">
+    <div className="info-box">
+    <div className="info-text">
+      <p><strong>Class:</strong> {userData.class}</p>
+      <p><strong>Year:</strong> {userData.year}</p>
+      <p><strong>Subject:</strong> {userData.subject}</p>
     </div>
+    <div className="info-text">
+      <p><strong>Section:</strong> {userData.section}</p>
+      <p><strong>Quarter:</strong> {userData.quarter}</p>
+    </div>
+  </div>
+
+  <div className="chart-selection">
+    <select className="chart-dropdown" onChange={(e) => setSelectedChart(e.target.value)}>
+      <option value="ac">AC Scores</option>
+      <option value="lo">LO Scores</option>
+      <option value="ro">RO Scores</option>
+    </select>
+  </div>
+
+  {/* Chart Display */}
+  <div className="chart-wrapper">
+    <div className="chart-container">
+      <Line data={chartData[selectedChart]} options={options} />
+    </div>
+  </div>
+  
+</div>
+</>
   );
 };
 
