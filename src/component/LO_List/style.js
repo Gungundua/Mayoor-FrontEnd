@@ -5,6 +5,7 @@ const Wrapper = styled.section`
     flex-direction: column;
     overflow: hidden; /* Prevent overflowing of the container */
     background-color: #21C3BC;
+
     .search-container {
       display: flex;
       gap: 5px;
@@ -17,16 +18,19 @@ const Wrapper = styled.section`
       margin-left: -10px;
       padding: 10px
     }
+
     .menu{
     padding-right:17px;
     }
+
     .icon{
       display: flex;
       // gap: 12px;
       align-items: center;
       // padding-right: 15px;
     }
-       .search-bar {
+
+    .search-bar {
       width: 100%;
       padding: 10px 40px 10px 15px; /* Padding for space for the search icon */
       font-size: 16px;
@@ -72,13 +76,7 @@ const Wrapper = styled.section`
       height: 18px;
       opacity: 0.7;
     }
-  //   .lo-list-title {
-  //   text-align: center;
-  //   color: white;
-  //   margin-bottom: 10px;
-  //   padding: 15px;
-  //   height: 50px;
-  // }
+
   .lo-list {
     list-style: none;
     flex: 1; /* Allow the list to grow and take up available space */
@@ -90,13 +88,16 @@ const Wrapper = styled.section`
     background-color: #fff;
     padding: 10px;
   }
+
   .lo-list::-webkit-scrollbar {
     width: 8px; /* Width of the scrollbar for WebKit browsers */
   }
+
   .lo-list::-webkit-scrollbar-thumb {
     background-color: #ccc; /* Color of the scrollbar thumb */
     border-radius: 4px;
   }
+
   .lo-list-item {
     width: 90%;
     background: white;
@@ -190,9 +191,7 @@ const Wrapper = styled.section`
   border-radius: 5px;
   padding: 2px;
 }
-/* .item-title{
-  font-weight: bold;
-} */
+
 .popup-overlay {
   position: fixed;
   top: 0;
@@ -212,7 +211,7 @@ const Wrapper = styled.section`
   width: 300px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   animation: popup 0.3s ease-in-out;
-}
+} 
 @keyframes popup {
   from {
     transform: scale(0.8);
@@ -242,6 +241,40 @@ const Wrapper = styled.section`
   color: #fff;
   margin-right: 5px;
   padding: 2px;
+}
+
+.circular{
+    height: 50px;
+    width: 50px;
+    border: 5px solid lightgray;
+    border-bottom: 5px solid rgb(127, 124, 124);
+    position: absolute;
+    top: 150px;
+    left: 180px;
+    border-radius: 50%;
+    animation: loader 2s linear infinite;
+}
+
+@keyframes loader {
+    from{
+        transform: rotate(0deg);
+    }
+    to{
+        transform: rotate(360deg);
+    }
+}
+
+.success-overlay {
+  position: fixed; /* Ensures full-page coverage */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Keeps it on top */
 }
 `
 export default Wrapper;

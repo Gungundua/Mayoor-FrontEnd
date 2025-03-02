@@ -143,6 +143,7 @@ const ROlist = ({ loItems, setLoItems, setIndex, handleLoItems, acItems }) => {
       <ul className="ro-list">
         {loading ? (
           <li>
+            <div class="circular"></div>
             <p className='loading-message'>Loading....</p>
           </li>
         ) : filteredRoList.length > 0 ? (

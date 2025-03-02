@@ -168,6 +168,27 @@ const Wrapper = styled.section`
   color: #fff;
   padding: 2px;
 }
+
+.circular{
+    height: 50px;
+    width: 50px;
+    border: 5px solid lightgray;
+    border-bottom: 5px solid rgb(127, 124, 124);
+    position: absolute;
+    top: 150px;
+    left: 180px;
+    border-radius: 50%;
+    animation: loader 2s linear infinite;
+}
+
+@keyframes loader {
+    from{
+        transform: rotate(0deg);
+    }
+    to{
+        transform: rotate(360deg);
+    }
+}
 `
 
 export default Wrapper;

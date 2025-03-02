@@ -1,12 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Wrapper from "./style";
 
-const Form_LO = ({ closeForm, loadLO }) => {
+const Form_LO = ({ closeForm, loadLO, closeForm2, closeFormOnly, setShowSuccess, setShowFailed }) => {
   const [loInput, setLoInput] = useState("");
   const [filteredRoList, setFilteredRoList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState(null);
+
+  const successTimeout = useRef(null);
+  
+    useEffect(() => {
+      return () => {
+        if (successTimeout.current) {
+          clearTimeout(successTimeout.current);
+        }
+      };
+    }, []);
 
   useEffect(() => {
     const storedUserData = sessionStorage.getItem("userData");
@@ -81,16 +91,22 @@ const Form_LO = ({ closeForm, loadLO }) => {
         { headers }
       );
       if (response.status === 201) {
-        alert("LO successfully added!");
-        loadLO(userData);
+        setLoInput()
+        loadLO(userData)
+        closeForm()
+        successTimeout.current = setTimeout(() => {
+          setShowSuccess(true);
+          successTimeout.current = setTimeout(() => setShowSuccess(false), 2000);
+        }, 500);
       } else {
         alert("Failed to add LO. Please try again!");
       }
     } catch (error) {
       console.error("Error adding new LO:", error.response || error.message);
-      alert("Failed to add LO. Please try again!");
+      closeForm2();
+      setShowFailed(true);
+      setTimeout(() => setShowFailed(false), 2000);
     }
-    closeForm();
   };
 
   return (
@@ -126,7 +142,16 @@ const Form_LO = ({ closeForm, loadLO }) => {
           )}
         </ul>
         <div className="buttons">
-          <input type="button" value="Close" className="closebtn" onClick={closeForm} />
+        <input
+              type="button"
+              value="Close"
+              onClick={() => {
+                clearTimeout(successTimeout.current);
+                setShowSuccess(false); // Ensure success popup is hidden when closing
+                closeFormOnly();
+              }}
+              className="closebtn"
+            />
           <input type="button" value="Add" className="submitbtn" onClick={handleSubmit} />
         </div>
       </div>

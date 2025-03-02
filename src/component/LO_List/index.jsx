@@ -6,6 +6,8 @@ import axios from 'axios';
 import Form_LO from '../Form_LO';
 import MenuDots from '../MenuDots';
 import Menu from '../MenuBar';
+import SuccessfulDone from "../Popup_successful"; // Import the success message component
+import Failed from "../Popup_Failed/index.jsx";
 
 const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIndex }) => {
   const [activeIndex, setActiveIndex] = useState(null);
@@ -16,6 +18,8 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
   const [loading, setLoading] = useState(false);
   const [acList, setAcList] = useState([]);
   const [filteredAcList, setFilteredAcList] = useState([]);
+  const [showSuccess, setShowSuccess] = useState(false); // ✅ New state for success message
+  const [showFailed, setShowFailed] = useState(false)
 
   const handleClick = () => setIndex(1);
 
@@ -76,6 +80,26 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
       loadLO(userData);
     }
   }, [userData]);
+
+  useEffect(() => {
+      if (showSuccess) {
+        const timer = setTimeout(() => {
+          setShowSuccess(false);
+        }, 30000); // Hide after 2 seconds
+    
+        return () => clearTimeout(timer); // Cleanup timer
+      }
+  }, [showSuccess]);
+
+  useEffect(() => {
+      if (showFailed) {
+        const timer = setTimeout(() => {
+          setShowFailed(false)
+        }, 30000)
+    
+        return () => clearTimeout(timer)
+      }
+  }, [showFailed])
 
   useEffect(() => {
     if (!searchQuery) {
@@ -235,6 +259,7 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
       <ul className="lo-list">
         {loading ? (
           <li>
+            <div class="circular"></div>
             <p className="loading-message">Loading....</p>
           </li>
         ) : filteredLoList.length > 0 ? (
@@ -275,10 +300,22 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
       {showForm && (
         <div className="popup-overlay">
           <div className="popup-content">
-            <Form_LO closeForm={() => setShowForm(false)} loadLO={loadLO} />
+            <Form_LO closeForm={() => { setShowForm(false); setShowSuccess(true); }} closeForm2={() => { setShowForm(false); setShowFailed(true)}} closeFormOnly={() => setShowForm(false)} loadLO={loadLO} setShowSuccess={setShowSuccess} setShowFailed={setShowFailed} />
           </div>
         </div>
       )}
+
+      {showSuccess && 
+        <div className="success-overlay">
+        <SuccessfulDone />
+      </div>  
+      } {/* ✅ Show success message after closing the form */}
+
+      {showFailed &&
+         <div className="success-overlay">
+         <Failed />
+       </div>
+      }
     </Wrapper>
   );
 };

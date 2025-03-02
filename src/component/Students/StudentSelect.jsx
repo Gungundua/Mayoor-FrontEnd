@@ -147,7 +147,7 @@ const StudentList = ({ onStudentsData }) => {
               </div>
             ))
           ) : (
-            <div className="no-results">No students found</div>
+            <div className="no-results">Loading...  <div class="circular"></div></div>
           )}
         </div>
       </div>

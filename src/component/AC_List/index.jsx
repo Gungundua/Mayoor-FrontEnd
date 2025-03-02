@@ -6,6 +6,8 @@ import Form_AC from "../Form_AC";
 import Assessment from "../Start_Assesment/index.jsx";
 import Menu from "../MenuBar/index.jsx";
 import MenuDots from "../MenuDots/index.jsx";
+import SuccessfulDone from "../Popup_successful"; // Import the success message component
+import Failed from "../Popup_Failed/index.jsx";
 
 const AC_List = ({ acItems, setAcItems, handleAcItems, studentsData, setIndex, user }) => {
   const [acList, setAcList] = useState([]);
@@ -15,6 +17,8 @@ const AC_List = ({ acItems, setAcItems, handleAcItems, studentsData, setIndex, u
   const [showForm, setShowForm] = useState(false);
   const [selectedAssessment, setSelectedAssessment] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false); // ✅ New state for success message
+  const [showFailed, setShowFailed] = useState(false)
 
   const handleClick = () => {
     setIndex(1);
@@ -76,6 +80,26 @@ const AC_List = ({ acItems, setAcItems, handleAcItems, studentsData, setIndex, u
   }, [userData]);
 
   useEffect(() => {
+    if (showSuccess) {
+      const timer = setTimeout(() => {
+        setShowSuccess(false);
+      }, 1000); // Hide after 2 seconds
+  
+      return () => clearTimeout(timer); // Cleanup timer
+    }
+  }, [showSuccess]);
+
+  useEffect(() => {
+    if (showFailed) {
+      const timer = setTimeout(() => {
+        setShowFailed(false)
+      }, 1000)
+  
+      return () => clearTimeout(timer)
+    }
+  }, [showFailed])
+
+  useEffect(() => {
     if (!searchQuery) {
       setFilteredAcList(acList);
     } else {
@@ -86,10 +110,9 @@ const AC_List = ({ acItems, setAcItems, handleAcItems, studentsData, setIndex, u
     }
   }, [searchQuery, acList]);
 
-  // ✅ Prevents opening Assessment when MenuDots is active
   const handleStartAssessment = (item) => {
     if (activeMenuIndex !== null) {
-      return; // If menu is open, do nothing
+      return;
     }
     setSelectedAssessment(item);
   };
@@ -106,9 +129,9 @@ const AC_List = ({ acItems, setAcItems, handleAcItems, studentsData, setIndex, u
     if (!window.confirm("Are you sure you want to delete this Assessment Criteria?")) {
       return;
     }
-  
+
     setLoading(true);
-    
+
     try {
       const headers = {
         Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
@@ -119,13 +142,13 @@ const AC_List = ({ acItems, setAcItems, handleAcItems, studentsData, setIndex, u
         subject: userData.subject,
         quarter: userData.quarter,
       };
-  
+
       await axios.delete(`${process.env.REACT_APP_API_URL}/api/assessment-criteria/${acId}`, { headers });
-  
+
       const updatedAcItems = acItems.filter(item => item.id !== acId);
       setAcItems(updatedAcItems);
       setFilteredAcList(updatedAcItems);
-  
+
       alert("Assessment Criteria deleted successfully.");
     } catch (error) {
       console.error("Error deleting Assessment Criteria:", error.response?.data || error.message);
@@ -141,9 +164,9 @@ const AC_List = ({ acItems, setAcItems, handleAcItems, studentsData, setIndex, u
       alert("Name cannot be empty.");
       return;
     }
-  
+
     setLoading(true);
-  
+
     try {
       const headers = {
         Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
@@ -154,18 +177,18 @@ const AC_List = ({ acItems, setAcItems, handleAcItems, studentsData, setIndex, u
         subject: userData.subject,
         quarter: userData.quarter,
       };
-  
+
       const requestBody = { name: newName };
-  
+
       await axios.put(`${process.env.REACT_APP_API_URL}/api/assessment-criteria/${acId}`, requestBody, { headers });
-  
+
       const updatedAcItems = acItems.map(item =>
         item.id === acId ? { ...item, name: newName } : item
       );
-      
+
       setAcItems(updatedAcItems);
       setFilteredAcList(updatedAcItems);
-  
+
       alert("Assessment Criteria updated successfully.");
     } catch (error) {
       console.error("Error updating Assessment Criteria:", error.response?.data || error.message);
@@ -178,7 +201,7 @@ const AC_List = ({ acItems, setAcItems, handleAcItems, studentsData, setIndex, u
   return (
     <Wrapper>
       <div className="search-container">
-      <div className="icon">
+        <div className="icon">
           <Menu
             onProfileClick={() => alert("Go to Profile")}
             onSettingsClick={() => alert("Open Settings")}
@@ -198,6 +221,7 @@ const AC_List = ({ acItems, setAcItems, handleAcItems, studentsData, setIndex, u
       <ul className="ac-list">
         {loading ? (
           <li>
+            <div class="circular"></div>
             <p className="loading-message">Loading....</p>
           </li>
         ) : filteredAcList.length > 0 ? (
@@ -215,10 +239,7 @@ const AC_List = ({ acItems, setAcItems, handleAcItems, studentsData, setIndex, u
                   <MenuDots
                     index={index}
                     activeMenuIndex={activeMenuIndex}
-                    setActiveMenuIndex={(index) => {
-                      setSelectedAssessment(null); // Close Assessment when menu is clicked
-                      setActiveMenuIndex(index);
-                    }}
+                    setActiveMenuIndex={setActiveMenuIndex}
                     onEditClick={() => handleEdit(item.id, item.name)}
                     onDeleteClick={() => handleDelete(item.id)}
                   />
@@ -232,14 +253,29 @@ const AC_List = ({ acItems, setAcItems, handleAcItems, studentsData, setIndex, u
           </li>
         )}
       </ul>
+
       <div className="add" onClick={() => setShowForm(true)}><span className='plus'>+</span></div>
+
       {showForm && (
         <div className="popup-overlay">
           <div className="popup-content">
-            <Form_AC closeForm={() => setShowForm(false)} />
+            <Form_AC closeForm={() => { setShowForm(false); setShowSuccess(true); }} closeForm2={() => { setShowForm(false); setShowFailed(true)}} closeFormOnly={() => setShowForm(false)} loadAC={loadAC} setShowSuccess={setShowSuccess} setShowFailed={setShowFailed} />
           </div>
         </div>
       )}
+
+      {showSuccess && 
+        <div className="success-overlay">
+        <SuccessfulDone />
+      </div>  
+      } {/* ✅ Show success message after closing the form */}
+
+      {showFailed &&
+         <div className="success-overlay">
+         <Failed />
+       </div>
+      }
+
     </Wrapper>
   );
 };

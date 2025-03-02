@@ -1,35 +1,42 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Wrapper from "./style";
-const Form_AC = ({ closeForm, loadAC }) => {
+
+const Form_AC = ({ closeForm, loadAC, closeForm2, closeFormOnly, setShowSuccess, setShowFailed }) => {
   const [acName, setAcName] = useState("");
   const [maxMarks, setMaxMarks] = useState("");
   const [userData, setUserData] = useState(null);
   const [filteredLoList, setFilteredLoList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [addAssess, setAddAssess] = useState(true);
+
+  const successTimeout = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if (successTimeout.current) {
+        clearTimeout(successTimeout.current);
+      }
+    };
+  }, []);
+
   useEffect(() => {
     const storedUserData = sessionStorage.getItem("userData");
     if (storedUserData) {
       try {
         const parsedUserData = JSON.parse(storedUserData);
-        console.log(":white_check_mark: Loaded User Data:", parsedUserData); // Debugging
         setUserData(parsedUserData);
-        // :white_check_mark: Load LO only if userData is valid
         if (parsedUserData?.year && parsedUserData?.class) {
           loadLO(parsedUserData);
-        } else {
-          console.error("Invalid userData:", parsedUserData);
         }
       } catch (error) {
         console.error("Error parsing userData:", error);
       }
-    } else {
-      console.warn(":warning: No userData found in sessionStorage");
     }
   }, []);
+
   const loadLO = async (userData) => {
-    if (!userData) return; // Prevent calling API with null userData
+    if (!userData) return;
     setLoading(true);
     const headers = {
       Authorization: "Bearer YOUR_ACCESS_TOKEN",
@@ -41,12 +48,10 @@ const Form_AC = ({ closeForm, loadAC }) => {
       quarter: userData.quarter,
     };
     try {
-      console.log("Fetching LO Data with Headers:", headers); // Debugging
       const response = await axios.get(
         `${process.env.REACT_APP_API_URL}/api/learning-outcome`,
         { headers }
       );
-      console.log("API Response:", response.data); // Debugging API response
       let finalData = [];
       if (Array.isArray(response.data)) {
         finalData = response.data;
@@ -54,19 +59,16 @@ const Form_AC = ({ closeForm, loadAC }) => {
         finalData = response.data.lo;
       } else if (Array.isArray(response.data.ro)) {
         finalData = response.data.ro;
-      } else {
-        console.warn("API response does not contain expected data format:", response.data);
       }
-      // handleLoItems(finalData);
       setFilteredLoList(finalData);
-      // console.log(handleLoItems)
     } catch (error) {
-      console.error(" Error fetching LOs:", error.response?.data || error.message);
+      console.error("Error fetching LOs:", error.response?.data || error.message);
       alert(`Error loading LO data: ${error.response?.data?.message || "Unknown error"}`);
     } finally {
       setLoading(false);
     }
   };
+
   const handleSubmit = async () => {
     if (!acName.trim() || !maxMarks) {
       alert("Please fill in all fields.");
@@ -77,7 +79,7 @@ const Form_AC = ({ closeForm, loadAC }) => {
       return;
     }
     const headers = {
-      Authorization: "Bearer YOUR_ACCESS_TOKEN", // Replace with actual token
+      Authorization: "Bearer YOUR_ACCESS_TOKEN",
       "Content-Type": "application/json",
       year: userData.year,
       classname: userData.class,
@@ -96,24 +98,24 @@ const Form_AC = ({ closeForm, loadAC }) => {
         { headers }
       );
       if (response.status === 201) {
-        alert("AC successfully added!");
         setAcName("");
         setMaxMarks("");
         loadAC();
         closeForm();
-      } else {
-        alert("Failed to add AC. Please try again!");
+
+        successTimeout.current = setTimeout(() => {
+          setShowSuccess(true);
+          successTimeout.current = setTimeout(() => setShowSuccess(false), 2000);
+        }, 500);
       }
     } catch (error) {
       console.error("Error adding new AC:", error.response?.data || error.message);
-      alert(`Error: ${error.response?.data?.message || "Failed to add AC."}`);
+      closeForm2();
+      setShowFailed(true);
+      setTimeout(() => setShowFailed(false), 2000);
     }
   };
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      handleSubmit(); // Trigger form submission when Enter is pressed
-    }
-  };
+
   return (
     <Wrapper>
       <div className="form-box">
@@ -167,7 +169,16 @@ const Form_AC = ({ closeForm, loadAC }) => {
             )}
           </ul>
           <div className="buttons">
-            <input type="button" value="Close" onClick={closeForm} className="closebtn" />
+            <input
+              type="button"
+              value="Close"
+              onClick={() => {
+                clearTimeout(successTimeout.current);
+                setShowSuccess(false); // Ensure success popup is hidden when closing
+                closeFormOnly();
+              }}
+              className="closebtn"
+            />
             <input type="button" value="Add" className="savebtn" onClick={handleSubmit} />
           </div>
         </form>
@@ -175,4 +186,5 @@ const Form_AC = ({ closeForm, loadAC }) => {
     </Wrapper>
   );
 };
+
 export default Form_AC;

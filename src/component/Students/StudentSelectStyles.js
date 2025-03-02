@@ -75,7 +75,7 @@ position: fixed;
   .studentlist {
     background-color: white;
     padding: 15px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    /* box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); */
     margin-top: -1px;
     border-top-left-radius: 30px;
     border-top-right-radius: 30px;
@@ -120,6 +120,27 @@ position: fixed;
     font-size: 16px;
     margin-top: 10px;
   }
+
+  .circular{
+    height: 50px;
+    width: 50px;
+    border: 5px solid lightgray;
+    border-bottom: 5px solid rgb(127, 124, 124);
+    position: absolute;
+    top: 70px;
+    left: 160px;
+    border-radius: 50%;
+    animation: loader 2s linear infinite;
+}
+
+@keyframes loader {
+    from{
+        transform: rotate(0deg);
+    }
+    to{
+        transform: rotate(360deg);
+    }
+}
 `;
 
 export default Wrapper;
