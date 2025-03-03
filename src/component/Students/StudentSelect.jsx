@@ -58,17 +58,19 @@ const StudentList = ({ onStudentsData }) => {
         const headers = {
           Authorization: "Bearer YOUR_ACCESS_TOKEN",
           "Content-Type": "application/json",
-          year: userData?.year,
-          classname: userData?.class,
-          section: userData?.section,
-          subject: userData?.subject,
+          year: userData.year,
+          classname: userData.class,
+          section: userData.section,
+          subject: userData.subject,
         };
 
         const response = await axios.get(
           `${process.env.REACT_APP_API_URL}/api/students`,
           { headers }
         );
-
+         
+        const Data = response.data
+        console.log(Data)
         let re = /(\b[a-z](?!\s))/g;
         response.data.students.map(
           (student) =>

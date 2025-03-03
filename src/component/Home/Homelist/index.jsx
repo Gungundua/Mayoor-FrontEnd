@@ -14,7 +14,7 @@ const HomeList = ({ user, setIndex, msg }) => {
   }, []);
   const [selectedYear, setSelectedYear] = useState(sessionStorage.getItem("year") || 2024);
   const [selectedClass, setSelectedClass] = useState(sessionStorage.getItem("class") || 1);
-  const [selectedSection, setSelectedSection] = useState(sessionStorage.getItem("section") || 'Orchid');
+  const [selectedSection, setSelectedSection] = useState(sessionStorage.getItem("section") || '1');
   const [selectedQuarter, setSelectedQuarter] = useState(sessionStorage.getItem("quarter") || '1');
   const [selectedSubject, setSelectedSubject] = useState(sessionStorage.getItem("subject") || '1');
   const updateSessionStorage = (key, value, setter) => {
@@ -26,7 +26,7 @@ const HomeList = ({ user, setIndex, msg }) => {
     const updatedUserdata = {
       year: parseInt(selectedYear, 10),
       class: parseInt(selectedClass, 10),
-      section: selectedSection,
+      section: parseInt(selectedSection,10),
       quarter: parseInt(selectedQuarter, 10),
       subject: parseInt(selectedSubject, 10),
     };
@@ -70,9 +70,9 @@ const HomeList = ({ user, setIndex, msg }) => {
         </div>
         <label htmlFor="section" onClick={toggle}>Section ({selectedSection})</label>
         <div className="options">
-          <Ripples><div tabIndex={0} className={selectedSection === "Orchid" ? "option active" : "option"} onClick={e => setSelectedSection("Orchid")}>Orchid</div></Ripples>
-          <Ripples><div tabIndex={0} className={selectedSection === "Tulip" ? "option active" : "option"} onClick={e => setSelectedSection("Tulip")}>Tulip</div></Ripples>
-          <Ripples><div tabIndex={0} className={selectedSection === "Daffodil" ? "option active" : "option"} onClick={e => setSelectedSection("Daffodil")}>Daffodil</div></Ripples>
+          <Ripples><div tabIndex={0} className={selectedSection === "1" ? "option active" : "option"} onClick={e => setSelectedSection("1")}>Orchid</div></Ripples>
+          <Ripples><div tabIndex={0} className={selectedSection === "2" ? "option active" : "option"} onClick={e => setSelectedSection("2")}>Tulip</div></Ripples>
+          <Ripples><div tabIndex={0} className={selectedSection === "3" ? "option active" : "option"} onClick={e => setSelectedSection("3")}>Daffodil</div></Ripples>
         </div>
         <label htmlFor="quarter" onClick={toggle}>Quarter ({selectedQuarter})</label>
         <div className="options">

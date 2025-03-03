@@ -10,6 +10,7 @@ import listIcon from '../assets/Audit.png';
 import StudentList from '../Students/StudentSelect';
 import ClassView from "../Classview/Classview";
 import { useSwipeable } from 'react-swipeable';
+import AreYouSure from '../AreYouSure';
 const Home = ({ user }) => {
   const [index, setIndex] = useState(1);
   const [tabs, setTabs] = useState([
@@ -53,11 +54,12 @@ const handlers = useSwipeable({
         {index === 1 ? (
           <HomeList user={user} setIndex={setIndex}  />
         ) : index === 2 ? (
-          <ClassView setIndex={setIndex} user={user}/>
+          // <ClassView setIndex={setIndex} user={user}/>
+          <AreYouSure/>
         ) : index === 3 ? (
           <StudentList onStudentsData={handleStudentsData} setIndex={setIndex} />
         ) : index === 4 ? (
-          <LOlist loItems={loItems} handleLoItems={handleLoItems} acItems={acItems} setAcItems={setAcItems} setIndex={setIndex}/>
+          <LOlist loItems={loItems} setLoItems={setLoItems} handleLoItems={handleLoItems} acItems={acItems} setAcItems={setAcItems} setIndex={setIndex}/>
         ) : index === 5 ? (
           <ROlist loItems={loItems} setLoItems={setLoItems} setIndex={setIndex} handleLoItems={handleLoItems} acItems={acItems}/>
         ) : (

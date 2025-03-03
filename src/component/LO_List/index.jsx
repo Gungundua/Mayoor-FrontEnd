@@ -8,7 +8,6 @@ import MenuDots from '../MenuDots';
 import Menu from '../MenuBar';
 import SuccessfulDone from "../Popup_successful"; // Import the success message component
 import Failed from "../Popup_Failed/index.jsx";
-
 const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIndex }) => {
   const [activeIndex, setActiveIndex] = useState(null);
   const [activeMenuIndex, setActiveMenuIndex] = useState(null); // For three-dot menu state
@@ -17,33 +16,25 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
   const [acList, setAcList] = useState([]);
-  const [filteredAcList, setFilteredAcList] = useState([]);
-  const [showSuccess, setShowSuccess] = useState(false); // ✅ New state for success message
+  const [showSuccess, setShowSuccess] = useState(false); // :white_tick: New state for success message
   const [showFailed, setShowFailed] = useState(false)
-
   const handleClick = () => setIndex(1);
-
   const toggleDropdown = (index) => {
     if (activeMenuIndex !== null) {
       return; // Prevent toggling when MenuDots is open
     }
     setActiveIndex((prevIndex) => (prevIndex === index ? null : index));
   };
-  
-
   const handleProfileClick = () => alert("Go to Profile");
   const handleSettingsClick = () => alert("Open Settings");
   const handleLogoutClick = () => alert("Logging Out...");
-
   const [userData, setUserData] = useState(null);
-
   useEffect(() => {
     const userData = sessionStorage.getItem("userData");
     if (userData) {
       setUserData(JSON.parse(userData));
     }
   }, []);
-
   const loadLO = async (userData) => {
     setLoading(true);
     const headers = {
@@ -66,33 +57,27 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
       setLoading(false);
     }
   };
-
   useEffect(() => {
     if (userData && Object.keys(userData).length > 0) {
       loadLO(userData);
     }
   }, [userData]);
-
   useEffect(() => {
       if (showSuccess) {
         const timer = setTimeout(() => {
           setShowSuccess(false);
         }, 1000); // Hide after 2 seconds
-    
         return () => clearTimeout(timer); // Cleanup timer
       }
   }, [showSuccess]);
-
   useEffect(() => {
       if (showFailed) {
         const timer = setTimeout(() => {
           setShowFailed(false)
         }, 1000)
-    
         return () => clearTimeout(timer)
       }
   }, [showFailed])
-
   useEffect(() => {
     if (!searchQuery) {
       setFilteredLoList(loItems);
@@ -103,32 +88,16 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
       setFilteredLoList(filteredData);
     }
   }, [searchQuery, loItems]);
-
   const handleDelete = async (loId) => {
     if (!window.confirm("Are you sure you want to delete this Learning Outcome?")) {
       return;
     }
-  
     setLoading(true);
-    
     try {
-      const headers = {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-      "Content-Type": "application/json",
-      year: userData.year,
-      classname: userData.class,
-      section: userData.section,
-      subject: userData.subject,
-      quarter: userData.quarter,
-      };
-  
-      await axios.delete(`${process.env.REACT_APP_API_URL}/api/learning-outcome/${loId}`, { headers });
-  
-      // Update the list after deletion
-      const updatedLoItems = loItems.filter(item => item.id !== loId);
+      const response = await axios.delete(`${process.env.REACT_APP_API_URL}/api/learning-outcome?lo_id=${loId}`);
+      const updatedLoItems = filteredLoList.filter(item => item.lo_id !== loId);
       setLoItems(updatedLoItems);
       setFilteredLoList(updatedLoItems);
-  
       alert("Learning Outcome deleted successfully.");
     } catch (error) {
       console.error("Error deleting Learning Outcome:", error.response?.data || error.message);
@@ -137,16 +106,13 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
       setLoading(false);
     }
   };
-  
   const handleEdit = async (loId, updatedName) => {
     const newName = prompt("Enter new name for Learning Outcome:", updatedName);
     if (!newName || newName.trim() === "") {
       alert("Name cannot be empty.");
       return;
     }
-  
     setLoading(true);
-  
     try {
       const headers = {
         Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
@@ -157,19 +123,14 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
         subject: userData.subject,
         quarter: userData.quarter,
       };
-  
       const requestBody = { name: newName };
-  
       await axios.put(`${process.env.REACT_APP_API_URL}/api/learning-outcome/${loId}`, requestBody, { headers });
-  
       // Update local state
       const updatedLoItems = loItems.map(item =>
         item.id === loId ? { ...item, name: newName } : item
       );
-      
       setLoItems(updatedLoItems);
       setFilteredLoList(updatedLoItems);
-  
       alert("Learning Outcome updated successfully.");
     } catch (error) {
       console.error("Error updating Learning Outcome:", error.response?.data || error.message);
@@ -178,7 +139,6 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
       setLoading(false);
     }
   };
-  
   return (
     <Wrapper>
       <div className="search-container">
@@ -197,10 +157,8 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="search-bar"
-          
         />
         </div>
-        
       </div>
       <ul className="lo-list">
         {loading ? (
@@ -224,8 +182,8 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
                     index={index}
                     activeMenuIndex={activeMenuIndex}
                     setActiveMenuIndex={setActiveMenuIndex}
-                    onEditClick={() => handleEdit(item.id, item.name)}
-                    onDeleteClick={() => handleDelete(item.id)}
+                    onEditClick={() => handleEdit(item.id, item.lo_name)}
+                    onDeleteClick={() => handleDelete(item.lo_id)}
                   />
                 </div>
               </div>
@@ -250,13 +208,11 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
           </div>
         </div>
       )}
-
-      {showSuccess && 
+      {showSuccess &&
         <div className="success-overlay">
         <SuccessfulDone />
-      </div>  
-      } {/* ✅ Show success message after closing the form */}
-
+      </div>
+      } {/* :white_tick: Show success message after closing the form */}
       {showFailed &&
          <div className="success-overlay">
          <Failed />
@@ -265,5 +221,4 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
     </Wrapper>
   );
 };
-
 export default LOlist;

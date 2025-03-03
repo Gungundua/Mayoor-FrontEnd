@@ -86,7 +86,7 @@ const Wrapper = styled.section`
     border-top-left-radius:30px;
     border-top-right-radius: 30px;
     background-color: #fff;
-    padding: 10px;
+    padding: 10px 10px 50px 10px;
   }
 
   .lo-list::-webkit-scrollbar {
@@ -204,14 +204,14 @@ const Wrapper = styled.section`
   align-items: center;
   z-index: 1000;
 }
-.popup-content {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  width: 300px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  animation: popup 0.3s ease-in-out;
-} 
+// .popup-content {
+//   background: white;
+//   padding: 20px;
+//   border-radius: 10px;
+//   width: 300px;
+//   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+//   animation: popup 0.3s ease-in-out;
+// } 
 @keyframes popup {
   from {
     transform: scale(0.8);

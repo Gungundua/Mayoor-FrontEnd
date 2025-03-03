@@ -7,16 +7,17 @@ const Form_LO = ({ closeForm, loadLO, closeForm2, closeFormOnly, setShowSuccess,
   const [filteredRoList, setFilteredRoList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [selectedRoIds, setselectedRoIds] = useState([]);
 
   const successTimeout = useRef(null);
-  
-    useEffect(() => {
-      return () => {
-        if (successTimeout.current) {
-          clearTimeout(successTimeout.current);
-        }
-      };
-    }, []);
+
+  useEffect(() => {
+    return () => {
+      if (successTimeout.current) {
+        clearTimeout(successTimeout.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const storedUserData = sessionStorage.getItem("userData");
@@ -53,14 +54,23 @@ const Form_LO = ({ closeForm, loadLO, closeForm2, closeFormOnly, setShowSuccess,
         `${process.env.REACT_APP_API_URL}/api/report-outcome`,
         { headers }
       );
+
+      console.log("API Response:", response.data); // Debugging log
+
       let finalData = [];
-      if (Array.isArray(response.data)) {
-        finalData = response.data;
-      } else if (Array.isArray(response.data.ro)) {
+      if (Array.isArray(response.data?.ro)) {
         finalData = response.data.ro;
+      } else if (Array.isArray(response.data)) {
+        finalData = response.data;
       } else {
-        console.warn("API response does not contain expected data format:", response.data);
+        console.warn("Unexpected API response format:", response.data);
       }
+
+      // Ensure every item has an ro_id before setting state
+      if (!finalData.every((item) => item.ro_id)) {
+        console.error("Some items are missing ro_id:", finalData);
+      }
+
       setFilteredRoList(finalData);
     } catch (error) {
       console.error("Error fetching ROs:", error.response?.data || error.message);
@@ -70,11 +80,27 @@ const Form_LO = ({ closeForm, loadLO, closeForm2, closeFormOnly, setShowSuccess,
     }
   };
 
+  const handleCheckboxChange = (ro_id) => {
+    console.log("Selected RO ID:", ro_id); // Debugging log
+
+    setselectedRoIds((prevSelected) =>
+      prevSelected.includes(ro_id)
+        ? prevSelected.filter((id) => id !== ro_id)
+        : [...prevSelected, ro_id]
+    );
+  };
+
   const handleSubmit = async () => {
     if (loInput.trim() === "") {
       alert("Please enter a valid LO!");
       return;
     }
+  
+    if (selectedRoIds.length === 0) {
+      alert("Please select at least one Reported Outcome!");
+      return;
+    }
+  
     try {
       const headers = {
         Authorization: "Bearer YOUR_ACCESS_TOKEN",
@@ -84,20 +110,31 @@ const Form_LO = ({ closeForm, loadLO, closeForm2, closeFormOnly, setShowSuccess,
         subject: userData.subject,
         quarter: userData.quarter,
       };
-      const body = { name: loInput };
+  
+      const body = {
+        name: loInput, // LO name
+        ro_id: selectedRoIds, // Array of selected RO IDs
+      };
+  
+      console.log("Payload being sent:", body); // Debugging log
+  
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}/api/learning-outcome`,
         body,
         { headers }
       );
+  
       if (response.status === 201) {
-        setLoInput()
-        loadLO(userData)
-        closeForm()
+        setLoInput(""); // Reset input field
+        setselectedRoIds([]); // Clear selection
+        // loadLO(userData); // Refresh LO list
+  
         successTimeout.current = setTimeout(() => {
           setShowSuccess(true);
           successTimeout.current = setTimeout(() => setShowSuccess(false), 2000);
         }, 500);
+  
+        closeForm(); // Close form after success
       } else {
         alert("Failed to add LO. Please try again!");
       }
@@ -108,7 +145,7 @@ const Form_LO = ({ closeForm, loadLO, closeForm2, closeFormOnly, setShowSuccess,
       setTimeout(() => setShowFailed(false), 2000);
     }
   };
-
+  
   return (
     <Wrapper>
       <div className="form-container">
@@ -126,11 +163,14 @@ const Form_LO = ({ closeForm, loadLO, closeForm2, closeFormOnly, setShowSuccess,
             <li><p className="loading-message">Loading...</p></li>
           ) : filteredRoList.length > 0 ? (
             filteredRoList.map((item) => (
-              <li key={item.id} className="ro-list-item">
+              <li key={item.ro_id} className="ro-list-item">
                 <div className="ro-header">
                   <div className="ro-info">
-                    <input type="checkbox" />
-                    <p className="para">{item.name}</p>
+                    <input type="checkbox" 
+                      checked={selectedRoIds.includes(item.ro_id)}
+                      onChange={() => handleCheckboxChange(item.ro_id)}
+                    />
+                    <p className="para">{item.ro_name}</p>
                   </div>
                 </div>
               </li>
@@ -142,16 +182,16 @@ const Form_LO = ({ closeForm, loadLO, closeForm2, closeFormOnly, setShowSuccess,
           )}
         </ul>
         <div className="buttons">
-        <input
-              type="button"
-              value="Close"
-              onClick={() => {
-                clearTimeout(successTimeout.current);
-                setShowSuccess(false); // Ensure success popup is hidden when closing
-                closeFormOnly();
-              }}
-              className="closebtn"
-            />
+          <input
+            type="button"
+            value="Close"
+            onClick={() => {
+              clearTimeout(successTimeout.current);
+              setShowSuccess(false); // Ensure success popup is hidden when closing
+              closeFormOnly();
+            }}
+            className="closebtn"
+          />
           <input type="button" value="Add" className="submitbtn" onClick={handleSubmit} />
         </div>
       </div>

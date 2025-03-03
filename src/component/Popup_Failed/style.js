@@ -1,34 +1,6 @@
 import styled from "styled-components";
 
 const Wrapper = styled.div`
-    /* .popup {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 9999;
-    }
-
-    .popup-content {
-        background-color: white;
-        padding: 20px;
-        width: 300px;
-        border-radius: 10px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        color : green;
-
-
-        .icon{
-            height: 30px;
-            margin: 0%;
-            align-content: center;
-        }
-    } */
     background: rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: center;

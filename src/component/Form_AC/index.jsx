@@ -7,8 +7,10 @@ const Form_AC = ({ closeForm, loadAC, closeForm2, closeFormOnly, setShowSuccess,
   const [maxMarks, setMaxMarks] = useState("");
   const [userData, setUserData] = useState(null);
   const [filteredLoList, setFilteredLoList] = useState([]);
+  const [selectedLoIds, setSelectedLoIds] = useState([]); // Track selected lo_id
   const [loading, setLoading] = useState(false);
   const [addAssess, setAddAssess] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const successTimeout = useRef(null);
 
@@ -36,7 +38,6 @@ const Form_AC = ({ closeForm, loadAC, closeForm2, closeFormOnly, setShowSuccess,
   }, []);
 
   const loadLO = async (userData) => {
-    if (!userData) return;
     setLoading(true);
     const headers = {
       Authorization: "Bearer YOUR_ACCESS_TOKEN",
@@ -48,36 +49,45 @@ const Form_AC = ({ closeForm, loadAC, closeForm2, closeFormOnly, setShowSuccess,
       quarter: userData.quarter,
     };
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/learning-outcome`,
-        { headers }
-      );
-      let finalData = [];
-      if (Array.isArray(response.data)) {
-        finalData = response.data;
-      } else if (Array.isArray(response.data.lo)) {
-        finalData = response.data.lo;
-      } else if (Array.isArray(response.data.ro)) {
-        finalData = response.data.ro;
-      }
-      setFilteredLoList(finalData);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/learning-outcome`, { headers });
+      setFilteredLoList(response.data);
     } catch (error) {
-      console.error("Error fetching LOs:", error.response?.data || error.message);
-      alert(`Error loading LO data: ${error.response?.data?.message || "Unknown error"}`);
+      console.error("Error fetching report outcomes:", error);
     } finally {
       setLoading(false);
     }
   };
 
+  const handleCheckboxChange = (lo_id) => {
+    setSelectedLoIds((prevSelected) =>
+      prevSelected.includes(lo_id)
+        ? prevSelected.filter((id) => id !== lo_id) 
+        : [...prevSelected, lo_id] 
+    );
+  };
+
   const handleSubmit = async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+  
     if (!acName.trim() || !maxMarks) {
       alert("Please fill in all fields.");
+      setIsSubmitting(false);
       return;
     }
-    if (!userData.year || !userData.class || !userData.section || !userData.subject || !userData.quarter) {
+  
+    if (!userData?.year || !userData?.class || !userData?.section || !userData?.subject || !userData?.quarter) {
       alert("Missing user details. Ensure all fields are filled in.");
+      setIsSubmitting(false);
       return;
     }
+  
+    if (selectedLoIds.length === 0) {
+      alert("Please select at least one Learning Outcome.");
+      setIsSubmitting(false);
+      return;
+    }
+  
     const headers = {
       Authorization: "Bearer YOUR_ACCESS_TOKEN",
       "Content-Type": "application/json",
@@ -87,22 +97,34 @@ const Form_AC = ({ closeForm, loadAC, closeForm2, closeFormOnly, setShowSuccess,
       subject: userData.subject,
       quarter: userData.quarter,
     };
+  
     const body = {
       name: acName.trim(),
       max_marks: parseInt(maxMarks, 10),
+      lo_id: selectedLoIds, // Send only selected LO IDs
     };
+  
+    console.log("Payload being sent:", body); // Debugging log
+  
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}/api/assessment-criteria`,
         body,
         { headers }
       );
+  
       if (response.status === 201) {
+        // const newAssessment = response.data; // Assuming API returns only the newly added assessment
+      
+        // console.log("Newly Created Assessment:", newAssessment);
+  
         setAcName("");
         setMaxMarks("");
-        loadAC();
+        setSelectedLoIds([]);
+        
+        // loadAC(newAssessment); // Pass only the new assessment, not the full list
         closeForm();
-
+  
         successTimeout.current = setTimeout(() => {
           setShowSuccess(true);
           successTimeout.current = setTimeout(() => setShowSuccess(false), 2000);
@@ -110,12 +132,13 @@ const Form_AC = ({ closeForm, loadAC, closeForm2, closeFormOnly, setShowSuccess,
       }
     } catch (error) {
       console.error("Error adding new AC:", error.response?.data || error.message);
-      closeForm2();
       setShowFailed(true);
       setTimeout(() => setShowFailed(false), 2000);
+    } finally {
+      setIsSubmitting(false);
     }
   };
-
+  
   return (
     <Wrapper>
       <div className="form-box">
@@ -153,11 +176,15 @@ const Form_AC = ({ closeForm, loadAC, closeForm2, closeFormOnly, setShowSuccess,
               </li>
             ) : filteredLoList.length > 0 ? (
               filteredLoList.map((item) => (
-                <li key={item.id} className="lo-list-item">
+                <li key={item.lo_id} className="lo-list-item">
                   <div className="lo-header">
                     <div className="lo-info">
-                      <input type="checkbox" />
-                      <p>{item.name}</p>
+                      <input
+                        type="checkbox"
+                        checked={selectedLoIds.includes(item.lo_id)}
+                        onChange={() => handleCheckboxChange(item.lo_id)}
+                      />
+                      <p>{item.lo_name}</p>
                     </div>
                   </div>
                 </li>
@@ -174,12 +201,19 @@ const Form_AC = ({ closeForm, loadAC, closeForm2, closeFormOnly, setShowSuccess,
               value="Close"
               onClick={() => {
                 clearTimeout(successTimeout.current);
-                setShowSuccess(false); // Ensure success popup is hidden when closing
+                setShowSuccess(false);
                 closeFormOnly();
               }}
               className="closebtn"
             />
-            <input type="button" value="Add" className="savebtn" onClick={handleSubmit} />
+            <button
+              type="button"
+              className="savebtn"
+              onClick={handleSubmit}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Adding..." : "Add"}
+            </button>
           </div>
         </form>
       </div>

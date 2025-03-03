@@ -84,7 +84,7 @@ const Wrapper = styled.section`
     border-top-left-radius:30px;
     border-top-right-radius: 30px;
     background-color: #fff;
-    padding: 10px;
+     padding: 10px 10px 50px 10px;
   }
   .no-results{
     list-style: none;

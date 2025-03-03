@@ -77,9 +77,6 @@ const Wrapper = styled.section`
     gap: 15px;
     color: #262626;
     }
-  .lo-list-item:hover {
-    background: #F0F0F0;
-  }
   .buttons {
     display: flex;
     justify-content: space-between;
