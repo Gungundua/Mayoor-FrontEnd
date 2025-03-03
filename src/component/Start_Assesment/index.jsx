@@ -77,7 +77,7 @@ const Assessment = ({ selectedAssessment, onBack, studentsData }) => {
         </div>
         <div className="info-container">
           <h1 className="name">
-            {selectedAssessment ? selectedAssessment.name : "AC-1"}
+            {selectedAssessment ? selectedAssessment.ac_name : "AC-1"}
           </h1>
           <p className="max-marks">
             Max Marks: {selectedAssessment?.max_marks}

@@ -78,29 +78,29 @@ const ACMapping = ({ loId, acList }) => {
             const selectedPriority = priorityMapping[ac.id] || "";
 
             return (
-              <div key={ac.id} className="ac-item">
+              <div key={ac.ac_id} className="ac-item">
                 <div>
-                  <span className="name">{ac.name}</span>
+                  <span className="name">{ac.ac_name}</span>
                 </div>
                 <div className="priority-buttons">
                   <button
                     className={`priority-button ${selectedPriority === "h" ? "h" : ""}`}
-                    onClick={() => handleClick(ac.id, "H")}
-                    disabled={lockedPriorities[ac.id]}
+                    onClick={() => handleClick(ac.ac_id, "H")}
+                    disabled={lockedPriorities[ac.ac_id]}
                   >
                     H
                   </button>
                   <button
                     className={`priority-button ${selectedPriority === "m" ? "m" : ""}`}
-                    onClick={() => handleClick(ac.id, "M")}
-                    disabled={lockedPriorities[ac.id]}
+                    onClick={() => handleClick(ac.ac_id, "M")}
+                    disabled={lockedPriorities[ac.ac_id]}
                   >
                     M
                   </button>
                   <button
                     className={`priority-button ${selectedPriority === "l" ? "l" : ""}`}
-                    onClick={() => handleClick(ac.id, "L")}
-                    disabled={lockedPriorities[ac.id]}
+                    onClick={() => handleClick(ac.ac_id, "L")}
+                    disabled={lockedPriorities[ac.ac_id]}
                   >
                     L
                   </button>

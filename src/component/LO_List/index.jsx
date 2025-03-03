@@ -58,16 +58,8 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/learning-outcome`, { headers });
       const data = response.data;
-      let finalData = [];
-      if (Array.isArray(data)) {
-        finalData = data;
-      } else if (Array.isArray(data.ro)) {
-        finalData = data.ro;
-      } else if (Array.isArray(data.lo)) {
-        finalData = data.lo;
-      }
-      handleLoItems(finalData);
-      setFilteredLoList(finalData);
+      console.log('Response data : ', data)
+      setFilteredLoList(data);
     } catch (error) {
       console.error('Error fetching report outcomes:', error);
     } finally {
@@ -85,7 +77,7 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
       if (showSuccess) {
         const timer = setTimeout(() => {
           setShowSuccess(false);
-        }, 30000); // Hide after 2 seconds
+        }, 1000); // Hide after 2 seconds
     
         return () => clearTimeout(timer); // Cleanup timer
       }
@@ -95,7 +87,7 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
       if (showFailed) {
         const timer = setTimeout(() => {
           setShowFailed(false)
-        }, 30000)
+        }, 1000)
     
         return () => clearTimeout(timer)
       }
@@ -111,52 +103,6 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
       setFilteredLoList(filteredData);
     }
   }, [searchQuery, loItems]);
-
-  const loadAC = async () => {
-    if (!userData || !userData.year || !userData.class || !userData.section || !userData.subject || !userData.quarter) {
-      console.warn("Missing user data, skipping API call.");
-      return;
-    }
-    setLoading(true);
-
-    const headers = {
-      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-      "Content-Type": "application/json",
-      year: userData.year,
-      classname: userData.class,
-      section: userData.section,
-      subject: userData.subject,
-      quarter: userData.quarter,
-    };
-
-    try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/assessment-criteria`, { headers });
-      console.log("Response Data:", response.data);
-      const data = response.data;
-
-      if (Array.isArray(data.assessments)) {
-        setAcList(data.assessments);
-        setFilteredAcList(data.assessments);
-        setAcItems(data.assessments);
-      } else {
-        setAcList([]);
-        setFilteredAcList([]);
-        setAcItems([]);
-        console.warn("Unexpected API response format:", data);
-      }
-    } catch (error) {
-      console.error("Error fetching assessment criteria:", error.response?.data || error.message);
-      setAcList([]);
-      setFilteredAcList([]);
-      setAcItems([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    loadAC();
-  }, [userData]);
 
   const handleDelete = async (loId) => {
     if (!window.confirm("Are you sure you want to delete this Learning Outcome?")) {
@@ -264,13 +210,13 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
           </li>
         ) : filteredLoList.length > 0 ? (
           filteredLoList.map((item, index) => (
-            <li key={item.id} className={`lo-list-item ${activeIndex === index ? 'active' : ''}`}>
+            <li key={item.lo_id} className={`lo-list-item ${activeIndex === index ? 'active' : ''}`}>
               <div className="lo-header" onClick={() => toggleDropdown(index)}>
                 <div className="list-icon-containers">
                   <img src={List} alt="" className="list-icons" />
                 </div>
                 <div className="lo-info">
-                  <p className="item-title">{item.name}</p>
+                  <p className="item-title">{item.lo_name}</p>
                 </div>
                 <div className='mapCounter'>1</div>
                 <div>

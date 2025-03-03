@@ -54,17 +54,9 @@ const AC_List = ({ acItems, setAcItems, handleAcItems, studentsData, setIndex, u
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/assessment-criteria`, { headers });
       console.log("Response Data:", response.data);
       const data = response.data;
-
-      if (Array.isArray(data.assessments)) {
-        setAcList(data.assessments);
-        setFilteredAcList(data.assessments);
-        setAcItems(data.assessments);
-      } else {
-        setAcList([]);
-        setFilteredAcList([]);
-        setAcItems([]);
-        console.warn("Unexpected API response format:", data);
-      }
+      setAcList(data);
+      setFilteredAcList(data);
+      setAcItems(data);
     } catch (error) {
       console.error("Error fetching assessment criteria:", error.response?.data || error.message);
       setAcList([]);
@@ -226,13 +218,13 @@ const AC_List = ({ acItems, setAcItems, handleAcItems, studentsData, setIndex, u
           </li>
         ) : filteredAcList.length > 0 ? (
           filteredAcList.map((item, index) => (
-            <li key={item.id} className="ac-list-item" onClick={() => handleStartAssessment(item)}>
+            <li key={item.ac_id} className="ac-list-item" onClick={() => handleStartAssessment(item)}>
               <div className="ac-header">
                 <div className="list-icon-containers">
                   <img src={List} alt="" className="list-icons" />
                 </div>
                 <div className="ac-info">
-                  <p className="item-title">{item.name}</p>
+                  <p className="item-title">{item.ac_name}</p>
                 </div>
                 <div className='mapCounter'>1</div>
                 <div>
