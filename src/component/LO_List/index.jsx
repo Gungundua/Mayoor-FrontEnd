@@ -6,35 +6,40 @@ import axios from 'axios';
 import Form_LO from '../Form_LO';
 import MenuDots from '../MenuDots';
 import Menu from '../MenuBar';
-import SuccessfulDone from "../Popup_successful"; // Import the success message component
+import SuccessfulDone from "../Popup_successful";
 import Failed from "../Popup_Failed/index.jsx";
+import DeletedSuccessfully from "../DeletedSuccessfully/index.jsx";
+import DeleteFailed from "../DeleteFailed/index.jsx";
+import AreYouSure from "../AreYouSure"; // Import confirmation modal
+
 const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIndex }) => {
   const [activeIndex, setActiveIndex] = useState(null);
-  const [activeMenuIndex, setActiveMenuIndex] = useState(null); // For three-dot menu state
+  const [activeMenuIndex, setActiveMenuIndex] = useState(null);
   const [filteredLoList, setFilteredLoList] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
   const [acList, setAcList] = useState([]);
-  const [showSuccess, setShowSuccess] = useState(false); // :white_tick: New state for success message
-  const [showFailed, setShowFailed] = useState(false)
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [showFailed, setShowFailed] = useState(false);
+  const [showDeleted, setShowDeleted] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [deleteLoId, setDeleteLoId] = useState(null); // Store LO ID for deletion
+  const [editItem, setEditItem] = useState(null);
+  const [showDeleteFailed, setShowDeleteFailed] = useState(false); // New state for delete failure
+
+
   const handleClick = () => setIndex(1);
-  const toggleDropdown = (index) => {
-    if (activeMenuIndex !== null) {
-      return; // Prevent toggling when MenuDots is open
-    }
-    setActiveIndex((prevIndex) => (prevIndex === index ? null : index));
-  };
-  const handleProfileClick = () => alert("Go to Profile");
-  const handleSettingsClick = () => alert("Open Settings");
-  const handleLogoutClick = () => alert("Logging Out...");
+  const toggleDropdown = (index) => setActiveIndex((prevIndex) => (prevIndex === index ? null : index));
+
   const [userData, setUserData] = useState(null);
   useEffect(() => {
-    const userData = sessionStorage.getItem("userData");
-    if (userData) {
-      setUserData(JSON.parse(userData));
+    const storedUserData = sessionStorage.getItem("userData");
+    if (storedUserData) {
+      setUserData(JSON.parse(storedUserData));
     }
   }, []);
+
   const loadLO = async (userData) => {
     setLoading(true);
     const headers = {
@@ -48,36 +53,20 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
     };
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/learning-outcome`, { headers });
-      const data = response.data;
-      console.log('Response data : ', data)
-      setFilteredLoList(data);
+      setFilteredLoList(response.data);
     } catch (error) {
       console.error('Error fetching report outcomes:', error);
     } finally {
       setLoading(false);
     }
   };
+
   useEffect(() => {
-    if (userData && Object.keys(userData).length > 0) {
+    if (userData) {
       loadLO(userData);
     }
   }, [userData]);
-  useEffect(() => {
-      if (showSuccess) {
-        const timer = setTimeout(() => {
-          setShowSuccess(false);
-        }, 1000); // Hide after 2 seconds
-        return () => clearTimeout(timer); // Cleanup timer
-      }
-  }, [showSuccess]);
-  useEffect(() => {
-      if (showFailed) {
-        const timer = setTimeout(() => {
-          setShowFailed(false)
-        }, 1000)
-        return () => clearTimeout(timer)
-      }
-  }, [showFailed])
+
   useEffect(() => {
     if (!searchQuery) {
       setFilteredLoList(loItems);
@@ -88,82 +77,91 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
       setFilteredLoList(filteredData);
     }
   }, [searchQuery, loItems]);
-  const handleDelete = async (loId) => {
-    if (!window.confirm("Are you sure you want to delete this Learning Outcome?")) {
-      return;
+
+  useEffect(() => {
+    if (showSuccess) {
+      const timer = setTimeout(() => setShowSuccess(false), 1000);
+      return () => clearTimeout(timer);
     }
+  }, [showSuccess]);
+
+  useEffect(() => {
+    if (showFailed) {
+      const timer = setTimeout(() => setShowFailed(false), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [showFailed]);
+
+  useEffect(() => {
+    if (showDeleted) {
+      const timer = setTimeout(() => setShowDeleted(false), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [showDeleted]);
+  useEffect(()=>{
+    if(showDeleteFailed) {
+      const timer = setTimeout(()=>{
+        setShowDeleteFailed(false)
+      }, 1000)
+      return ()=> clearTimeout(timer)
+    }
+  }, [showDeleteFailed])
+
+  // Function to show the confirmation modal before deletion
+  const handleDeleteClick = (loId) => {
+    setDeleteLoId(loId);
+    setShowConfirmation(true);
+  };
+
+  // Function to perform the deletion if confirmed
+  const handleConfirm = async () => {
+    if (!deleteLoId) return;
     setLoading(true);
     try {
-      const response = await axios.delete(`${process.env.REACT_APP_API_URL}/api/learning-outcome?lo_id=${loId}`);
-      const updatedLoItems = filteredLoList.filter(item => item.lo_id !== loId);
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/learning-outcome?lo_id=${deleteLoId}`);
+
+      // Remove deleted item from the list
+      const updatedLoItems = filteredLoList.filter(item => item.lo_id !== deleteLoId);
       setLoItems(updatedLoItems);
       setFilteredLoList(updatedLoItems);
-      alert("Learning Outcome deleted successfully.");
+
+      setShowDeleted(true); // Show success message
     } catch (error) {
+      setShowDeleteFailed(true);
       console.error("Error deleting Learning Outcome:", error.response?.data || error.message);
-      alert("Failed to delete Learning Outcome. Please try again.");
     } finally {
       setLoading(false);
+      setShowConfirmation(false);
+      setDeleteLoId(null);
     }
   };
-  const handleEdit = async (loId, updatedName) => {
-    const newName = prompt("Enter new name for Learning Outcome:", updatedName);
-    if (!newName || newName.trim() === "") {
-      alert("Name cannot be empty.");
-      return;
-    }
-    setLoading(true);
-    try {
-      const headers = {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-        "Content-Type": "application/json",
-        year: userData.year,
-        classname: userData.class,
-        section: userData.section,
-        subject: userData.subject,
-        quarter: userData.quarter,
-      };
-      const requestBody = { name: newName };
-      await axios.put(`${process.env.REACT_APP_API_URL}/api/learning-outcome/${loId}`, requestBody, { headers });
-      // Update local state
-      const updatedLoItems = loItems.map(item =>
-        item.id === loId ? { ...item, name: newName } : item
-      );
-      setLoItems(updatedLoItems);
-      setFilteredLoList(updatedLoItems);
-      alert("Learning Outcome updated successfully.");
-    } catch (error) {
-      console.error("Error updating Learning Outcome:", error.response?.data || error.message);
-      alert("Failed to update Learning Outcome. Please try again.");
-    } finally {
-      setLoading(false);
-    }
+
+  const handleEdit = (item) => {
+    setEditItem(item);
+    setShowForm(true);
   };
+
   return (
     <Wrapper>
       <div className="search-container">
-      <div className="icon">
-          <Menu
-            onProfileClick={handleProfileClick}
-            onSettingsClick={handleSettingsClick}
-            onLogoutClick={handleLogoutClick}
-            onReturnClick={handleClick}
+        <div className="icon">
+          <Menu onReturnClick={handleClick} />
+        </div>
+        <div>
+          <input
+            type="text"
+            placeholder="Search LO..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="search-bar"
           />
         </div>
-       <div>
-        <input
-          type="text"
-          placeholder="Search LO..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="search-bar"
-        />
-        </div>
       </div>
+
       <ul className="lo-list">
         {loading ? (
           <li>
-            <div class="circular"></div>
+            <div className="circular"></div>
             <p className="loading-message">Loading....</p>
           </li>
         ) : filteredLoList.length > 0 ? (
@@ -176,20 +174,20 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
                 <div className="lo-info">
                   <p className="item-title">{item.lo_name}</p>
                 </div>
-                <div className='mapCounter'>1</div>
+                <div className="mapCounter">1</div>
                 <div>
                   <MenuDots
                     index={index}
                     activeMenuIndex={activeMenuIndex}
                     setActiveMenuIndex={setActiveMenuIndex}
-                    onEditClick={() => handleEdit(item.id, item.lo_name)}
-                    onDeleteClick={() => handleDelete(item.lo_id)}
+                    onEditClick={() => handleEdit(item)}
+                    onDeleteClick={() => handleDeleteClick(item.lo_id)}
                   />
                 </div>
               </div>
               <div className={`lo-dropdown-content ${activeIndex === index ? 'show' : 'hide'}`}>
                 {activeIndex === index && (
-                  <ACMapping acItems={acItems} setAcItems={setAcItems} loId={item.id} acList={acList} setAcList={setAcList}/>
+                  <ACMapping acItems={acItems} setAcItems={setAcItems} loId={item.id} acList={acList} setAcList={setAcList} loData={[item]} />
                 )}
               </div>
             </li>
@@ -200,25 +198,48 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
           </li>
         )}
       </ul>
-      <div className="add" onClick={() => setShowForm(true)}><span className='plus'>+</span></div>
+
+      <div className="add" onClick={() => { setEditItem(null); setShowForm(true); }}>
+        <span className="plus">+</span>
+      </div>
+
       {showForm && (
         <div className="popup-overlay">
           <div className="popup-content">
-            <Form_LO closeForm={() => { setShowForm(false); setShowSuccess(true); }} closeForm2={() => { setShowForm(false); setShowFailed(true)}} closeFormOnly={() => setShowForm(false)} loadLO={loadLO} setShowSuccess={setShowSuccess} setShowFailed={setShowFailed} />
+            <Form_LO
+              closeForm={() => { setShowForm(false); setShowSuccess(true); }}
+              closeForm2={() => { setShowForm(false); setShowFailed(true); }}
+              closeFormOnly={() => setShowForm(false)}
+              loadLO={loadLO}
+              setShowSuccess={setShowSuccess}
+              setShowFailed={setShowFailed}
+              editItem={editItem}
+              setEditItem={setEditItem}
+            />
           </div>
         </div>
       )}
-      {showSuccess &&
-        <div className="success-overlay">
-        <SuccessfulDone />
-      </div>
-      } {/* :white_tick: Show success message after closing the form */}
-      {showFailed &&
-         <div className="success-overlay">
-         <Failed />
-       </div>
-      }
+
+      {showSuccess && <div className="success-overlay"><SuccessfulDone /></div>}
+      {showFailed && <div className="success-overlay"><Failed /></div>}
+      {showDeleted && <div className="success-overlay"><DeletedSuccessfully /></div>}
+
+      {showConfirmation && (
+        <div className='success-overlay'>
+          <AreYouSure
+            onConfirm={handleConfirm}
+            onCancel={() => setShowConfirmation(false)}
+          />
+        </div>
+      )}
+      {showDeleteFailed && (
+
+        <div className='success-overlay'>
+        <DeleteFailed/>
+        </div>
+      )}
     </Wrapper>
   );
 };
+
 export default LOlist;

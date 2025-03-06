@@ -13,6 +13,21 @@ const Wrapper = styled.div`
     margin: 22px 0;
     padding-left: 19px;
   }
+   .popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  // background-color: white;
+  // padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  width: 500px; /* Adjust width as needed */
+  // max-width: 90%;
+
+}
+
   .search-bar {
     width: 65%;
     padding: 10px 40px 10px 15px;

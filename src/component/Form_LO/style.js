@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 const Wrapper = styled.section`
   .form-box {
-    width: min-content;
+    width: 300px;
     padding: 30px;
     background: white;
     border-radius: 10px;

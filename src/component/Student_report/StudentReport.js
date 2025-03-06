@@ -1,118 +1,128 @@
 import styled from "styled-components";
+
 const Wrapper = styled.div`
-  width: 100%;
-  height: 90%;
-  box-sizing : border-box;
-  overscroll-behavior-y: none;
-  .header {
+  /* Global Styles */
+  margin: 0;
+  background-color: #21C3BC;
+  height:90;
+  overflow:hidden;
+
+  /* Header */
+  .st-header {
+    height:30px;
     background-color: #21C3BC;
     color: white;
-    height: 50px;
     text-align: center;
-    padding: 15px;
+    padding: 30px;
+    padding-left :0;
     font-size: 16px;
     font-weight: bold;
     top: 0;
     width: 100%;
-    // z-index: 1000;
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index:100;
+    position: relative;
+
   }
-  .back-icon {
-    position: absolute;
-    left: 15px;
-    cursor: pointer;
-    font-size: 18px;
-  }
-  .main-container {
-    background-color: white;
-  }
-  .student-info {
-    height: 150px;
+
+    .back-icon { 
+      position: absolute;
+     left: 10px; 
+    cursor: pointer; 
+    z-index:1000;
+}
+
+   .initials {
     display: flex;
+    justify-content: center; 
+    align-items: center; 
+    height: 65px;
+    width: 65px;
+    font-size: 18px; 
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #fff;
+    background-color: #135d5d;
+    border-radius: 50%;
+    margin-right: 40px;
+    margin-left:15px;
+}
+
+  /* Main Container */
+  .main-container {
+  padding: 20px;
+  background-color: white; 
+  border-top-right-radius: 30px;
+  border-top-left-radius: 30px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  height: calc(100vh - 50px);
+  max-height: 100vh;
+
+  max-width: 100%;
+  overflow:hidden; 
+  z-index: 1; 
+   
+  }
+    
+
+
+  /* Student Info Section */
+  .student-info {
+    display: flex;
+   height: 12%;
+    
     align-items: center;
     background-color: #fff;
-    gap: 20px;
+    padding: 10px;
+    border-radius: 20px;
+     margin-top: 5px;
+    border: 1px solid #e0d8cc; 
+    background: linear-gradient(white, white) padding-box, 
+                linear-gradient(120deg, #f7f3e9, #fffdf5) border-box; /* Softer gradient */
+    color: #444;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   }
-  .profile-pic img {
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
-    margin-left: 20px;
-  }
+
+  
+
+  /* Student Details */
   .student-details p,
   .student-section p {
     font-size: 14px;
     margin: 3px 0;
   }
- .percentage-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between; /* Ensures left and right alignment */
-    align-items: center;
-    width: 80%; /* Increase width for more space */
-    margin: 30px auto; /* Adjust margin to center */
-    position: relative;
+
+  /* Percentage Circles */
+  .percentage-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 40px; 
 }
 
-.percentage-container div {
-    width: 180px; /* Increased circle size */
-    height: 180px; /* Increased circle size */
-    background-color: white;
-    display: flex;
-    flex-direction: column; /* Arrange content vertically */
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%; /* Makes perfect circles */
+  .percentage {
     text-align: center;
-    // box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.15); /* Optional: adds a soft shadow */
-}
-
-.percentage-container div:nth-child(3) {
-    position: absolute;
-    top: 220px; /* Increased gap between top and bottom circle */
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-.percentage {
-    margin-top: 15px; /* More space between circle and text */
-    font-size: 18px; /* Increase text size */
-    color: black;
-}
-
+    width: 35%;
+    max-width: 150px;
+  }
 
   .percentage p {
     font-size: 11px;
     margin-top: 5px;
   }
-  .chart-container {
-    width: 340px;
-    height: 300px;
-    background-color: #fff;
-    border-radius: 10px;
-    margin-left: 20px;
-    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
+
+  
+  .average-title{
+  margin: 25px;
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  
   }
-  .remark-section {
-    position: relative;
-    margin-top: 40px;
-  }
-  .remark-section textarea {
-    width: 100%;
-    height: 50px;
-    border-radius: 5px;
-    padding: 8px;
-    font-size: 13px;
-  }
-  .edit-icon {
-    position: absolute;
-    right: 8px;
-    top: 8px;
-    cursor: pointer;
-    color: gray;
-  }
+
+  /* Score Components */
   .score-component {
     position: absolute;
     top: 0;
@@ -121,15 +131,7 @@ const Wrapper = styled.div`
     height: 100%;
     background: white;
     z-index: 1;
-  }
-  .average-title{
-  margin-left: 20px;
-  margin-top: 50px;
-  }
-  .subject-title{
-  margin-top: 40px;
-  margin-left: 20px;
-  }
-`
-export default Wrapper
+  } 
+`;
 
+export default Wrapper;

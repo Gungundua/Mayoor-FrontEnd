@@ -14,13 +14,13 @@ const Wrapper = styled.section`
         flex-wrap: wrap;
         .option{
             flex : 1;
-            background : #21C2BA;
+            background :rgb(0, 134, 128);
             color : #FFFFFF;
-            padding : 20px 30px;
+            padding : 21px 30px;
             border-radius: 5px;
             font-size: 1.1rem;
             text-align: center;
-            opacity : 0.5;
+            opacity : 0.7;
             &.active{
                 opacity: 1;
                 box-shadow: 2px 2px 2px #ccc;
@@ -29,24 +29,47 @@ const Wrapper = styled.section`
     }
 
     .subjects{
+        flex-wrap : nowrap;
+        overflow-x: auto;
         .option{
+            padding : 21px 20px;
             width : 80px;
             flex : auto;
             white-space: nowrap;
         }
     }
 
-    // padding: 20px;
+    .subjects .react-ripples{
+        min-width: 170px;
+    }
+
+    .class {
+        flex-wrap : nowrap;
+        overflow-x : auto;
+    }
+
+    .class .react-ripples{
+        min-width : 80px;
+    }
+
+    .quarter {
+        flex-wrap : nowrap;
+        overflow-x : auto;
+    }
+
+    .quarter .react-ripples {
+        min-width : 100px;
+    }
+
     #user {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 40px 20px 50px 30px;
+        padding: 40px 20px 50px 20px;
         font-size: 17px;
         color: black;
         background: no-repeat 150% center;
         background-image: linear-gradient( rgba(33,194, 186, 0.7),rgba(33,194, 186, 0.7) ), url(${peacock});
-        
         background-size: auto 130%;
     }
 
@@ -56,8 +79,8 @@ const Wrapper = styled.section`
     }
 
     #hi{
-    font-size:19px;
-    font-weight:bold;
+    font-size: 22px;
+    font-weight: bold;
     }
     
     #image {
@@ -94,7 +117,7 @@ const Wrapper = styled.section`
     form {
         background-color: #FFFFF0;
         border-radius: 30px 30px 0 0;
-        padding: 50px 20px;
+        padding: 42px 20px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         flex : 1;
         max-width: 500px;
@@ -133,11 +156,14 @@ const Wrapper = styled.section`
     }
     label {
         font-weight: bold;
+        font-size: 18px;
     }
     
-    .started{
-       margin-left: 80px;
-       margin-top: 8px;
+    .started {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        margin-top: 10px;
     }
 
     .get-started{
@@ -148,7 +174,7 @@ const Wrapper = styled.section`
         border-radius: 5px;
         border : none;
         margin-top : 30px;
-        width: 100%;
+        width: auto;
         font-weight : bold;
         border-bottom : solid 3px #00a098;
     }

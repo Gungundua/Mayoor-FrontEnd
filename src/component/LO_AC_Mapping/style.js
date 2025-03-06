@@ -18,7 +18,7 @@ const Wrapper = styled.section`
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    height: auto;
+    // height: auto;
     overflow-y: auto; /* Add vertical scroll bar when content exceeds height */
     overflow-x: hidden; /* Prevent horizontal scrolling */
     scrollbar-width: thin; /* For Firefox - thin scrollbar */
@@ -81,9 +81,6 @@ const Wrapper = styled.section`
   .priority-button:not(.h):not(.m):not(.l) {
     background-color: white;
     color: black;
-  }
-  .ac-list-container {
-    margin-bottom: 50px;
   }
   .btns{
     margin : auto;

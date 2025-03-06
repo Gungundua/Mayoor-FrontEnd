@@ -2,89 +2,104 @@ import React, { useState, useEffect } from "react";
 import Wrapper from "./style";
 import Form_LO from "../Form_LO/index";
 import axios from "axios";
-const LOMapping = ({ roId, loItems }) => {
+const LOMapping = ({ roId, loItems, roData }) => {
   const [priorityMapping, setPriorityMapping] = useState({});
-  const [lockedPriorities, setLockedPriorities] = useState({}); // Store locked priorities
   const [showForm, setShowForm] = useState(false);
   const [userData, setUserData] = useState(null);
-  const [filteredRoListMapping, setFilteredRoListMapping] = useState([]);
+  const [loading, setLoading] = useState(false);
+  console.log('roDta : ', roData)
   useEffect(() => {
     const userData = sessionStorage.getItem("userData");
     if (userData) {
       setUserData(JSON.parse(userData));
     }
-  }, []);
-  const handleform = () => {
-    setShowForm(true);
-  };
-  const handleClick = (loid, priority) => {
-    if (lockedPriorities[loid]) return; // Lock only specific LO priorities
-    setPriorityMapping((prev) => {
-      if (prev[loid] === priority.toLowerCase()) {
-        const newMapping = { ...prev };
-        delete newMapping[loid]; // Deselect if already selected
-        return newMapping;
-      }
-      return { ...prev, [loid]: priority.toLowerCase() };
-    });
-  };
-  const loadROMapping = async (userData) => {
-      console.log("Fetching RO Mapping for user:", userData);
-      try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/report-outcome-mapping`, {
-          headers: {
-            Authorization: 'Bearer YOUR_ACCESS_TOKEN',
-            'Content-Type': 'application/json',
-            year: userData.year,
-            classname: userData.class,
-            section: userData.section,
-            subject: userData.subject,
-            quarter: userData.quarter,
-            ro_id: roId,
-          },
+    if (roData && Array.isArray(roData)) {
+      const initialMapping = {};
+      roData
+        .flatMap((ro) => ro.assessment_criterias || []) // Ensure assessment_criterias exists
+        .forEach((lo) => {
+          if (lo && lo.priority !== null) { // Ensure lo is defined before accessing priority
+            initialMapping[lo.lo_id] = lo.priority.toLowerCase();
+          }
         });
-        const data = await response.json();
-        console.log("Fetched RO Mapping Data:", data);
-        setFilteredRoListMapping(data);
-      } catch (error) {
-        console.error("Error fetching RO Mapping:", error);
-      }
+      setPriorityMapping(initialMapping);
+    }
+  }, [roData]);
+  const handleClick = (loid, priority) => {
+    setPriorityMapping((prev) => ({
+      ...prev,
+      [loid]: prev[loid] === priority.toLowerCase() ? "" : priority.toLowerCase(),
+    }));
+  };
+  const handleSubmit = async () => {
+    setLoading(true);
+    const formattedData = {
+      data: Object.entries(priorityMapping)
+        .filter(([_, priority]) => priority)
+        .map(([lo_id, priority]) => ({
+          lo_id: Number(lo_id),
+          priority: priority.toLowerCase(),
+        })),
     };
-    useEffect(() => {
-      if (userData) {
-        loadROMapping(userData);
-      }
-    }, [userData]);
+    if (formattedData.data.length === 0) {
+      alert("No priorities selected.");
+      setLoading(false);
+      return;
+    }
+    console.log("Formatted Data being sent:", JSON.stringify(formattedData, null, 2));
+    console.log(roId)
+    const headers = {
+      Authorization: `Bearer ${userData?.token}`,
+      "Content-Type": "application/json",
+      year: userData?.year,
+      classname: userData?.class,
+      section: userData?.section,
+      subject: userData?.subject,
+      quarter: userData?.quarter,
+    };
+    try {
+      const response = await axios.put(
+        `${process.env.REACT_APP_API_URL}/api/report-outcome-mapping?ro_id=${roId}`,
+        formattedData,
+        { headers }
+      );
+      console.log("Priorities updated:", response.data);
+      alert("Priorities updated successfully!");
+    } catch (error) {
+      console.error("Error updating priorities:", error.response?.data || error.message);
+      alert("Failed to update priorities");
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <Wrapper>
       <div className="lo-list-container">
         <div className="lo-list">
-          {loItems.map((lo) => {
-            const selectedPriority = priorityMapping[lo.id] || "";
+          {roData?.flatMap((ro) => ro.learning_outcomes)?.map((lo) => {
+            if (!lo?.lo_id) return null; // Ensure lo_id is defined
+            const selectedPriority = priorityMapping[lo.lo_id] || "";
             return (
-              <div key={lo.id} className="lo-item">
+              <div key={lo.lo_id} className="lo-item">
                 <div>
-                  <span className="name">{lo.name}</span>
+                  <span className="name">{lo.lo_name}</span>
                 </div>
                 <div className="priority-buttons">
                   <button
                     className={`priority-button ${selectedPriority === "h" ? "h" : ""}`}
-                    onClick={() => handleClick(lo.id, "H")}
-                    disabled={lockedPriorities[lo.id]}
+                    onClick={() => handleClick(lo.lo_id, "H")} // Fix applied here
                   >
                     H
                   </button>
                   <button
                     className={`priority-button ${selectedPriority === "m" ? "m" : ""}`}
-                    onClick={() => handleClick(lo.id, "M")}
-                    disabled={lockedPriorities[lo.id]}
+                    onClick={() => handleClick(lo.lo_id, "M")} // Fix applied here
                   >
                     M
                   </button>
                   <button
                     className={`priority-button ${selectedPriority === "l" ? "l" : ""}`}
-                    onClick={() => handleClick(lo.id, "L")}
-                    disabled={lockedPriorities[lo.id]}
+                    onClick={() => handleClick(lo.lo_id, "L")} // Fix applied here
                   >
                     L
                   </button>
@@ -94,8 +109,13 @@ const LOMapping = ({ roId, loItems }) => {
           })}
         </div>
         <div className="btns">
-          {/* <input type="button" value="Add" className="add" onClick={handleform} /> */}
-          <input type="button" value="Done" className="btn" />
+          <input
+            type="button"
+            value={loading ? "Updating..." : "Done"}
+            className="btn"
+            onClick={handleSubmit}
+            disabled={loading}
+          />
         </div>
       </div>
       {showForm && (

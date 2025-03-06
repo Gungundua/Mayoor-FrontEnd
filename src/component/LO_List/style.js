@@ -125,8 +125,8 @@ const Wrapper = styled.section`
   }
   .lo-dropdown-content {
     padding: 10px;
-    background: #eee;
-    color: #004D40;
+    background:r;
+    // color: #004D40;
     display : none;
     &.show{
       display : block;
@@ -179,7 +179,7 @@ const Wrapper = styled.section`
   color: green;
 }
   .popup-menu{
-  background-color: beige
+  background-color: white
   }
 .list-icons{
   height: 20px;

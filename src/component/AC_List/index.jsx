@@ -8,6 +8,9 @@ import React, { useState, useEffect } from "react";
   import MenuDots from "../MenuDots/index.jsx";
   import SuccessfulDone from "../Popup_successful"; // Import the success message component
   import Failed from "../Popup_Failed/index.jsx";
+  import AreYouSure from "../AreYouSure/index.jsx";
+  import DeleteFailed from "../DeleteFailed/index.jsx";
+  import DeletedSuccessfully from "../DeletedSuccessfully/index.jsx"
   const AC_List = ({ acItems, setAcItems, handleAcItems, studentsData, setIndex, user }) => {
     const [acList, setAcList] = useState([]);
     const [activeMenuIndex, setActiveMenuIndex] = useState(null);
@@ -18,6 +21,13 @@ import React, { useState, useEffect } from "react";
     const [loading, setLoading] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false); // :white_tick: New state for success message
     const [showFailed, setShowFailed] = useState(false)
+    const [editItem, setEditItem] = useState(null);
+    const [showDeleted, setshowDeleted] = useState(false)
+     const [showConfirmation, setShowConfirmation] = useState(false);
+      const [deleteAcId, setDeleteAcId] = useState(null); // Store LO ID for deletion
+      const [showDeleteFailed, setShowDeleteFailed] = useState(false); // New state for delete failure
+
+    
     const handleClick = () => {
       setIndex(1);
     };
@@ -78,6 +88,22 @@ import React, { useState, useEffect } from "react";
         return () => clearTimeout(timer)
       }
     }, [showFailed])
+    useEffect(()=>{
+        if(showDeleted) {
+          const timer = setTimeout(()=>{
+            setshowDeleted(false)
+          }, 1000)
+          return ()=> clearTimeout(timer)
+        }
+      }, [showDeleted])
+    useEffect(()=>{
+        if(showDeleteFailed) {
+          const timer = setTimeout(()=>{
+            setShowDeleteFailed(false)
+          }, 1000)
+          return ()=> clearTimeout(timer)
+        }
+      }, [showDeleteFailed])
     useEffect(() => {
       if (!searchQuery) {
         setFilteredAcList(acList);
@@ -100,56 +126,65 @@ import React, { useState, useEffect } from "react";
     if (selectedAssessment) {
       return <Assessment selectedAssessment={selectedAssessment} onBack={handleBackToList} studentsData={studentsData} />;
     }
-    const handleDelete = async (ac_id) => {
-      if (!window.confirm("Are you sure you want to delete this Assessment Criteria?")) {
-        return;
-      }
+    // Function to show the confirmation modal before deletion
+  const handleDeleteClick = (acId) => {
+    setDeleteAcId(acId);
+    setShowConfirmation(true);
+  };
+    const handleConfirm = async () => {
+      if (!deleteAcId) return;
       setLoading(true);
       try {
-        console.log(ac_id)
-        const response = await axios.delete(`${process.env.REACT_APP_API_URL}/api/assessment-criteria?id=${ac_id}`);
-        const updatedAcItems = acItems.filter(item => item.ac_id !== ac_id);
+        const response = await axios.delete(`${process.env.REACT_APP_API_URL}/api/assessment-criteria?id=${deleteAcId}`);
+        const updatedAcItems = acItems.filter(item => item.acId !== deleteAcId);
         setAcItems(updatedAcItems);
         setFilteredAcList(updatedAcItems);
+        setshowDeleted(true);
         alert("Assessment Criteria deleted successfully.");
       } catch (error) {
-        console.error("Error deleting Assessment Criteria:", error.response?.data || error.message);
-        alert("Failed to delete Assessment Criteria. Please try again.");
+        setShowDeleteFailed(true);
+        console.error("Error deleting Assessment :", error.response?.data || error.message);
       } finally {
         setLoading(false);
+        setShowConfirmation(false);
+        setDeleteAcId(null);
       }
     };
-    const handleEdit = async (acId, updatedName) => {
-      const newName = prompt("Enter new name for Assessment Criteria:", updatedName);
-      if (!newName || newName.trim() === "") {
-        alert("Name cannot be empty.");
-        return;
-      }
-      setLoading(true);
-      try {
-        const headers = {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-          "Content-Type": "application/json",
-          year: userData.year,
-          classname: userData.class,
-          section: userData.section,
-          subject: userData.subject,
-          quarter: userData.quarter,
-        };
-        const requestBody = { name: newName };
-        await axios.put(`${process.env.REACT_APP_API_URL}/api/assessment-criteria/${acId}`, requestBody, { headers });
-        const updatedAcItems = acItems.map(item =>
-          item.id === acId ? { ...item, name: newName } : item
-        );
-        setAcItems(updatedAcItems);
-        setFilteredAcList(updatedAcItems);
-        alert("Assessment Criteria updated successfully.");
-      } catch (error) {
-        console.error("Error updating Assessment Criteria:", error.response?.data || error.message);
-        alert("Failed to update Assessment Criteria. Please try again.");
-      } finally {
-        setLoading(false);
-      }
+    // const handleEdit = async (acId, updatedName) => {
+    //   const newName = prompt("Enter new name for Assessment Criteria:", updatedName);
+    //   if (!newName || newName.trim() === "") {
+    //     alert("Name cannot be empty.");
+    //     return;
+    //   }
+    //   setLoading(true);
+    //   try {
+    //     const headers = {
+    //       Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+    //       "Content-Type": "application/json",
+    //       year: userData.year,
+    //       classname: userData.class,
+    //       section: userData.section,
+    //       subject: userData.subject,
+    //       quarter: userData.quarter,
+    //     };
+    //     const requestBody = { name: newName };
+    //     await axios.put(`${process.env.REACT_APP_API_URL}/api/assessment-criteria/${acId}`, requestBody, { headers });
+    //     const updatedAcItems = acItems.map(item =>
+    //       item.id === acId ? { ...item, name: newName } : item
+    //     );
+    //     setAcItems(updatedAcItems);
+    //     setFilteredAcList(updatedAcItems);
+    //     alert("Assessment Criteria updated successfully.");
+    //   } catch (error) {
+    //     console.error("Error updating Assessment Criteria:", error.response?.data || error.message);
+    //     alert("Failed to update Assessment Criteria. Please try again.");
+    //   } finally {
+    //     setLoading(false);
+    //   }
+    // };
+    const handleEdit = (item) => {
+      setEditItem(item);
+      setShowForm(true);
     };
     return (
       <Wrapper>
@@ -192,8 +227,8 @@ import React, { useState, useEffect } from "react";
                       index={index}
                       activeMenuIndex={activeMenuIndex}
                       setActiveMenuIndex={setActiveMenuIndex}
-                      onEditClick={() => handleEdit(item.ac_id, item.ac_name)}
-                      onDeleteClick={() => handleDelete(item.ac_id)}
+                      onEditClick={() => handleEdit(item)}
+                      onDeleteClick={() => handleDeleteClick(item.ac_id)}
                     />
                   </div>
                 </div>
@@ -205,11 +240,14 @@ import React, { useState, useEffect } from "react";
             </li>
           )}
         </ul>
-        <div className="add" onClick={() => setShowForm(true)}><span className='plus'>+</span></div>
+        <div className="add" onClick={() => {
+          setEditItem(null); // Reset editItem
+          setShowForm(true);
+        }}><span className='plus'>+</span></div>
         {showForm && (
           <div className="popup-overlay">
             <div className="popup-content">
-              <Form_AC closeForm={() => { setShowForm(false); setShowSuccess(true); }} closeForm2={() => { setShowForm(false); setShowFailed(true)}} closeFormOnly={() => setShowForm(false)} loadAC={loadAC} setShowSuccess={setShowSuccess} setShowFailed={setShowFailed} />
+              <Form_AC closeForm={() => { setShowForm(false); setShowSuccess(true); }} closeForm2={() => { setShowForm(false); setShowFailed(true)}} closeFormOnly={() => setShowForm(false)} loadAC={loadAC} setShowSuccess={setShowSuccess} setShowFailed={setShowFailed} editItem={editItem} setEditItem={setEditItem} />
             </div>
           </div>
         )}
@@ -223,6 +261,27 @@ import React, { useState, useEffect } from "react";
           <Failed />
         </div>
         }
+        {
+        showDeleted && 
+        <div className='success-overlay'>
+          <DeletedSuccessfully/>
+        </div>
+      }
+      {showConfirmation && (
+        <div className='success-overlay'>
+          <AreYouSure
+            onConfirm={handleConfirm}
+            onCancel={() => setShowConfirmation(false)}
+          />
+        </div>
+      )}
+      {showDeleteFailed && (
+
+        <div className='success-overlay'>
+       <DeleteFailed/>
+      </div>
+      )}
+
       </Wrapper>
     );
   };

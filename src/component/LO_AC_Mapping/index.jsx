@@ -2,81 +2,79 @@ import React, { useState, useEffect } from "react";
 import Wrapper from "./style";
 import Form_AC from "../Form_AC/index";
 import axios from "axios";
-
-const ACMapping = ({ loId, acList }) => {
+const ACMapping = ({ loId, acList, loData }) => {
   const [priorityMapping, setPriorityMapping] = useState({});
-  const [lockedPriorities, setLockedPriorities] = useState({}); // Track locked ACs
   const [showForm, setShowForm] = useState(false);
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [filteredLoListMapping, setFilteredLoListMapping] = useState([]);
-
   useEffect(() => {
     const userData = sessionStorage.getItem("userData");
     if (userData) {
       setUserData(JSON.parse(userData));
     }
-  }, []);
-
-  const handleform = () => {
-    setShowForm(true);
-  };
-
+    // Initialize priorityMapping from loData if priority is not null
+    if (loData) {
+      const initialMapping = {};
+      loData.flatMap((lo) => lo.assessment_criterias).forEach((ac) => {
+        if (ac.priority !== null) {
+          initialMapping[ac.ac_id] = ac.priority.toLowerCase();
+        }
+      });
+      setPriorityMapping(initialMapping);
+    }
+  }, [loData]);
   const handleClick = (acid, priority) => {
-    if (lockedPriorities[acid]) return; // Prevent changing locked priorities
-    setPriorityMapping((prev) => {
-      if (prev[acid] === priority.toLowerCase()) {
-        const newMapping = { ...prev };
-        delete newMapping[acid]; // Deselect if already selected
-        return newMapping;
-      }
-      return { ...prev, [acid]: priority.toLowerCase() };
-    });
+    setPriorityMapping((prev) => ({
+      ...prev,
+      [acid]: prev[acid] === priority.toLowerCase() ? "" : priority.toLowerCase(),
+    }));
   };
-
-  const loadLOMapping = async (userData) => {
+  const handleSubmit = async () => {
     setLoading(true);
+    const formattedData = {
+      data: Object.entries(priorityMapping)
+        .filter(([_, priority]) => priority)
+        .map(([ac_id, priority]) => ({
+          ac_id: Number(ac_id),
+          priority: priority.toLowerCase(),
+        })),
+    };
+    if (formattedData.data.length === 0) {
+      alert("No priorities selected.");
+      setLoading(false);
+      return;
+    }
+    console.log("Formatted Data being sent:", JSON.stringify(formattedData, null, 2));
     const headers = {
-      Authorization: 'Bearer YOUR_ACCESS_TOKEN',
-      'Content-Type': 'application/json',
-      year: userData.year,
-      classname: userData.class,
-      section: userData.section,
-      subject: userData.subject,
-      quarter: userData.quarter,
+      Authorization: `Bearer ${userData?.token}`,
+      "Content-Type": "application/json",
+      year: userData?.year,
+      classname: userData?.class,
+      section: userData?.section,
+      subject: userData?.subject,
+      quarter: userData?.quarter,
     };
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/learning-outcome-mapping`, { headers });
-      const data = response.data;
-      let finalData = [];
-      if (Array.isArray(data)) {
-        finalData = data;
-      } else if (Array.isArray(data.ro)) {
-        finalData = data.ro;
-      } else if (Array.isArray(data.lo)) {
-        finalData = data.lo;
-      }
-      setFilteredLoListMapping(finalData);
+      const response = await axios.put(
+        `${process.env.REACT_APP_API_URL}/api/learning-outcome-mapping?lo_id=${loId}`,
+        formattedData,
+        { headers }
+      );
+      console.log("Priorities updated:", response.data);
+      alert("Priorities updated successfully!");
     } catch (error) {
-      console.error('Error fetching LO Mapping:', error);
+      console.error("Error updating priorities:", error.response?.data || error.message);
+      alert("Failed to update priorities");
     } finally {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    if (userData && Object.keys(userData).length > 0) {
-      loadLOMapping(userData);
-    }
-  }, [userData]);
-
   return (
     <Wrapper>
       <div className="ac-list-container">
         <div className="ac-list">
-          {acList.map((ac) => {
-            const selectedPriority = priorityMapping[ac.id] || "";
-
+          {loData.flatMap((lo) => lo.assessment_criterias).map((ac) => {
+            const selectedPriority = priorityMapping[ac.ac_id] || "";
             return (
               <div key={ac.ac_id} className="ac-item">
                 <div>
@@ -86,21 +84,18 @@ const ACMapping = ({ loId, acList }) => {
                   <button
                     className={`priority-button ${selectedPriority === "h" ? "h" : ""}`}
                     onClick={() => handleClick(ac.ac_id, "H")}
-                    disabled={lockedPriorities[ac.ac_id]}
                   >
                     H
                   </button>
                   <button
                     className={`priority-button ${selectedPriority === "m" ? "m" : ""}`}
                     onClick={() => handleClick(ac.ac_id, "M")}
-                    disabled={lockedPriorities[ac.ac_id]}
                   >
                     M
                   </button>
                   <button
                     className={`priority-button ${selectedPriority === "l" ? "l" : ""}`}
                     onClick={() => handleClick(ac.ac_id, "L")}
-                    disabled={lockedPriorities[ac.ac_id]}
                   >
                     L
                   </button>
@@ -110,16 +105,12 @@ const ACMapping = ({ loId, acList }) => {
           })}
         </div>
         <div className="btns">
-          {/* <input
-            type="button"
-            value="Add"
-            className="addBtn"
-            onClick={handleform}
-          /> */}
           <input
             type="button"
-            value="Done"
+            value={loading ? "Updating..." : "Done"}
             className="btn"
+            onClick={handleSubmit}
+            disabled={loading}
           />
         </div>
       </div>
@@ -133,5 +124,4 @@ const ACMapping = ({ loId, acList }) => {
     </Wrapper>
   );
 };
-
 export default ACMapping;

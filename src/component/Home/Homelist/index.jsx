@@ -26,7 +26,7 @@ const HomeList = ({ user, setIndex, msg }) => {
     const updatedUserdata = {
       year: parseInt(selectedYear, 10),
       class: parseInt(selectedClass, 10),
-      section: parseInt(selectedSection,10),
+      section: parseInt(selectedSection, 10),
       quarter: parseInt(selectedQuarter, 10),
       subject: parseInt(selectedSubject, 10),
     };
@@ -40,8 +40,8 @@ const HomeList = ({ user, setIndex, msg }) => {
     <Wrapper>
       <div id="user">
         <div id="detail">
-          <p id="hi">Hi ,</p>
-          <h1 id="name">{user.name}</h1>
+          <p id="hi">Hi,</p>
+          <h1 id="name">Mr. Cool</h1>
         </div>
         <div id="image">
           {/* <img id="notification" src={notification} alt="Notification" /> */}
@@ -50,15 +50,22 @@ const HomeList = ({ user, setIndex, msg }) => {
         </div>
       </div>
       <form className="choice">
-        <label htmlFor="year" onClick={toggle}>Year ({selectedYear})</label>
+        <label htmlFor="year" onClick={toggle}>Session</label>
         <div className="options">
-          <Ripples>
-          <div tabIndex={0} className={selectedYear === 2025 ? "option active" : "option"} onClick={e => setSelectedYear(2025)}>2025</div>
-            </Ripples>
-          <Ripples><div tabIndex={0} className={selectedYear === 2024 ? "option active" : "option"} onClick={e => setSelectedYear(2024)}>2024</div></Ripples>
+          <Ripples><div tabIndex={0} className={selectedYear === 2025 ? "option active" : "option"} onClick={e => setSelectedYear(2025)}>2025 - 2026</div></Ripples>
+          <Ripples><div tabIndex={0} className={selectedYear === 2024 ? "option active" : "option"} onClick={e => setSelectedYear(2024)}>2024 - 2025</div></Ripples>
         </div>
-        <label htmlFor="class" onClick={toggle}>Class ({selectedClass})</label>
-        <div className="options">
+        <label htmlFor="quarter" onClick={toggle}>Quarter</label>
+        <div className="quarter options">
+          <Ripples><div tabIndex={0} className={selectedQuarter === "1" ? "option active" : "option"} onClick={e => setSelectedQuarter("1")}>Q I</div></Ripples>
+          <Ripples><div tabIndex={0} className={selectedQuarter === "2" ? "option active" : "option"} onClick={e => setSelectedQuarter("2")}>Q II</div></Ripples>
+          <Ripples><div tabIndex={0} className={selectedQuarter === "3" ? "option active" : "option"} onClick={e => setSelectedQuarter("3")}>T I</div></Ripples>
+          <Ripples><div tabIndex={0} className={selectedQuarter === "4" ? "option active" : "option"} onClick={e => setSelectedQuarter("4")}>Q III</div></Ripples>
+          <Ripples><div tabIndex={0} className={selectedQuarter === "5" ? "option active" : "option"} onClick={e => setSelectedQuarter("5")}>Q IV</div></Ripples>
+          <Ripples><div tabIndex={0} className={selectedQuarter === "6" ? "option active" : "option"} onClick={e => setSelectedQuarter("6")}>T II</div></Ripples>
+        </div>
+        <label htmlFor="class" onClick={toggle}>Class</label>
+        <div className="class options">
           <Ripples><div tabIndex={0} className={`option ${selectedClass === 1 ? 'active' : ''}`} onClick={e => setSelectedClass(1)}>1</div></Ripples>
           <Ripples><div tabIndex={0} className={`option ${selectedClass === 2 ? 'active' : ''}`} onClick={e => setSelectedClass(2)}>2</div></Ripples>
           <Ripples><div tabIndex={0} className={`option ${selectedClass === 3 ? 'active' : ''}`} onClick={e => setSelectedClass(3)}>3</div></Ripples>
@@ -68,20 +75,13 @@ const HomeList = ({ user, setIndex, msg }) => {
           <Ripples><div tabIndex={0} className={`option ${selectedClass === 7 ? 'active' : ''}`} onClick={e => setSelectedClass(7)}>7</div></Ripples>
           <Ripples><div tabIndex={0} className={`option ${selectedClass === 8 ? 'active' : ''}`} onClick={e => setSelectedClass(8)}>8</div></Ripples>
         </div>
-        <label htmlFor="section" onClick={toggle}>Section ({selectedSection})</label>
+        <label htmlFor="section" onClick={toggle}>Section</label>
         <div className="options">
           <Ripples><div tabIndex={0} className={selectedSection === "1" ? "option active" : "option"} onClick={e => setSelectedSection("1")}>Orchid</div></Ripples>
           <Ripples><div tabIndex={0} className={selectedSection === "2" ? "option active" : "option"} onClick={e => setSelectedSection("2")}>Tulip</div></Ripples>
           <Ripples><div tabIndex={0} className={selectedSection === "3" ? "option active" : "option"} onClick={e => setSelectedSection("3")}>Daffodil</div></Ripples>
         </div>
-        <label htmlFor="quarter" onClick={toggle}>Quarter ({selectedQuarter})</label>
-        <div className="options">
-          <Ripples><div tabIndex={0} className={selectedQuarter === "1" ? "option active" : "option"} onClick={e => setSelectedQuarter("1")}>I</div></Ripples>
-          <Ripples><div tabIndex={0} className={selectedQuarter === "2" ? "option active" : "option"} onClick={e => setSelectedQuarter("2")}>II</div></Ripples>
-          <Ripples><div tabIndex={0} className={selectedQuarter === "3" ? "option active" : "option"} onClick={e => setSelectedQuarter("3")}>III</div></Ripples>
-          <Ripples><div tabIndex={0} className={selectedQuarter === "4" ? "option active" : "option"} onClick={e => setSelectedQuarter("4")}>IV</div></Ripples>
-        </div>
-        <label htmlFor="subject" onClick={toggle}>Subject ({selectedSubject})</label>
+        <label htmlFor="subject" onClick={toggle}>Subject</label>
         <div className="options subjects">
           <Ripples><div tabIndex={0} className={`option ${selectedSubject === "1" ? 'active' : ''}`} onClick={e => setSelectedSubject('1')}>English</div></Ripples>
           <Ripples><div tabIndex={0} className={`option ${selectedSubject === "2" ? 'active' : ''}`} onClick={e => setSelectedSubject('2')}>Hindi</div></Ripples>

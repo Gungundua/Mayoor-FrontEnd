@@ -1,16 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Wrapper from "./style";
-
-const Form_LO = ({ closeForm, loadLO, closeForm2, closeFormOnly, setShowSuccess, setShowFailed }) => {
+const Form_LO = ({ closeForm, loadLO, closeForm2, closeFormOnly, setShowSuccess, setShowFailed, editItem }) => {
   const [loInput, setLoInput] = useState("");
   const [filteredRoList, setFilteredRoList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState(null);
-  const [selectedRoIds, setselectedRoIds] = useState([]);
-
+  const [selectedRoIds, setSelectedRoIds] = useState([]);
+  const [loName, setLoName] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const successTimeout = useRef(null);
-
   useEffect(() => {
     return () => {
       if (successTimeout.current) {
@@ -18,7 +17,6 @@ const Form_LO = ({ closeForm, loadLO, closeForm2, closeFormOnly, setShowSuccess,
       }
     };
   }, []);
-
   useEffect(() => {
     const storedUserData = sessionStorage.getItem("userData");
     if (storedUserData) {
@@ -37,7 +35,26 @@ const Form_LO = ({ closeForm, loadLO, closeForm2, closeFormOnly, setShowSuccess,
       console.warn("No userData found in sessionStorage");
     }
   }, []);
-
+  useEffect(() => {
+    if (editItem) {
+      setLoName(editItem.lo_name || "");
+      setLoInput(editItem.lo_name || "");
+      // Ensure editItem.report_outcomes is an array before calling map()
+      if (Array.isArray(editItem.report_outcomes)) {
+        const roIds = editItem.report_outcomes.map((ro) => ro.ro_id);
+        console.log("Extracted RO IDs:", roIds); // Debugging output
+        setSelectedRoIds(roIds);
+      } else {
+        console.warn("editItem.report_outcomes is not an array or is missing:", editItem.report_outcomes);
+        setSelectedRoIds([]);  // Reset if invalid
+      }
+    } else {
+      // Reset fields when adding a new LO
+      setLoName("");
+      setLoInput("");
+      setSelectedRoIds([]);
+    }
+  }, [editItem]);
   const loadRO = async (userData) => {
     if (!userData) return;
     setLoading(true);
@@ -54,9 +71,7 @@ const Form_LO = ({ closeForm, loadLO, closeForm2, closeFormOnly, setShowSuccess,
         `${process.env.REACT_APP_API_URL}/api/report-outcome`,
         { headers }
       );
-
       console.log("API Response:", response.data); // Debugging log
-
       let finalData = [];
       if (Array.isArray(response.data?.ro)) {
         finalData = response.data.ro;
@@ -65,12 +80,10 @@ const Form_LO = ({ closeForm, loadLO, closeForm2, closeFormOnly, setShowSuccess,
       } else {
         console.warn("Unexpected API response format:", response.data);
       }
-
       // Ensure every item has an ro_id before setting state
       if (!finalData.every((item) => item.ro_id)) {
         console.error("Some items are missing ro_id:", finalData);
       }
-
       setFilteredRoList(finalData);
     } catch (error) {
       console.error("Error fetching ROs:", error.response?.data || error.message);
@@ -79,29 +92,23 @@ const Form_LO = ({ closeForm, loadLO, closeForm2, closeFormOnly, setShowSuccess,
       setLoading(false);
     }
   };
-
   const handleCheckboxChange = (ro_id) => {
     console.log("Selected RO ID:", ro_id); // Debugging log
-
-    setselectedRoIds((prevSelected) =>
+    setSelectedRoIds((prevSelected) =>
       prevSelected.includes(ro_id)
         ? prevSelected.filter((id) => id !== ro_id)
         : [...prevSelected, ro_id]
     );
   };
-
   const handleSubmit = async () => {
     if (loInput.trim() === "") {
       alert("Please enter a valid LO!");
       return;
     }
-  
     if (selectedRoIds.length === 0) {
       alert("Please select at least one Reported Outcome!");
       return;
     }
-  
-    try {
       const headers = {
         Authorization: "Bearer YOUR_ACCESS_TOKEN",
         "Content-Type": "application/json",
@@ -110,46 +117,49 @@ const Form_LO = ({ closeForm, loadLO, closeForm2, closeFormOnly, setShowSuccess,
         subject: userData.subject,
         quarter: userData.quarter,
       };
-  
       const body = {
         name: loInput, // LO name
         ro_id: selectedRoIds, // Array of selected RO IDs
       };
-  
-      console.log("Payload being sent:", body); // Debugging log
-  
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/learning-outcome`,
-        body,
-        { headers }
-      );
-  
-      if (response.status === 201) {
-        setLoInput(""); // Reset input field
-        setselectedRoIds([]); // Clear selection
-        // loadLO(userData); // Refresh LO list
-  
-        successTimeout.current = setTimeout(() => {
-          setShowSuccess(true);
-          successTimeout.current = setTimeout(() => setShowSuccess(false), 2000);
-        }, 500);
-  
-        closeForm(); // Close form after success
-      } else {
-        alert("Failed to add LO. Please try again!");
+      try {
+        let response;
+        if (editItem) {
+          console.log("Request Payload:", body);
+          response = await axios.put(
+            `${process.env.REACT_APP_API_URL}/api/learning-outcome?id=${editItem.lo_id}`,
+            body,
+            { headers }
+          );
+        } else {
+          response = await axios.post(
+            `${process.env.REACT_APP_API_URL}/api/learning-outcome`,
+            body,
+            { headers }
+          );
+        }
+        if (response.status === 200 || response.status === 201) {
+          setLoName("");
+          // setMaxMarks("");
+          setSelectedRoIds([]);
+          loadLO(userData); // Refresh list
+          closeForm();
+          successTimeout.current = setTimeout(() => {
+            setShowSuccess(true);
+            successTimeout.current = setTimeout(() => setShowSuccess(false), 2000);
+          }, 500);
+        }
+      } catch (error) {
+        console.error("Error saving LO:", error.response?.data || error.message);
+        setShowFailed(true);
+        setTimeout(() => setShowFailed(false), 2000);
+      } finally {
+        setIsSubmitting(false);
       }
-    } catch (error) {
-      console.error("Error adding new LO:", error.response || error.message);
-      closeForm2();
-      setShowFailed(true);
-      setTimeout(() => setShowFailed(false), 2000);
-    }
-  };
-  
+    };
   return (
     <Wrapper>
-      <div className="form-container">
-        <p className="header">Enter the LO you want to add :</p>
+      <div className="form-box">
+        <p className="header">{editItem ? "Edit Learning outcome" : "Add Learning outcome"}</p>
         <input
           type="text"
           placeholder="Enter Learning Outcome"
@@ -164,16 +174,18 @@ const Form_LO = ({ closeForm, loadLO, closeForm2, closeFormOnly, setShowSuccess,
           ) : filteredRoList.length > 0 ? (
             filteredRoList.map((item) => (
               <li key={item.ro_id} className="ro-list-item">
-                <div className="ro-header">
-                  <div className="ro-info">
-                    <input type="checkbox" 
-                      checked={selectedRoIds.includes(item.ro_id)}
-                      onChange={() => handleCheckboxChange(item.ro_id)}
-                    />
-                    <p className="para">{item.ro_name}</p>
-                  </div>
-                </div>
-              </li>
+        <div className="ro-header">
+          <div className="ro-info" onClick={() => handleCheckboxChange(item.ro_id)}>
+            <input
+              type="checkbox"
+              checked={selectedRoIds.includes(item.ro_id)}
+              onChange={() => handleCheckboxChange(item.ro_id)}
+              onClick={(e) => e.stopPropagation()} // Prevents double triggering when clicking checkbox
+            />
+            <p className="para">{item.ro_name}</p>
+          </div>
+        </div>
+      </li>
             ))
           ) : (
             <li className="no-results">
@@ -192,11 +204,10 @@ const Form_LO = ({ closeForm, loadLO, closeForm2, closeFormOnly, setShowSuccess,
             }}
             className="closebtn"
           />
-          <input type="button" value="Add" className="submitbtn" onClick={handleSubmit} />
+          <input type="button" value={isSubmitting ? "Saving..." : editItem ? "Update" : "Add"} className="submitbtn" onClick={handleSubmit} disabled={isSubmitting}/>
         </div>
       </div>
     </Wrapper>
   );
 };
-
 export default Form_LO;

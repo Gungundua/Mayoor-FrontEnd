@@ -8,9 +8,9 @@ import stuIcon from '../assets/Graduate.png';
 import homeIcon from '../assets/Smart Home.png';
 import listIcon from '../assets/Audit.png';
 import StudentList from '../Students/StudentSelect';
-import ClassView from "../Classview/Classview";
 import { useSwipeable } from 'react-swipeable';
-import AreYouSure from '../AreYouSure';
+import ClassView from "../Classview/Classview";
+import DeletedSuccessfully from "../DeletedSuccessfully/index";
 const Home = ({ user }) => {
   const [index, setIndex] = useState(1);
   const [tabs, setTabs] = useState([
@@ -54,8 +54,10 @@ const handlers = useSwipeable({
         {index === 1 ? (
           <HomeList user={user} setIndex={setIndex}  />
         ) : index === 2 ? (
-          // <ClassView setIndex={setIndex} user={user}/>
-          <AreYouSure/>
+          <ClassView setIndex={setIndex} user={user}/>
+          // // <AreYouSure/>
+          // < DeletedSuccessfully />
+          // <DeleteFailed/>
         ) : index === 3 ? (
           <StudentList onStudentsData={handleStudentsData} setIndex={setIndex} />
         ) : index === 4 ? (

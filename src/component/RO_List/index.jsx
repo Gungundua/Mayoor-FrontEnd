@@ -119,8 +119,9 @@ const ROlist = ({ loItems, setLoItems, setIndex, handleLoItems, acItems }) => {
                   <div className="ro-dropdown-content">
                     <LOMapping 
                       loItems={loItems} 
-                      userData={userData} 
-                      roId={item.id} 
+                      userData={userData}  
+                      roId={item.ro_id}
+                      roData={[item]}
                     />
                   </div>
                 )}

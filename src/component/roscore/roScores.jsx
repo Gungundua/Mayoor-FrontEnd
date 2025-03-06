@@ -1,62 +1,46 @@
 import React, { useState , useEffect} from 'react';
 import Wrapper from './rostyle';
 import axios from 'axios';
-import { FaArrowLeft, FaEdit } from "react-icons/fa";
-import studentIcon from '../assets/Student.avif'
-// import bellIcon from './bell.png';
-// import userIcon from './user.png';
-const StudentList = ({student, handleOnBack, roScoreList}) => {
-  // const [profile] = useState({
-  //   name: 'John Doe',
-  //   studentId: '1234567',
-  //  subject: 'Computer Science',
-  //   //  profilePic: 'https://i.pravatar.cc/150',
-  // })
-  // const [scores] = useState([
-  //   { ro: 'RO1', score: 90 },
-  //   { ro: 'RO2', score: 85 },
-  //   { ro: 'RO3', score: 95 },
-  //   { ro: 'RO4', score: 90 },
-  //   { ro: 'RO5', score: 85 },
-  //   { ro: 'RO6', score: 95 },
-  //   { ro: 'RO7', score: 90 },
-  //   { ro: 'RO8', score: 85 },
-  // ])
+
+
+const StudentList = ({student , scores}) => {
+ 
   const [userData, setUserData] = useState(null);
     useEffect(() => {
       const userData = sessionStorage.getItem("userData");
       if (userData) {
-        setUserData(JSON.parse(userData))
+        setUserData(JSON.parse(userData));
       }
-    }, [])
-    // console.log("Student Data:", student)
-    // console.log("User Data:", userData)
+    }, []);
+    console.log("Student Data:", student);
+    console.log("User Data:", userData);
+    console.log(scores);
   return (
     <Wrapper>
       <div className="AppContainer">
-      <div className="Header">
-        <FaArrowLeft className="back-icon" onClick={handleOnBack}/>
-          <span className="name">RO Scores</span>
-        </div>
+      <div className="roHeader"> 
+          <span>RO Scores </span>
+      </div>  
         <div className="container">
         <div className="ContentContainer">
           <div className="ProfileCard">
-            <img className="ProfilePic" src={studentIcon} alt="Profile" />
+          <span className="initials">{student.name.split(' ')[0][0] + (student.name.split(' ')[1] ? student.name.split(' ')[1][0].toUpperCase() : "")}</span>
             <div className="ProfileInfo">
               <div className="ProfileRow">
                 <span className="Label">Name:</span>
-                <span className="Value">{student.name}</span>
+                <span className="Value">{student.name|| userData?.name|| "N/A"}</span>
               </div>
               <div className="ProfileRow">
-                <span className="Label">Student ID:</span>
-                <span className="Value">{student.id}</span>
+                <span className="Label">Roll No.:</span>
+                <span className="Value">{student.id||userData?.id|| "N/A"}</span>
               </div>
               <div className="ProfileRow">
                 <span className="Label">Subject:</span>
-                <span className="Value">{student.subject}</span>
+                <span className="Value">{student.subject|| userData?.subject|| "N/A"}</span>
               </div>
             </div>
           </div>
+        
           <div className="TableContainer">
             <table className="ScoresTable">
               <thead>
@@ -66,9 +50,9 @@ const StudentList = ({student, handleOnBack, roScoreList}) => {
                 </tr>
               </thead>
               <tbody>
-                {roScoreList.map((item, index) => (
+                {scores.map((item, index) => (
                   <tr key={index}>
-                    <td className="TableDataCell">{item.ro_id}</td>
+                    <td className="TableDataCell">{item.ro_name}</td>
                     <td className="TableDataCell">{item.value}</td>
                   </tr>
                 ))}
@@ -79,6 +63,7 @@ const StudentList = ({student, handleOnBack, roScoreList}) => {
       </div>
     </div>
     </Wrapper>
-  )
-}
-export default StudentList
+  );
+};
+
+export default StudentList;

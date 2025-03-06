@@ -1,7 +1,7 @@
 import React from 'react'
 import Wrapper from './style';
 
-function AreYouSure() {
+function AreYouSure({ onConfirm, onCancel }) {
   return (
     <Wrapper>
     <div className='mainContainer'>
@@ -9,10 +9,10 @@ function AreYouSure() {
         Are you sure?
     </div>
     <div className='container2'>
-        <div>
+        <div onClick={onCancel} style={{cursor: 'pointer'}}>
             No
         </div>
-        <div>
+        <div onClick={onConfirm} style={{cursor: 'pointer'}}>
             Yes
         </div>
     </div>

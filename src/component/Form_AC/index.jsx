@@ -1,19 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Wrapper from "./style";
-
-const Form_AC = ({ closeForm, loadAC, closeForm2, closeFormOnly, setShowSuccess, setShowFailed }) => {
+const Form_AC = ({closeForm, loadAC, closeFormOnly, setShowSuccess, setShowFailed, editItem }) => {
   const [acName, setAcName] = useState("");
   const [maxMarks, setMaxMarks] = useState("");
   const [userData, setUserData] = useState(null);
   const [filteredLoList, setFilteredLoList] = useState([]);
-  const [selectedLoIds, setSelectedLoIds] = useState([]); // Track selected lo_id
+  const [selectedLoIds, setSelectedLoIds] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [addAssess, setAddAssess] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const [addAssess, setAddAssess] = useState(true);
   const successTimeout = useRef(null);
-
   useEffect(() => {
     return () => {
       if (successTimeout.current) {
@@ -21,7 +18,6 @@ const Form_AC = ({ closeForm, loadAC, closeForm2, closeFormOnly, setShowSuccess,
       }
     };
   }, []);
-
   useEffect(() => {
     const storedUserData = sessionStorage.getItem("userData");
     if (storedUserData) {
@@ -36,7 +32,27 @@ const Form_AC = ({ closeForm, loadAC, closeForm2, closeFormOnly, setShowSuccess,
       }
     }
   }, []);
-
+  useEffect(() => {
+    if (editItem) {
+      console.log("Editing AC, selected LO IDs:", editItem)
+      console.log("Editing AC, selected LO IDs:", editItem.learning_outcomes)
+        setAcName(editItem.ac_name || "");
+        setMaxMarks(editItem.max_marks ? String(editItem.max_marks) : "");
+        if (Array.isArray(editItem.learning_outcomes)) {
+          const loIds = editItem.learning_outcomes.map((lo) => lo.lo_id);
+          console.log("Extracted LO IDs:", loIds); // Debugging output
+          setSelectedLoIds(loIds);
+        } else {
+          console.warn("editItem.learning_outcomes is not an array:", editItem.learning_outcomes);
+          setSelectedLoIds([]);  // Reset if invalid
+        }
+    } else {
+        // Reset fields when adding a new AC
+        setAcName("");
+        setMaxMarks("");
+        setSelectedLoIds([]);
+    }
+}, [editItem]);
   const loadLO = async (userData) => {
     setLoading(true);
     const headers = {
@@ -57,37 +73,31 @@ const Form_AC = ({ closeForm, loadAC, closeForm2, closeFormOnly, setShowSuccess,
       setLoading(false);
     }
   };
-
   const handleCheckboxChange = (lo_id) => {
     setSelectedLoIds((prevSelected) =>
       prevSelected.includes(lo_id)
-        ? prevSelected.filter((id) => id !== lo_id) 
-        : [...prevSelected, lo_id] 
+        ? prevSelected.filter((id) => id !== lo_id)
+        : [...prevSelected, lo_id]
     );
   };
-
   const handleSubmit = async () => {
     if (isSubmitting) return;
     setIsSubmitting(true);
-  
     if (!acName.trim() || !maxMarks) {
       alert("Please fill in all fields.");
       setIsSubmitting(false);
       return;
     }
-  
     if (!userData?.year || !userData?.class || !userData?.section || !userData?.subject || !userData?.quarter) {
       alert("Missing user details. Ensure all fields are filled in.");
       setIsSubmitting(false);
       return;
     }
-  
     if (selectedLoIds.length === 0) {
       alert("Please select at least one Learning Outcome.");
       setIsSubmitting(false);
       return;
     }
-  
     const headers = {
       Authorization: "Bearer YOUR_ACCESS_TOKEN",
       "Content-Type": "application/json",
@@ -97,51 +107,51 @@ const Form_AC = ({ closeForm, loadAC, closeForm2, closeFormOnly, setShowSuccess,
       subject: userData.subject,
       quarter: userData.quarter,
     };
-  
     const body = {
       name: acName.trim(),
       max_marks: parseInt(maxMarks, 10),
-      lo_id: selectedLoIds, // Send only selected LO IDs
+      lo_id: selectedLoIds,
     };
-  
-    console.log("Payload being sent:", body); // Debugging log
-  
     try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/assessment-criteria`,
-        body,
-        { headers }
-      );
-  
-      if (response.status === 201) {
-        // const newAssessment = response.data; // Assuming API returns only the newly added assessment
-      
-        // console.log("Newly Created Assessment:", newAssessment);
-  
+      let response;
+      if (editItem) {
+        // Update existing AC
+        response = await axios.put(
+          `${process.env.REACT_APP_API_URL}/api/assessment-criteria?id=${editItem.ac_id}`,
+          body,
+          { headers }
+        );
+      } else {
+        // Create new AC
+        response = await axios.post(
+          `${process.env.REACT_APP_API_URL}/api/assessment-criteria`,
+          body,
+          { headers }
+        );
+      }
+      if (response.status === 200 || response.status === 201) {
         setAcName("");
         setMaxMarks("");
         setSelectedLoIds([]);
-        
-        // loadAC(newAssessment); // Pass only the new assessment, not the full list
+        loadAC(); // Refresh list
         closeForm();
-  
         successTimeout.current = setTimeout(() => {
           setShowSuccess(true);
           successTimeout.current = setTimeout(() => setShowSuccess(false), 2000);
         }, 500);
       }
     } catch (error) {
-      console.error("Error adding new AC:", error.response?.data || error.message);
+      console.error("Error saving AC:", error.response?.data || error.message);
       setShowFailed(true);
       setTimeout(() => setShowFailed(false), 2000);
     } finally {
       setIsSubmitting(false);
     }
   };
-  
   return (
     <Wrapper>
       <div className="form-box">
+        {/* <h2>{editItem ? "Edit Assessment" : "Add Assessment"}</h2> */}
         <div className="toggle-buttons">
           <input
             type="button"
@@ -178,14 +188,15 @@ const Form_AC = ({ closeForm, loadAC, closeForm2, closeFormOnly, setShowSuccess,
               filteredLoList.map((item) => (
                 <li key={item.lo_id} className="lo-list-item">
                   <div className="lo-header">
-                    <div className="lo-info">
-                      <input
-                        type="checkbox"
-                        checked={selectedLoIds.includes(item.lo_id)}
-                        onChange={() => handleCheckboxChange(item.lo_id)}
-                      />
-                      <p>{item.lo_name}</p>
-                    </div>
+                  <div className="lo-info" onClick={() => handleCheckboxChange(item.lo_id)}>
+                  <input
+                    type="checkbox"
+                    checked={selectedLoIds.includes(item.lo_id)}
+                    onChange={() => handleCheckboxChange(item.lo_id)}
+                    onClick={(e) => e.stopPropagation()} // Prevent double toggle when clicking checkbox
+                  />
+                  <p>{item.lo_name}</p>
+                  </div>
                   </div>
                 </li>
               ))
@@ -212,7 +223,7 @@ const Form_AC = ({ closeForm, loadAC, closeForm2, closeFormOnly, setShowSuccess,
               onClick={handleSubmit}
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Adding..." : "Add"}
+              {isSubmitting ? "Saving..." : editItem ? "Update" : "Add"}
             </button>
           </div>
         </form>
@@ -220,5 +231,4 @@ const Form_AC = ({ closeForm, loadAC, closeForm2, closeFormOnly, setShowSuccess,
     </Wrapper>
   );
 };
-
 export default Form_AC;

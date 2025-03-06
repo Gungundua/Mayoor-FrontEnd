@@ -7,10 +7,11 @@ const Wrapper = styled.section`
   justify-content: center;
   height: 100vh;
   margin: 0;
-  background: rgba(0, 0, 0, 0.5); /* Semi-transparent dark overlay */
+  width: 100%;
+  background: rgba(0, 0, 0, 0.3); /* Semi-transparent dark overlay */
 
   .mainContainer {
-    background: white; /* Clean white box */
+    background:rgb(236, 242, 242); /* Clean white box */
     padding: 30px;
     border-radius: 12px; /* Rounded corners */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Soft shadow */
@@ -19,15 +20,15 @@ const Wrapper = styled.section`
     align-items: center;
     justify-content: center;
     gap: 20px;
-    min-width: 300px;
     text-align: center;
-
   }
 
   .container1 {
     font-size: 1.8rem;
     font-weight: bold;
     color: #333; /* Darker text */
+    padding: 10px;
+    line-height: 1.5
   }
 
   .container2 {
@@ -54,7 +55,7 @@ const Wrapper = styled.section`
 
   /* No button */
   .container2 div:last-child {
-    background: #21c2ba; 
+    background:rgb(114, 197, 192); 
     color: white;
   
 `;
