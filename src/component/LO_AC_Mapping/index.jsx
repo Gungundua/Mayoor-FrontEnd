@@ -2,11 +2,15 @@ import React, { useState, useEffect } from "react";
 import Wrapper from "./style";
 import Form_AC from "../Form_AC/index";
 import axios from "axios";
+import SuccessfulDone from "../Popup_successful"; // Import the success message component
+import Failed from "../Popup_Failed/index.jsx";
 const ACMapping = ({ loId, acList, loData }) => {
   const [priorityMapping, setPriorityMapping] = useState({});
   const [showForm, setShowForm] = useState(false);
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
+    const [showSuccess, setShowSuccess] = useState(false); // :white_tick: New state for success message
+    const [showFailed, setShowFailed] = useState(false)
   useEffect(() => {
     const userData = sessionStorage.getItem("userData");
     if (userData) {
@@ -23,6 +27,22 @@ const ACMapping = ({ loId, acList, loData }) => {
       setPriorityMapping(initialMapping);
     }
   }, [loData]);
+  useEffect(() => {
+      if (showSuccess) {
+        const timer = setTimeout(() => {
+          setShowSuccess(false);
+        }, 1000); // Hide after 2 seconds
+        return () => clearTimeout(timer); // Cleanup timer
+      }
+    }, [showSuccess]);
+    useEffect(() => {
+      if (showFailed) {
+        const timer = setTimeout(() => {
+          setShowFailed(false)
+        }, 1000)
+        return () => clearTimeout(timer)
+      }
+    }, [showFailed])
   const handleClick = (acid, priority) => {
     setPriorityMapping((prev) => ({
       ...prev,
@@ -61,10 +81,10 @@ const ACMapping = ({ loId, acList, loData }) => {
         { headers }
       );
       console.log("Priorities updated:", response.data);
-      alert("Priorities updated successfully!");
+     setShowSuccess(true)
     } catch (error) {
       console.error("Error updating priorities:", error.response?.data || error.message);
-      alert("Failed to update priorities");
+      setShowFailed(true)
     } finally {
       setLoading(false);
     }
@@ -121,6 +141,16 @@ const ACMapping = ({ loId, acList, loData }) => {
           </div>
         </div>
       )}
+      {showSuccess &&
+          <div className="success-overlay">
+          <SuccessfulDone />
+        </div>
+        } {/* :white_tick: Show success message after closing the form */}
+        {showFailed &&
+          <div className="success-overlay">
+          <Failed />
+        </div>
+        }
     </Wrapper>
   );
 };

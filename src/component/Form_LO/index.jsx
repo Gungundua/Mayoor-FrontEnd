@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import axios from "axios";
 import Wrapper from "./style";
-const Form_LO = ({ closeForm, loadLO, closeForm2, closeFormOnly, setShowSuccess, setShowFailed, editItem }) => {
+const Form_LO = ({ closeForm, loadLO, closeFormOnly, setShowSuccess, setShowFailed, editItem }) => {
   const [loInput, setLoInput] = useState("");
   const [filteredRoList, setFilteredRoList] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -10,6 +10,7 @@ const Form_LO = ({ closeForm, loadLO, closeForm2, closeFormOnly, setShowSuccess,
   const [loName, setLoName] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const successTimeout = useRef(null);
+  const isSubmittingRef = useRef(false);
   useEffect(() => {
     return () => {
       if (successTimeout.current) {
@@ -39,7 +40,6 @@ const Form_LO = ({ closeForm, loadLO, closeForm2, closeFormOnly, setShowSuccess,
     if (editItem) {
       setLoName(editItem.lo_name || "");
       setLoInput(editItem.lo_name || "");
-      // Ensure editItem.report_outcomes is an array before calling map()
       if (Array.isArray(editItem.report_outcomes)) {
         const roIds = editItem.report_outcomes.map((ro) => ro.ro_id);
         console.log("Extracted RO IDs:", roIds); // Debugging output
@@ -49,7 +49,6 @@ const Form_LO = ({ closeForm, loadLO, closeForm2, closeFormOnly, setShowSuccess,
         setSelectedRoIds([]);  // Reset if invalid
       }
     } else {
-      // Reset fields when adding a new LO
       setLoName("");
       setLoInput("");
       setSelectedRoIds([]);
@@ -100,15 +99,26 @@ const Form_LO = ({ closeForm, loadLO, closeForm2, closeFormOnly, setShowSuccess,
         : [...prevSelected, ro_id]
     );
   };
-  const handleSubmit = async () => {
-    if (loInput.trim() === "") {
-      alert("Please enter a valid LO!");
-      return;
-    }
-    if (selectedRoIds.length === 0) {
-      alert("Please select at least one Reported Outcome!");
-      return;
-    }
+  // const handleSubmit = async () => {
+    const handleSubmit = async () => {
+      if (isSubmitting || isSubmittingRef.current) return; // Prevent duplicate requests
+      isSubmittingRef.current = true;
+      setIsSubmitting(true);
+    
+      if (loInput.trim() === "") {
+        alert("Please enter a valid LO!");
+        isSubmittingRef.current = false;
+        setIsSubmitting(false);
+        return;
+      }
+    
+      if (selectedRoIds.length === 0) {
+        alert("Please select at least one Reported Outcome!");
+        isSubmittingRef.current = false;
+        setIsSubmitting(false);
+        return;
+      }
+    
       const headers = {
         Authorization: "Bearer YOUR_ACCESS_TOKEN",
         "Content-Type": "application/json",
@@ -117,10 +127,12 @@ const Form_LO = ({ closeForm, loadLO, closeForm2, closeFormOnly, setShowSuccess,
         subject: userData.subject,
         quarter: userData.quarter,
       };
+    
       const body = {
-        name: loInput, // LO name
-        ro_id: selectedRoIds, // Array of selected RO IDs
+        name: loInput,
+        ro_id: selectedRoIds,
       };
+    
       try {
         let response;
         if (editItem) {
@@ -136,13 +148,16 @@ const Form_LO = ({ closeForm, loadLO, closeForm2, closeFormOnly, setShowSuccess,
             body,
             { headers }
           );
+          console.log("API request at:", new Date().toISOString());
+          console.log("Response:", response.data);
         }
+    
         if (response.status === 200 || response.status === 201) {
           setLoName("");
-          // setMaxMarks("");
           setSelectedRoIds([]);
-          loadLO(userData); // Refresh list
+          loadLO(userData);
           closeForm();
+    
           successTimeout.current = setTimeout(() => {
             setShowSuccess(true);
             successTimeout.current = setTimeout(() => setShowSuccess(false), 2000);
@@ -153,9 +168,11 @@ const Form_LO = ({ closeForm, loadLO, closeForm2, closeFormOnly, setShowSuccess,
         setShowFailed(true);
         setTimeout(() => setShowFailed(false), 2000);
       } finally {
+        isSubmittingRef.current = false;
         setIsSubmitting(false);
       }
     };
+    
   return (
     <Wrapper>
       <div className="form-box">
@@ -166,7 +183,7 @@ const Form_LO = ({ closeForm, loadLO, closeForm2, closeFormOnly, setShowSuccess,
           className="input"
           value={loInput}
           onChange={(e) => setLoInput(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
+          // onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
         />
         <ul className="ro-list">
           {loading ? (
@@ -204,8 +221,9 @@ const Form_LO = ({ closeForm, loadLO, closeForm2, closeFormOnly, setShowSuccess,
             }}
             className="closebtn"
           />
-          <input type="button" value={isSubmitting ? "Saving..." : editItem ? "Update" : "Add"} className="submitbtn" onClick={handleSubmit} disabled={isSubmitting}/>
-        </div>
+<button onClick={handleSubmit} disabled={isSubmitting}>
+  {isSubmitting ? "Submitting..." : "Submit"}
+</button>        </div>
       </div>
     </Wrapper>
   );

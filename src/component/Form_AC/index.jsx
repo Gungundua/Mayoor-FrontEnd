@@ -80,74 +80,89 @@ const Form_AC = ({closeForm, loadAC, closeFormOnly, setShowSuccess, setShowFaile
         : [...prevSelected, lo_id]
     );
   };
+
   const handleSubmit = async () => {
     if (isSubmitting) return;
+    
+    console.log("Submitting form..."); // Debugging output
     setIsSubmitting(true);
+
+
     if (!acName.trim() || !maxMarks) {
-      alert("Please fill in all fields.");
-      setIsSubmitting(false);
-      return;
+        alert("Please fill in all fields.");
+        setIsSubmitting(false);
+        return;
     }
+
     if (!userData?.year || !userData?.class || !userData?.section || !userData?.subject || !userData?.quarter) {
-      alert("Missing user details. Ensure all fields are filled in.");
-      setIsSubmitting(false);
-      return;
+        alert("Missing user details. Ensure all fields are filled in.");
+        setIsSubmitting(false);
+        return;
     }
+
     if (selectedLoIds.length === 0) {
-      alert("Please select at least one Learning Outcome.");
-      setIsSubmitting(false);
-      return;
+        alert("Please select at least one Learning Outcome.");
+        setIsSubmitting(false);
+        return;
     }
+
     const headers = {
-      Authorization: "Bearer YOUR_ACCESS_TOKEN",
-      "Content-Type": "application/json",
-      year: userData.year,
-      classname: userData.class,
-      section: userData.section,
-      subject: userData.subject,
-      quarter: userData.quarter,
+        Authorization: "Bearer YOUR_ACCESS_TOKEN",
+        "Content-Type": "application/json",
+        year: userData.year,
+        classname: userData.class,
+        section: userData.section,
+        subject: userData.subject,
+        quarter: userData.quarter,
     };
+
     const body = {
-      name: acName.trim(),
-      max_marks: parseInt(maxMarks, 10),
-      lo_id: selectedLoIds,
+        name: acName.trim(),
+        max_marks: parseInt(maxMarks, 10),
+        lo_id: selectedLoIds,
     };
+
     try {
-      let response;
-      if (editItem) {
-        // Update existing AC
-        response = await axios.put(
-          `${process.env.REACT_APP_API_URL}/api/assessment-criteria?id=${editItem.ac_id}`,
-          body,
-          { headers }
-        );
-      } else {
-        // Create new AC
-        response = await axios.post(
-          `${process.env.REACT_APP_API_URL}/api/assessment-criteria`,
-          body,
-          { headers }
-        );
-      }
-      if (response.status === 200 || response.status === 201) {
-        setAcName("");
-        setMaxMarks("");
-        setSelectedLoIds([]);
-        loadAC(); // Refresh list
-        closeForm();
-        successTimeout.current = setTimeout(() => {
-          setShowSuccess(true);
-          successTimeout.current = setTimeout(() => setShowSuccess(false), 2000);
-        }, 500);
-      }
+        let response;
+        if (editItem) {
+            console.log("Updating existing AC...");
+            response = await axios.put(
+                `${process.env.REACT_APP_API_URL}/api/assessment-criteria?id=${editItem.ac_id}`,
+                body,
+                { headers }
+            );
+        } else {
+            console.log("Creating new AC...");
+            response = await axios.post(
+                `${process.env.REACT_APP_API_URL}/api/assessment-criteria`,
+                body,
+                { headers }
+            );
+        }
+
+        console.log("Response status:", response.status);
+
+        if (response.status === 200 || response.status === 201) {
+            setAcName("");
+            setMaxMarks("");
+            setSelectedLoIds([]);
+            loadAC();
+            closeForm();
+
+            successTimeout.current = setTimeout(() => {
+                setShowSuccess(true);
+                successTimeout.current = setTimeout(() => setShowSuccess(false), 2000);
+            }, 500);
+        }
     } catch (error) {
-      console.error("Error saving AC:", error.response?.data || error.message);
-      setShowFailed(true);
-      setTimeout(() => setShowFailed(false), 2000);
+        console.error("Error saving AC:", error.response?.data || error.message);
+        setShowFailed(true);
+        setTimeout(() => setShowFailed(false), 2000);
     } finally {
-      setIsSubmitting(false);
+        // setIsSubmitting(false);
     }
-  };
+};
+
   return (
     <Wrapper>
       <div className="form-box">

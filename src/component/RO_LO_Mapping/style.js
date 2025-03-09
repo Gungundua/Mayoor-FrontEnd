@@ -122,14 +122,14 @@ const Wrapper = styled.section`
   align-items: center;
   z-index: 1000;
 }
-.popup-content {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  width: 400px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  animation: popup 0.3s ease-in-out;
-}
+// .popup-content {
+//   background: white;
+//   padding: 20px;
+//   border-radius: 10px;
+//   width: 300px;
+//   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+//   animation: popup 0.3s ease-in-out;
+// }
 @keyframes popup {
   from {
     transform: scale(0.8);
@@ -147,8 +147,18 @@ const Wrapper = styled.section`
   border-radius: 5px;
   cursor: pointer;
 }
-.form-container button:hover {
-  background-color: #F0F0F0;
+
+.success-overlay {
+  position: fixed; /* Ensures full-page coverage */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; 
 }
 `
 export default Wrapper

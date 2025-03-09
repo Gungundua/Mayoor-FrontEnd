@@ -2,11 +2,15 @@ import React, { useState, useEffect } from "react";
 import Wrapper from "./style";
 import Form_LO from "../Form_LO/index";
 import axios from "axios";
+import SuccessfulDone from "../Popup_successful"; // Import the success message component
+import Failed from "../Popup_Failed/index.jsx";
 const LOMapping = ({ roId, loItems, roData }) => {
   const [priorityMapping, setPriorityMapping] = useState({});
   const [showForm, setShowForm] = useState(false);
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false); // :white_tick: New state for success message
+  const [showFailed, setShowFailed] = useState(false)
   console.log('roDta : ', roData)
   useEffect(() => {
     const userData = sessionStorage.getItem("userData");
@@ -25,6 +29,22 @@ const LOMapping = ({ roId, loItems, roData }) => {
       setPriorityMapping(initialMapping);
     }
   }, [roData]);
+  useEffect(() => {
+    if (showSuccess) {
+      const timer = setTimeout(() => {
+        setShowSuccess(false);
+      }, 1000); // Hide after 2 seconds
+      return () => clearTimeout(timer); // Cleanup timer
+    }
+  }, [showSuccess]);
+  useEffect(() => {
+    if (showFailed) {
+      const timer = setTimeout(() => {
+        setShowFailed(false)
+      }, 1000)
+      return () => clearTimeout(timer)
+    }
+  }, [showFailed])
   const handleClick = (loid, priority) => {
     setPriorityMapping((prev) => ({
       ...prev,
@@ -63,11 +83,11 @@ const LOMapping = ({ roId, loItems, roData }) => {
         formattedData,
         { headers }
       );
+      setShowSuccess(true)
       console.log("Priorities updated:", response.data);
-      alert("Priorities updated successfully!");
     } catch (error) {
+      setShowFailed(true)
       console.error("Error updating priorities:", error.response?.data || error.message);
-      alert("Failed to update priorities");
     } finally {
       setLoading(false);
     }
@@ -118,13 +138,23 @@ const LOMapping = ({ roId, loItems, roData }) => {
           />
         </div>
       </div>
-      {showForm && (
+      {/* {showForm && (
         <div className="popup-overlay">
           <div className="popup-content">
             <Form_LO closeForm={() => setShowForm(false)} />
           </div>
         </div>
-      )}
+      )} */}
+      {showSuccess &&
+          <div className="success-overlay">
+          <SuccessfulDone />
+        </div>
+        } {/* :white_tick: Show success message after closing the form */}
+        {showFailed &&
+          <div className="success-overlay">
+          <Failed />
+        </div>
+        }
     </Wrapper>
   );
 };

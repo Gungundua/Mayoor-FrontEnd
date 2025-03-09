@@ -92,6 +92,27 @@ const Wrapper = styled.section`
   .lo-list::-webkit-scrollbar {
     width: 8px; /* Width of the scrollbar for WebKit browsers */
   }
+    .held-popup {
+  position: absolute;
+  background: rgba(94, 93, 93, 0.8);
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  z-index: 100;
+  margin-top: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 400px;
+}
+.mapLoItem{
+  border: #fff solid ;
+  margin: 10px 10px 0 0;
+  border-radius: 20px;
+  height: 20px;
+  padding: 5px;
+  min-width: 50px;
+  text-align: center;
+}
 
   .lo-list::-webkit-scrollbar-thumb {
     background-color: #ccc; /* Color of the scrollbar thumb */

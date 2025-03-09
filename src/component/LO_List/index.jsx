@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Wrapper from './style';
 import ACMapping from '../LO_AC_Mapping';
 import List from '../images/list.png';
@@ -11,7 +11,6 @@ import Failed from "../Popup_Failed/index.jsx";
 import DeletedSuccessfully from "../DeletedSuccessfully/index.jsx";
 import DeleteFailed from "../DeleteFailed/index.jsx";
 import AreYouSure from "../AreYouSure"; // Import confirmation modal
-
 const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIndex }) => {
   const [activeIndex, setActiveIndex] = useState(null);
   const [activeMenuIndex, setActiveMenuIndex] = useState(null);
@@ -27,11 +26,10 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
   const [deleteLoId, setDeleteLoId] = useState(null); // Store LO ID for deletion
   const [editItem, setEditItem] = useState(null);
   const [showDeleteFailed, setShowDeleteFailed] = useState(false); // New state for delete failure
-
-
+  const [heldLO, setHeldLO] = useState(null); // :fire: Track which RO is being held
+  const timeoutRef = useRef(null);
   const handleClick = () => setIndex(1);
   const toggleDropdown = (index) => setActiveIndex((prevIndex) => (prevIndex === index ? null : index));
-
   const [userData, setUserData] = useState(null);
   useEffect(() => {
     const storedUserData = sessionStorage.getItem("userData");
@@ -39,7 +37,6 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
       setUserData(JSON.parse(storedUserData));
     }
   }, []);
-
   const loadLO = async (userData) => {
     setLoading(true);
     const headers = {
@@ -54,19 +51,18 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/learning-outcome`, { headers });
       setFilteredLoList(response.data);
+      console.log(response.data)
     } catch (error) {
       console.error('Error fetching report outcomes:', error);
     } finally {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     if (userData) {
       loadLO(userData);
     }
   }, [userData]);
-
   useEffect(() => {
     if (!searchQuery) {
       setFilteredLoList(loItems);
@@ -77,21 +73,18 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
       setFilteredLoList(filteredData);
     }
   }, [searchQuery, loItems]);
-
   useEffect(() => {
     if (showSuccess) {
       const timer = setTimeout(() => setShowSuccess(false), 1000);
       return () => clearTimeout(timer);
     }
   }, [showSuccess]);
-
   useEffect(() => {
     if (showFailed) {
       const timer = setTimeout(() => setShowFailed(false), 1000);
       return () => clearTimeout(timer);
     }
   }, [showFailed]);
-
   useEffect(() => {
     if (showDeleted) {
       const timer = setTimeout(() => setShowDeleted(false), 1000);
@@ -106,25 +99,21 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
       return ()=> clearTimeout(timer)
     }
   }, [showDeleteFailed])
-
   // Function to show the confirmation modal before deletion
   const handleDeleteClick = (loId) => {
     setDeleteLoId(loId);
     setShowConfirmation(true);
   };
-
   // Function to perform the deletion if confirmed
   const handleConfirm = async () => {
     if (!deleteLoId) return;
     setLoading(true);
     try {
       await axios.delete(`${process.env.REACT_APP_API_URL}/api/learning-outcome?lo_id=${deleteLoId}`);
-
       // Remove deleted item from the list
       const updatedLoItems = filteredLoList.filter(item => item.lo_id !== deleteLoId);
       setLoItems(updatedLoItems);
       setFilteredLoList(updatedLoItems);
-
       setShowDeleted(true); // Show success message
     } catch (error) {
       setShowDeleteFailed(true);
@@ -135,12 +124,20 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
       setDeleteLoId(null);
     }
   };
-
   const handleEdit = (item) => {
     setEditItem(item);
     setShowForm(true);
   };
-
+  const handleTouchStart = (lo) => {
+    timeoutRef.current = setTimeout(() => {
+      setHeldLO(lo); // Store the RO being held
+    }, 800); // 800ms delay for touch hold
+  };
+  const handleTouchEnd = () => {
+    clearTimeout(timeoutRef.current);
+    timeoutRef.current = null;
+    setHeldLO(null); // Remove LO display
+  };
   return (
     <Wrapper>
       <div className="search-container">
@@ -157,7 +154,6 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
           />
         </div>
       </div>
-
       <ul className="lo-list">
         {loading ? (
           <li>
@@ -165,44 +161,60 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
             <p className="loading-message">Loading....</p>
           </li>
         ) : filteredLoList.length > 0 ? (
-          filteredLoList.map((item, index) => (
-            <li key={item.lo_id} className={`lo-list-item ${activeIndex === index ? 'active' : ''}`}>
-              <div className="lo-header" onClick={() => toggleDropdown(index)}>
-                <div className="list-icon-containers">
-                  <img src={List} alt="" className="list-icons" />
+          filteredLoList.map((item, index) => {
+            // Count ACs with null priority
+            const nullPriorityCount = item.assessment_criterias
+              ? item.assessment_criterias.filter(ac => ac.priority === null).length
+              : 0;
+            return (
+              <li key={item.lo_id} className={`lo-list-item ${activeIndex === index ? 'active' : ''}`} onTouchStart={() => handleTouchStart(item)} onTouchEnd={handleTouchEnd} onContextMenu={(e) => e.preventDefault()}>
+                <div className="lo-header" onClick={() => toggleDropdown(index)}>
+                  <div className="list-icon-containers">
+                    <img src={List} alt="" className="list-icons" />
+                  </div>
+                  <div className="lo-info">
+                    <p className="item-title">{item.lo_name}</p>
+                  </div>
+                  <div className="mapCounter">{nullPriorityCount}</div> {/* Show count here */}
+                  <div>
+                    <MenuDots
+                      index={index}
+                      activeMenuIndex={activeMenuIndex}
+                      setActiveMenuIndex={setActiveMenuIndex}
+                      onEditClick={() => handleEdit(item)}
+                      onDeleteClick={() => handleDeleteClick(item.lo_id)}
+                    />
+                  </div>
                 </div>
-                <div className="lo-info">
-                  <p className="item-title">{item.lo_name}</p>
+                {/* :fire: Show LO names when held */}
+              {heldLO && heldLO.lo_id === item.lo_id && (
+                <div className="held-popup">
+                  {heldLO.assessment_criterias.length > 0 ? (
+                      heldLO.assessment_criterias.map((ac) => (
+                        <div key={ac.ac_id} className='mapLoItem'>{ac.ac_name}</div>
+                      ))
+                    ) : (
+                      <div>No Assessment Criteria Mapped</div>
+                    )}
                 </div>
-                <div className="mapCounter">1</div>
-                <div>
-                  <MenuDots
-                    index={index}
-                    activeMenuIndex={activeMenuIndex}
-                    setActiveMenuIndex={setActiveMenuIndex}
-                    onEditClick={() => handleEdit(item)}
-                    onDeleteClick={() => handleDeleteClick(item.lo_id)}
-                  />
+              )}
+                <div className={`lo-dropdown-content ${activeIndex === index ? 'show' : 'hide'}`}>
+                  {activeIndex === index && (
+                    <ACMapping acItems={acItems} setAcItems={setAcItems} loId={item.lo_id} acList={acList} setAcList={setAcList} loData={[item]} />
+                  )}
                 </div>
-              </div>
-              <div className={`lo-dropdown-content ${activeIndex === index ? 'show' : 'hide'}`}>
-                {activeIndex === index && (
-                  <ACMapping acItems={acItems} setAcItems={setAcItems} loId={item.id} acList={acList} setAcList={setAcList} loData={[item]} />
-                )}
-              </div>
-            </li>
-          ))
+              </li>
+            );
+          })
         ) : (
           <li className="no-results">
             <p className="no_results">No Results Found</p>
           </li>
         )}
       </ul>
-
       <div className="add" onClick={() => { setEditItem(null); setShowForm(true); }}>
         <span className="plus">+</span>
       </div>
-
       {showForm && (
         <div className="popup-overlay">
           <div className="popup-content">
@@ -219,11 +231,9 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
           </div>
         </div>
       )}
-
       {showSuccess && <div className="success-overlay"><SuccessfulDone /></div>}
       {showFailed && <div className="success-overlay"><Failed /></div>}
       {showDeleted && <div className="success-overlay"><DeletedSuccessfully /></div>}
-
       {showConfirmation && (
         <div className='success-overlay'>
           <AreYouSure
@@ -233,7 +243,6 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
         </div>
       )}
       {showDeleteFailed && (
-
         <div className='success-overlay'>
         <DeleteFailed/>
         </div>
@@ -241,5 +250,4 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
     </Wrapper>
   );
 };
-
 export default LOlist;

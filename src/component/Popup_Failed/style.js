@@ -19,6 +19,7 @@ const Wrapper = styled.div`
     width: 300px;
 }
 
+
 .popup-icon {
     font-size: 50px;
     color: #4CAF50;
