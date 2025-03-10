@@ -129,7 +129,6 @@ const StudentList = ({ onStudentsData }) => {
             />
           </div>
         </div>
-
         <div className="studentlist">
           {filteredStudents.length > 0 ? (
             filteredStudents.map((student, index) => (

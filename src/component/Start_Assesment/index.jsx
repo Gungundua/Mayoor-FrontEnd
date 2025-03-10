@@ -1,63 +1,25 @@
-import React, { useState, useEffect, useRef } from "react";
-import Wrapper from "./style";
-import { FaArrowLeft } from "react-icons/fa";
-import Student from "./Student.avif";
-import axios from "axios";
-import Done from "../assets/check.png";
-import AreYouSure from '../AreYouSure/index';
-
+import React, { useState, useEffect, useRef } from "react"
+import Wrapper from "./style"
+import { FaArrowLeft } from "react-icons/fa"
+import Student from "./Student.avif"
+import axios from "axios"
+import Done from "../assets/check.png"
 const Assessment = ({ selectedAssessment, onBack, studentsData }) => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [userData, setUserData] = useState(null);
-  const [showConfirmation, setShowConfirmation] = useState(false);
-  const containerRef = useRef(null);
-
-  // Load user data from sessionStorage
+  const [searchQuery, setSearchQuery] = useState("")
+  const [userData, setUserData] = useState(null)
+  const containerRef = useRef(null)
+  const [students, setStudents] = useState(
+    studentsData.map((stu) => ({ ...stu, marks: "" }))
+  )
   useEffect(() => {
-    const userData = sessionStorage.getItem("userData");
+    const userData = sessionStorage.getItem("userData")
     if (userData) {
-      setUserData(JSON.parse(userData));
+      const parsedUserData = JSON.parse(userData)
+      setUserData(parsedUserData)
+      loadSavedScores(parsedUserData)
     }
-  }, []);
-
-  // Handle search input change
-  const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
-  };
-
-  // Handle marks input change
-  const handleMarksChange = (e, studentId) => {
-    let value = e.target.value;
-    const maxMarks = selectedAssessment?.max_marks || 100;
-
-    if (value > maxMarks || value < 0) {
-      alert("Invalid marks entered!");
-      e.target.value = "";
-    }
-  };
-
-  // Show confirmation modal when "Done" is clicked
-  const handleSubmit = () => {
-    setShowConfirmation(true);
-  };
-
-  // Handle confirmation when "Yes" is clicked
-  const handleConfirm = async () => {
-    setShowConfirmation(false); // Close the confirmation modal
-
-    // Prepare data for submission
-    const payload = studentsData
-      .filter((student) => student.marks !== "")
-      .map((student) => ({
-        student_id: student.id,
-        obtained_marks: student.marks,
-      }));
-
-    if (payload.length === 0) {
-      alert("No marks entered!");
-      return;
-    }
-
+  }, [selectedAssessment])
+  const loadSavedScores = async (userData) => {
     const headers = {
       Authorization: "Bearer YOUR_ACCESS_TOKEN",
       "Content-Type": "application/json",
@@ -66,30 +28,115 @@ const Assessment = ({ selectedAssessment, onBack, studentsData }) => {
       section: userData?.section,
       quarter: userData?.quarter,
       subject: userData?.subject,
-    };
-
-    const requestBody = {
-      ac_id: selectedAssessment?.id,
-      scores: payload,
-    };
-
-    try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/assessment-criteria-score`,
-        requestBody,
-        { headers }
-      );
-      alert("Marks submitted successfully!");
-    } catch (error) {
-      alert("Failed to submit marks. Please try again.");
+      ac_id: selectedAssessment.ac_id
     }
-  };
-
-  // Handle cancellation when "No" is clicked
-  const handleCancel = () => {
-    setShowConfirmation(false);
-  };
-
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/assessment-criteria-score`,
+        { headers }
+      )
+      console.log("API Response Data:", response.data)
+      if (response.data && response.data.length > 0) {
+        setStudents((prevStudents) =>
+          prevStudents.map((stu) => {
+            const score = response.data.find((item) => item.student_id === stu.id)
+            return score
+              ? {
+                  ...stu,
+                  marks: selectedAssessment.max_marks * score.value,
+                  scoreId: score.id
+                }
+              : stu
+          })
+        )
+      }
+    } catch (error) {
+      console.error("Error fetching saved scores:", error)
+      if (error.response) console.log("API Error Response:", error.response)
+    }
+  }
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value)
+  }
+  const handleMarksChange = (e, studentId) => {
+    let value = e.target.value
+    if (!/^\d+(\.\d{0,1})?$/.test(value) && value !== "") {
+      return;
+    }
+    const maxMarks = selectedAssessment?.max_marks || 100
+      if ((parseInt(value) > maxMarks || parseInt(value) < 0)) {
+        alert("Invalid marks")
+        return
+      }
+      setStudents((prevStudents) =>
+        prevStudents.map((stu) => (stu.id === studentId ? { ...stu, marks: value } : stu))
+      )
+  }
+  const submitNewScores = async (newScores, headers) => {
+    console.log( selectedAssessment.ac_id,  newScores)
+    try {
+      await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/assessment-criteria-score`,
+        { ac_id: selectedAssessment.ac_id, scores: newScores },
+        { headers }
+      )
+      console.log("New scores submitted successfully")
+    } catch (error) {
+      console.error("Error submitting new scores:", error.response?.data || error.message)
+      alert("Failed to submit new scores. Please try again.")
+    }
+  }
+  const updateScores = async (updateScores, headers) => {
+    try {
+      await axios.put(
+        `${process.env.REACT_APP_API_URL}/api/assessment-criteria-score/?ac_id = ${selectedAssessment.ac_id}`,
+        { scores: updateScores },
+        { headers }
+      )
+      console.log("Scores updated successfully")
+    } catch (error) {
+      console.error("Error updating scores:", error.response?.data || error.message)
+      alert("Failed to update scores. Please try again.")
+    }
+  }
+  const handleSubmit = async () => {
+    if (!selectedAssessment?.ac_id || !userData) {
+      console.error("Missing required data: selectedAssessment or userData")
+      return
+    }
+    const headers = {
+      Authorization: "Bearer YOUR_ACCESS_TOKEN",
+      "Content-Type": "application/json",
+      year: userData?.year,
+      classname: userData?.class,
+      section: userData?.section,
+      quarter: userData?.quarter,
+      subject: userData?.subject
+    }
+    const newScores = []
+    const updateScoresList = []
+    students.forEach((student) => {
+      if (student.marks !== null) {
+        const marksValue = student.marks === "" ? 0 : Number(student.marks)
+        if (!student.scoreId) {
+          newScores.push({
+            student_id: student.id,
+            obtained_marks: marksValue
+          })
+        } else {
+          updateScoresList.push({
+            id: student.scoreId,
+            student_id: student.id,
+            obtained_marks: marksValue
+          })
+        }
+      }
+    })
+    if (newScores.length > 0) await submitNewScores(newScores, headers)
+    if (updateScoresList.length > 0) await updateScores(updateScoresList, headers)
+    alert("Marks submitted successfully!")
+    loadSavedScores(userData)
+  }
   return (
     <Wrapper>
       <div className="profile-section">
@@ -114,10 +161,9 @@ const Assessment = ({ selectedAssessment, onBack, studentsData }) => {
           </p>
         </div>
       </div>
-
       <div className="ac-container">
         <div className="student-list" ref={containerRef}>
-          {studentsData.map((stu) => (
+          {students.map((stu) => (
             <div className="ac-box" key={stu.id}>
               <div>
                 <img src={Student} alt="Profile" className="profile-image" />
@@ -127,8 +173,9 @@ const Assessment = ({ selectedAssessment, onBack, studentsData }) => {
                 <p className="roll-number">Roll Number: {stu.id}</p>
                 <input
                   type="number"
+                  step="0.1"
                   className="marks-input"
-                  value={stu.marks}
+                  value={stu.marks || ""}
                   onChange={(e) => handleMarksChange(e, stu.id)}
                   placeholder="Enter Marks"
                   min="0"
@@ -139,21 +186,14 @@ const Assessment = ({ selectedAssessment, onBack, studentsData }) => {
             </div>
           ))}
         </div>
-
-        {/* Done button triggers confirmation */}
         <img
           src={Done}
           alt="Done"
           className="done-button"
           onClick={handleSubmit}
         />
-        {/* Show Confirmation Box */}
-        <div className="popup">
-        {showConfirmation && <AreYouSure onConfirm={handleConfirm} onCancel={handleCancel} />}
-        </div>
       </div>
     </Wrapper>
   );
 };
-
-export default Assessment;
+export default Assessment

@@ -1,15 +1,8 @@
-import React, { useState , useEffect} from "react";
-import { Line } from "react-chartjs-2";
-import { Chart, CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend } from "chart.js";
-import "./ClassViewStyle"
+import React, { useState, useEffect } from "react";
+import ReactApexChart from "react-apexcharts";
+import "./ClassViewStyle";
 import Menu from "../MenuBar/index";
-
-import imgUser from "../assets/user.png";
-// import imgBack from "../assets/Vector.png";
-import imgMenu from "../assets/menu.png";
-import imgBell from "../assets/bell.png";
-
-Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend);
+import axios from "axios";
 
 const ClassView = ({ setIndex, user }) => {
   const [selectedChart, setSelectedChart] = useState("ac");
@@ -17,175 +10,315 @@ const ClassView = ({ setIndex, user }) => {
   const [loData, setLoData] = useState([]);
   const [roData, setRoData] = useState([]);
   const [userData, setUserData] = useState('');
+  const selectedData =
+    selectedChart === "ac" ? acData :
+    selectedChart === "lo" ? loData :
+    roData;
+    const prefix = selectedChart === "LO" ? "LO" : selectedChart === "RO" ? "RO" : "AC";
+
 
   useEffect(() => {
-    const userData = sessionStorage.getItem("userData");
-    if (userData) {
-      setUserData(JSON.parse(userData));
+    const storedUserData = sessionStorage.getItem("userData");
+    if (storedUserData) {
+      setUserData(JSON.parse(storedUserData));
     }
   }, []);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const headers = {
-          "Content-Type": "application/json",
-          "subject": userData.subject,
-          "classname": userData.class,
-          "year": userData.year,
-          "quarter": userData.quarter,
-          "section": userData.section,
-          // "subject": "2",
-          // "classname": "5",
-          // "year": "2024",
-          // "quarter": "1",
-          // "section": "Orchid",
-        };
-
-        const acResponse = await fetch("https://mayoor-backend.vercel.app/api/class-average-ac-score", {
-          method: "GET",
-          headers: headers,
-        });
-        const loResponse = await fetch("https://mayoor-backend.vercel.app/api/class-average-lo-score", {
-          method: "GET",
-          headers: headers,
-        });
-        const roResponse = await fetch("https://mayoor-backend.vercel.app/api/class-average-ro-score", {
-          method: "GET",
-          headers: headers,
-        });
-
-        const acScores = await acResponse.json();
-        const loScores = await loResponse.json();
-        const roScores = await roResponse.json();
-
-        // Extracting average scores for the chart
-        const acData = acScores.class_ac_averages.map(item => item.average_score);
-        const loData = loScores.class_lo_averages.map(item => item.average_score);
-        const roData = roScores.class_ro_averages.map(item => item.average_score);
-
-        setAcData(acData);
-        setLoData(loData);
-        setRoData(roData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
+   
+  
+  const loadLoScore = async (userData) => {
+    const headers = {
+      Authorization: 'Bearer YOUR_ACCESS_TOKEN',
+      'Content-Type': 'application/json',
+      year: userData.year,
+      classname: userData.class,
+      section: userData.section,
+      subject: userData.subject,
+      quarter: userData.quarter,
     };
-
-    fetchData();
+    
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/class-overview-lo-avg`, { headers });
+      console.log('LO API Response:', response.data);
+  
+      // Ensure response contains valid data
+      if (response.data && Array.isArray(response.data.class_lo_averages)) {
+        const scores = response.data.class_lo_averages.map(item => item.average_score);
+        console.log("Extracted scores:", scores);
+        setLoData(scores);
+      } else {
+        setLoData([]); // Reset to avoid errors
+        console.error("Invalid AC Data format:", response.data);
+      }
+  
+  
+    } catch (error) {
+      console.error('Error fetching LO scores:', error);
+      setLoData([]);
+    }
+  };
+  
+  useEffect(() => {
+    if (userData && Object.keys(userData).length > 0) {
+      loadLoScore(userData);
+    }
   }, [userData]);
 
-  const chartData = {
-    ac: {
-      labels: ["AC 1", "AC 2", "AC 3", "AC 4", "AC 5", "AC 6", "AC 7", "AC 8", "AC 9", "AC 10"],
-      datasets: [
-        {
-          label: "AC Scores",
-          data: acData,
-          borderColor: "#3b82f6",
-          fill: false,
-          pointBackgroundColor: "#3b82f6",
-        },
-      ],
-    },
-    lo: {
-      labels: ["LO 1", "LO 2", "LO 3", "LO 4", "LO 5", "LO 6", "LO 7", "LO 8", "LO 9", "LO 10"],
-      datasets: [
-        {
-          label: "LO Scores",
-          data: loData,
-          borderColor: "#ff7f50",
-          fill: false,
-          pointBackgroundColor: "#ff7f50",
-        },
-      ],
-    },
-    ro: {
-      labels: ["RO 1", "RO 2", "RO 3", "RO 4", "RO 5", "RO 6", "RO 7", "RO 8", "RO 9", "RO 10"],
-      datasets: [
-        {
-          label: "RO Scores",
-          data: roData,
-          borderColor: "#32cd32",
-          fill: false,
-          pointBackgroundColor: "#32cd32",
-        },
-      ],
-    },
-  };
 
-  const options = {
-    responsive: true,
-    plugins: { legend: { display: false } },
-    maintainAspectRatio: false,
-    scales: {
-      x: {
-        beginAtZero: true,
+
+  const loadRoScore = async (userData) => {
+    const headers = {
+      Authorization: 'Bearer YOUR_ACCESS_TOKEN',
+      'Content-Type': 'application/json',
+      year: userData.year,
+      classname: userData.class,
+      section: userData.section,
+      subject: userData.subject,
+      quarter: userData.quarter,
+    };
+    
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/class-overview-ro-avg`, { headers });
+      console.log('RO API Response:', response.data);
+  
+      // Ensure response contains valid data
+      if (response.data && Array.isArray(response.data.class_ro_averages)) {
+        const scores = response.data.class_ro_averages.map(item => item.average_score);
+        console.log("Extracted scores:", scores);
+        setRoData(scores);
+      } else {
+        setRoData([]); // Reset to avoid errors
+        console.error("Invalid RO Data format:", response.data);
+      }
+  
+    } catch (error) {
+      console.error('Error fetching RO scores:', error);
+      setRoData([]);
+    }
+  };
+  
+  useEffect(() => {
+    if (userData && Object.keys(userData).length > 0) {
+      loadRoScore(userData);
+    }
+  }, [userData]);
+  
+  
+
+
+  const loadAcScore = async (userData) => {
+    const headers = {
+      Authorization: 'Bearer YOUR_ACCESS_TOKEN',
+      'Content-Type': 'application/json',
+      year: userData.year,
+      classname: userData.class,
+      section: userData.section,
+      subject: userData.subject,
+      quarter: userData.quarter,
+    };
+    
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/class-overview-ac-avg`, { headers });
+      console.log('AC API Response:', response.data);
+  
+      // Ensure response data is an array
+      if (response.data && Array.isArray(response.data.class_ac_averages)) {
+        const scores = response.data.class_ac_averages.map(item => item.average_score);
+        console.log("Extracted scores:", scores);
+        setAcData(scores);
+      } else {
+        setAcData([]); // Reset to avoid errors
+        console.error("Invalid AC Data format:", response.data);
+      }
+  
+    } catch (error) {
+      console.error('Error fetching AC scores:', error);
+      setAcData([]);
+    }
+  };
+   
+  useEffect(() => {
+    if (userData && Object.keys(userData).length > 0) {
+      loadAcScore(userData);
+    }
+  }, [userData]);
+
+  // Chart configuration for ApexCharts
+  const getChartOptions = () => ({
+    chart: {
+      type: "line",
+      toolbar: { show: false },
+      zoom: { enabled: true },
+      background: "rgb(158, 184, 160 , 0.05)",
+      scrollablePlotArea: {
+        enabled: true, // Enables scrolling
+        scrollHeight: undefined,
+        scrollHorizontal: true,
       },
-      y: {
-        min: 0.0,
-        max: 1.0,
-        ticks: {
-          stepSize: 0.1,
-          callback: (value) => value.toFixed(1),
-        },
+      
+ parentHeightOffset: 10,
+    },
+    stroke: {
+      curve: "smooth",
+      width: 3,
+    },
+    colors: selectedChart === "ac" ? ["#2d6a4f"] : selectedChart === "lo" ? ["#74c69d"] : ["#40916c"],
+    markers: {
+      size: 6,
+      strokeWidth: 2,
+      hover: { size: 8 },
+    },
+    fill: {
+      type: "gradient",
+      gradient: {
+        shadeIntensity: 0.5,
+        opacityFrom: 0.6,
+        opacityTo: 0.5,
       },
     },
+    grid: {
+      borderColor: "#ddd",
+      strokeDashArray: 4,
+    },
+    tooltip: {
+      theme: "dark",
+      style: { fontSize: "14px" },
+    },
+    
+    
+    xaxis: {
+      categories: selectedData.length 
+        ? selectedData.map((_, i) => `${selectedChart.toUpperCase()} ${i + 1}`) 
+        : [`${selectedChart.toUpperCase()} 1`, `${selectedChart.toUpperCase()} 2`],
+      labels: { style: { fontSize: "12px", colors: "#666" } },
+      tickAmount: selectedData.length,
+    },
+    
+    yaxis: {
+      min: 0,
+      max: 1,
+      tickAmount: 5,
+      floating: false,
+      labels: { formatter: (value) => value.toFixed(2) }, 
+    },
+   // legend: { position: "top", horizontalAlign: "center" },
+  });
+  
+  
+  
+
+  const getChartSeries = () => {
+    const data =
+      selectedChart === "ac" ? acData :
+      selectedChart === "lo" ? loData :
+      roData;
+    console.log("chart",data)
+    return [{
+      name: selectedChart.toUpperCase() + " Scores",
+      data: Array.isArray(data) && data.length > 0 ? data : [0], // Fallback to avoid errors
+    }];
   };
+  
 
   const handleClick = () => {
     setIndex(1);
   };
 
-      const handleProfileClick = () => alert("Go to Profile");
-      const handleSettingsClick = () => alert("Open Settings");
-      const handleLogoutClick = () => alert("Logging Out...");
+  const handleProfileClick = () => alert("Go to Profile");
+  const handleSettingsClick = () => alert("Open Settings");
+  const handleLogoutClick = () => alert("Logging Out...");
+
+  useEffect(() => {
+  const graphContainer = document.querySelector(".chart-wrapper"); // Select chart wrapper
+  if (!graphContainer) return;
+
+  let startX = 0;
+  let startY = 0;
+
+  const handleTouchStart = (event) => {
+    startX = event.touches[0].clientX;
+    startY = event.touches[0].clientY;
+  };
+
+  const handleTouchMove = (event) => {
+    const deltaX = event.touches[0].clientX - startX;
+    const deltaY = event.touches[0].clientY - startY;
+
+    // If horizontal movement is more than vertical, prevent swipe navigation
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
+  };
+
+  graphContainer.addEventListener("touchstart", handleTouchStart);
+  graphContainer.addEventListener("touchmove", handleTouchMove);
+
+  return () => {
+    graphContainer.removeEventListener("touchstart", handleTouchStart);
+    graphContainer.removeEventListener("touchmove", handleTouchMove);
+  };
+}, []);
+  
+
   return (
     <>
-<div className="class-header">
-  <div className="icon">
-    <Menu
-      onProfileClick={handleProfileClick}
-      onSettingsClick={handleSettingsClick}
-      onLogoutClick={handleLogoutClick}
-      onReturnClick={handleClick}
-    />
-  </div>
-  <div className="class-title">
-    <h2>Class Overview</h2>
-  </div>
-</div>
+      <div className="class-header">
+        <div className="icon">
+          <Menu
+            onProfileClick={handleProfileClick}
+            onSettingsClick={handleSettingsClick}
+            onLogoutClick={handleLogoutClick}
+            onReturnClick={handleClick}
+          />
+        </div>
+        <div className="class-title">
+          <h2>Class Overview</h2>
+        </div>
+      </div>
 
-<div className="class-container">
-    <div className="info-box">
-    <div className="info-text">
-      <p><strong>Class:</strong> {userData.class}</p>
-      <p><strong>Year:</strong> {userData.year}</p>
-      <p><strong>Subject:</strong> {userData.subject}</p>
-    </div>
-    <div className="info-text">
-      <p><strong>Section:</strong> {userData.section}</p>
-      <p><strong>Quarter:</strong> {userData.quarter}</p>
-    </div>
-  </div>
+      <div className="class-container">
+        <div className="info-box">
+          <div className="info-text">
+            <p><strong>Class:</strong> {userData.class}</p>
+            <p><strong>Year:</strong> {userData.year}</p>
+            <p><strong>Subject:</strong> {userData.subject}</p>
+          </div>
+          <div className="info-text">
+            <p><strong>Section:</strong> {userData.section}</p>
+            <p><strong>Quarter:</strong> {userData.quarter}</p>
+          </div>
+        </div>
 
-  <div className="chart-selection">
-    <select className="chart-dropdown" onChange={(e) => setSelectedChart(e.target.value)}>
-      <option value="ac">AC Scores</option>
-      <option value="lo">LO Scores</option>
-      <option value="ro">RO Scores</option>
+        <div className="chart-selection">
+  <div className="custom-dropdown">
+    <select
+      className="chart-dropdown"
+      value={selectedChart}
+      onChange={(e) => setSelectedChart(e.target.value)}
+    >
+      <option value="ac">AC Average</option>
+      <option value="lo">LO Average</option>
+      <option value="ro">RO Average</option>
     </select>
   </div>
-
-  {/* Chart Display */}
-  <div className="chart-wrapper">
-    <div className="chart-container">
-      <Line data={chartData[selectedChart]} options={options} />
-    </div>
-  </div>
-  
 </div>
-</>
+
+        {/* Chart Display */}
+        <div className="chart-wrapper">
+          <div className="chart-container">
+            <ReactApexChart 
+              options={getChartOptions()} 
+              series={getChartSeries()} 
+              type="line" 
+              height={250} 
+            />
+          </div>
+        </div>
+
+
+        
+      </div>
+    </>
   );
 };
 

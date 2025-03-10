@@ -10,8 +10,7 @@ import listIcon from '../assets/Audit.png';
 import StudentList from '../Students/StudentSelect';
 import { useSwipeable } from 'react-swipeable';
 import ClassView from "../Classview/Classview";
-import DeletedSuccessfully from "../DeletedSuccessfully/index";
-import LearningOutcomeForm from '../LearningOutcomeForm';
+
 const Home = ({ user }) => {
   const [index, setIndex] = useState(1);
   const [tabs, setTabs] = useState([
@@ -56,10 +55,6 @@ const handlers = useSwipeable({
           <HomeList user={user} setIndex={setIndex}  />
         ) : index === 2 ? (
           <ClassView setIndex={setIndex} user={user}/>
-          // <LearningOutcomeForm/>
-          // // <AreYouSure/>
-          // < DeletedSuccessfully />
-          // <DeleteFailed/>
         ) : index === 3 ? (
           <StudentList onStudentsData={handleStudentsData} setIndex={setIndex} />
         ) : index === 4 ? (

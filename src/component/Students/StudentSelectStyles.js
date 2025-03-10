@@ -1,15 +1,17 @@
 import styled from "styled-components";
 
 const Wrapper = styled.section`
-position: fixed;
+// position: fixed;
+overflow-x: hidden;
   .container {
     display: flex;
     flex-direction: column;
     background-color: #21c2ba;
-    width: 100vw;
+    width: 100%;
     align-items: center;
     max-width: 100%;
     box-sizing: border-box;
+
   }
 
   .header {

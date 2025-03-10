@@ -189,11 +189,25 @@ const Form_AC = ({closeForm, loadAC, closeFormOnly, setShowSuccess, setShowFaile
             onChange={(e) => setAcName(e.target.value)}
           />
           <input
-            type="number"
+            type="text" // Change to "text" to prevent scientific notation issues
             placeholder="Enter Maximum Marks"
             value={maxMarks}
-            onChange={(e) => setMaxMarks(e.target.value)}
+            onChange={(e) => {
+              let value = e.target.value;
+              value = value.replace(/\D/g, "");
+
+              if (value.startsWith("0")) {
+                value = value.replace(/^0+/, "");
+              }
+
+              setMaxMarks(value);
+            }}
+            onBlur={() => {
+              if (!maxMarks) setMaxMarks("");
+            }}
           />
+
+
           <ul className="lo-list">
             {loading ? (
               <li>

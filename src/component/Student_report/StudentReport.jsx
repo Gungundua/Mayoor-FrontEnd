@@ -7,12 +7,28 @@ import LoScores from '../loscore/loScores';
 import RoScores from '../roscore/roScores';
 import Wrapper from './StudentReport';
 import axios from "axios";
-
+//import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
+//import { BsJustify } from "react-icons/bs";
+//import profilePic from '../assets/Group 463.png';
+// Registering chart components
+//ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+//import { Bar } from "react-chartjs-2";
 const Student_report = ({ student, onBack   }) => {
   const [activeComponent, setActiveComponent] = useState(null);
   const [avgScores, setAvgScores] = useState({ avg_ac: 0, avg_lo: 0, avg_ro: 0 });
   const [scores, setScores] = useState({ ac_scores: [], lo_scores: [], ro_scores: [] });
- 
+  
+  // const chartData = {
+  //   labels: ["Science", "Computer Science", "Social Studies", "II Language", "GP"],
+  //   datasets: [
+  //     {
+  //       label: "Marks",
+  //       data: [70, 95, 45, 60, 80],
+  //       backgroundColor: ["#3498db", "#2ecc71", "#f1c40f", "#9b59b6", "#e74c3c"],
+  //       borderRadius: 5,
+  //     },
+  //   ],
+  // };
    const [userData, setUserData] = useState(null);
       useEffect(() => {
         const userData = sessionStorage.getItem("userData");
@@ -113,6 +129,7 @@ useEffect(() => {
     </h2>
       </div>
       </header>
+      
       <div className="main-container">
         {activeComponent === null ? (
           <>
@@ -133,13 +150,15 @@ useEffect(() => {
             <div className="percentage-container">
               {percentages.map((item, index) => (
                 <div key={index} className="percentage" onClick={() => handleComponentClick(item.component)}>
-                  <CircularProgressbar value={item.value} text={`${item.value}%`} styles={buildStyles({
-                    textSize: "14px", pathColor: "#16a085", textColor: "#333", trailColor: "#d6d6d6", strokeLinecap: "round"
+                  <CircularProgressbar value={item.value} text={`${item.value.toFixed(1)}%`} styles={buildStyles({
+                    textSize: "14px", pathColor: "#16a085", textColor: "#333", trailColor: "#d6d6d6", strokeLinecap: "rounded"
                   })} />
                   <p>{item.label}</p>
                 </div>
               ))}
             </div>
+
+            
           </>
         ) : (
           <div className="score-container">
