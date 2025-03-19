@@ -35,7 +35,7 @@ const StudentList = ({student , scores}) => {
     </div>
     <div className="ProfileRow">
       <span className="Label">Subject:</span>
-      <span className="Value">{student.subject|| userData?.subject || "N/A"}</span>
+      <span className="Value">{userData?.subjectName || userData?.subject || "N/A"}</span>
     </div>
   </div>
 </div>

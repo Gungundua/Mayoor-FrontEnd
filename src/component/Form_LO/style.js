@@ -79,7 +79,7 @@ const Wrapper = styled.section`
   }
 
   .closebtn,
-  .submitbtn {
+  .savebtn {
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
@@ -94,7 +94,7 @@ const Wrapper = styled.section`
     color: black;
   }
 
-  .submitbtn {
+  .savebtn {
     background: #21c2ba;
   }
 `;

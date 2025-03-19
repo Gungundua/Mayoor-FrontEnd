@@ -221,7 +221,7 @@ const Form_LO = ({ closeForm, loadLO, closeFormOnly, setShowSuccess, setShowFail
             }}
             className="closebtn"
           />
-<button onClick={handleSubmit} disabled={isSubmitting}>
+<button onClick={handleSubmit} disabled={isSubmitting} className="savebtn">
   {isSubmitting ? "Submitting..." : "Submit"}
 </button>        </div>
       </div>

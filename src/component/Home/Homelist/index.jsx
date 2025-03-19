@@ -21,18 +21,52 @@ const HomeList = ({ user, setIndex, msg }) => {
     sessionStorage.setItem(key, value);
     setter(value);
   };
-  const handleClick = () => {
-    setIndex(2)
-    const updatedUserdata = {
-      year: parseInt(selectedYear, 10),
-      class: parseInt(selectedClass, 10),
-      section: parseInt(selectedSection, 10),
-      quarter: parseInt(selectedQuarter, 10),
-      subject: parseInt(selectedSubject, 10),
+
+  const getClassName = (classNum) => {
+    const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'];
+    return romanNumerals[classNum - 1] || classNum;
+  };
+  
+  const getSectionName = (sectionNum) => {
+    const sectionNames = { '1': 'Orchid', '2': 'Tulip', '3': 'Daffodil' };
+    return sectionNames[sectionNum] || sectionNum;
+  };
+
+  const getQuarterName = (quarterNum) => {
+    const quarterNames = {
+      '1': 'Q I', '2': 'Q II', '3': 'T I', 
+      '4': 'Q III', '5': 'Q IV', '6': 'T II'
     };
-    sessionStorage.setItem("userData", JSON.stringify(updatedUserdata));
-    setUserData(updatedUserdata);
-  }
+    return quarterNames[quarterNum] || quarterNum;
+  };
+
+  const getSubjectName = (subjectNum) => {
+    const subjectNames = {
+      '1': 'English', '2': 'Hindi', '3': 'Mathematics', '4': 'Science',
+      '5': 'Computer Sc.', '6': 'Social Studies', '7': 'III Language',
+      '8': 'GP Values', '9': 'Music', '10': 'Dance/Dramatics',
+      '11': 'Art', '12': 'Sports', '13': 'Discipline', '14': 'Attendance'
+    };
+    return subjectNames[subjectNum] || subjectNum;
+  };
+
+  const handleClick = () => {
+  setIndex(2);
+  const updatedUserdata = {
+    year: parseInt(selectedYear, 10),
+    class: parseInt(selectedClass, 10),
+    section: parseInt(selectedSection, 10),
+    quarter: parseInt(selectedQuarter, 10),
+    subject: parseInt(selectedSubject, 10),
+    getclassName: getClassName(selectedClass),  
+    sectionName: getSectionName(selectedSection),
+    quarterName: getQuarterName(selectedQuarter), 
+    subjectName: getSubjectName(selectedSubject)
+  };  
+
+  sessionStorage.setItem("userData", JSON.stringify(updatedUserdata));
+  setUserData(updatedUserdata);
+};
   const toggle = e => {
     e.target.nextSibling.style.display = e.target.nextSibling.style.display === 'flex' ? 'none' : 'flex'
   }

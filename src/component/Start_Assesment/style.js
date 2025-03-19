@@ -96,7 +96,18 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 20px;
+    margin-top: 10px;
+  }
+    .student-avatar {
+    width: 50px;
+    height: 50px;
+    background-color: #20B2AA;
+    color: white;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
   }
   .ac-box {
     width: 85%;

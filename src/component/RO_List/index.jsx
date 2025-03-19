@@ -5,20 +5,23 @@ import List from '../images/list.png';
 import axios from 'axios';
 import noData from "../assets/noData.png";
 import Menu from '../MenuBar';
+
 const ROlist = ({ loItems, setLoItems, setIndex, handleLoItems, acItems }) => {
   const [activeIndex, setActiveIndex] = useState(null);
   const [roList, setRoList] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredRoList, setFilteredRoList] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [heldRO, setHeldRO] = useState(null); // :fire: Track which RO is being held
+  const [heldRO, setHeldRO] = useState(null); 
   const timeoutRef = useRef(null);
+
   useEffect(() => {
     const userData = sessionStorage.getItem("userData");
     if (userData) {
       loadRO(JSON.parse(userData));
     }
   }, []);
+
   const loadRO = async (userdata) => {
     setLoading(true);
     const headers = {
@@ -41,6 +44,7 @@ const ROlist = ({ loItems, setLoItems, setIndex, handleLoItems, acItems }) => {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     if (!searchQuery) {
       setFilteredRoList(roList);
@@ -51,17 +55,29 @@ const ROlist = ({ loItems, setLoItems, setIndex, handleLoItems, acItems }) => {
       setFilteredRoList(filteredData);
     }
   }, [searchQuery, roList]);
+
+  // ✅ Toggle only when clicking the same item
+  // const handleToggle = (index) => {
+  //   setActiveIndex((prevIndex) => (prevIndex === index ? null : index));
+  // };
+
+  const toggleDropdown = (index) => {
+    setActiveIndex(activeIndex === index ? null : index);
+  };
+
   // :fire: Touch and Hold Logic
   const handleTouchStart = (ro) => {
     timeoutRef.current = setTimeout(() => {
-      setHeldRO(ro); // Store the RO being held
+      setHeldRO(ro);
     }, 800); // 800ms delay for touch hold
   };
+
   const handleTouchEnd = () => {
     clearTimeout(timeoutRef.current);
     timeoutRef.current = null;
-    setHeldRO(null); // Remove LO display
+    setHeldRO(null);
   };
+
   return (
     <Wrapper>
       <div className="search-container">
@@ -74,19 +90,21 @@ const ROlist = ({ loItems, setLoItems, setIndex, handleLoItems, acItems }) => {
           className="search-bar"
         />
       </div>
+
       <ul className="ro-list">
         {loading ? (
           <li className="loading-message">Loading...</li>
         ) : filteredRoList.length > 0 ? (
-          filteredRoList.map((item) => (
+          filteredRoList.map((item, index) => (
             <li
               key={item.ro_id}
-              className="ro-list-item"
+              className={`ro-list-item `} // Added class for styling
+              // onClick={() => handleToggle(index)}
               onTouchStart={() => handleTouchStart(item)}
               onTouchEnd={handleTouchEnd}
               onContextMenu={(e) => e.preventDefault()} // Prevent long-press menu
             >
-              <div className="ro-header">
+              <div className="ro-header" onClick={() => toggleDropdown(index)}>
                 <div className="list-icon-containers">
                   <img src={List} alt="" className="list-icons" />
                 </div>
@@ -97,16 +115,30 @@ const ROlist = ({ loItems, setLoItems, setIndex, handleLoItems, acItems }) => {
                   {item.learning_outcomes ? item.learning_outcomes.length : 0}
                 </div>
               </div>
-              {/* :fire: Show LO names when held */}
+
+              {/* Show LOMapping only for the clicked item */}
+              {activeIndex === index && (
+                <div className="lomapping-container">
+                  <LOMapping 
+                    roData={[item]} 
+                    loItems={loItems} 
+                    setLoItems={setLoItems} 
+                    handleLoItems={handleLoItems} 
+                    acItems={acItems} 
+                  />
+                </div>
+              )}
+
+              {/* Show LO names on touch hold */}
               {heldRO && heldRO.ro_id === item.ro_id && (
                 <div className="held-popup">
                   {heldRO.learning_outcomes.length > 0 ? (
-                      heldRO.learning_outcomes.map((lo) => (
-                        <div key={lo.lo_id} className='mapLoItem'>{lo.lo_name}</div>
-                      ))
-                    ) : (
-                      <div>No Learning Outcome Mapped</div>
-                    )}
+                    heldRO.learning_outcomes.map((lo) => (
+                      <div key={lo.lo_id} className='mapLoItem'>{lo.lo_name}</div>
+                    ))
+                  ) : (
+                    <div>No Learning Outcome Mapped</div>
+                  )}
                 </div>
               )}
             </li>
@@ -120,4 +152,5 @@ const ROlist = ({ loItems, setLoItems, setIndex, handleLoItems, acItems }) => {
     </Wrapper>
   );
 };
+
 export default ROlist;

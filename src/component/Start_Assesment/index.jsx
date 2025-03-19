@@ -1,25 +1,34 @@
 import React, { useState, useEffect, useRef } from "react"
 import Wrapper from "./style"
 import { FaArrowLeft } from "react-icons/fa"
-import Student from "./Student.avif"
 import axios from "axios"
 import Done from "../assets/check.png"
-const Assessment = ({ selectedAssessment, onBack, studentsData }) => {
+const Assessment = ({ selectedAssessment, onBack, studentsData, onMissingMarksChange }) => {
   const [searchQuery, setSearchQuery] = useState("")
   const [userData, setUserData] = useState(null)
   const containerRef = useRef(null)
   const [students, setStudents] = useState(
     studentsData.map((stu) => ({ ...stu, marks: "" }))
   )
+  const [scoresLoaded, setScoresLoaded] = useState(false)
+  const missingMarksRef = useRef(null)
+  // :white_check_mark: Prevent infinite re-render with state guard
   useEffect(() => {
     const userData = sessionStorage.getItem("userData")
     if (userData) {
       const parsedUserData = JSON.parse(userData)
       setUserData(parsedUserData)
-      loadSavedScores(parsedUserData)
+      if (!scoresLoaded) {
+        loadSavedScores(parsedUserData)
+        setScoresLoaded(true)
+      }
     }
   }, [selectedAssessment])
+  // :white_check_mark: API call with loading state
+  const [loading, setLoading] = useState(false)
   const loadSavedScores = async (userData) => {
+    if (loading) return
+    setLoading(true)
     const headers = {
       Authorization: "Bearer YOUR_ACCESS_TOKEN",
       "Content-Type": "application/json",
@@ -35,7 +44,6 @@ const Assessment = ({ selectedAssessment, onBack, studentsData }) => {
         `${process.env.REACT_APP_API_URL}/api/assessment-criteria-score`,
         { headers }
       )
-      console.log("API Response Data:", response.data)
       if (response.data && response.data.length > 0) {
         setStudents((prevStudents) =>
           prevStudents.map((stu) => {
@@ -52,7 +60,8 @@ const Assessment = ({ selectedAssessment, onBack, studentsData }) => {
       }
     } catch (error) {
       console.error("Error fetching saved scores:", error)
-      if (error.response) console.log("API Error Response:", error.response)
+    } finally {
+      setLoading(false)
     }
   }
   const handleSearchChange = (e) => {
@@ -61,19 +70,18 @@ const Assessment = ({ selectedAssessment, onBack, studentsData }) => {
   const handleMarksChange = (e, studentId) => {
     let value = e.target.value
     if (!/^\d+(\.\d{0,1})?$/.test(value) && value !== "") {
-      return;
+      return
     }
     const maxMarks = selectedAssessment?.max_marks || 100
-      if ((parseInt(value) > maxMarks || parseInt(value) < 0)) {
-        alert("Invalid marks")
-        return
-      }
-      setStudents((prevStudents) =>
-        prevStudents.map((stu) => (stu.id === studentId ? { ...stu, marks: value } : stu))
-      )
+    if ((parseInt(value) > maxMarks || parseInt(value) < 0)) {
+      alert("Invalid marks")
+      return
+    }
+    setStudents((prevStudents) =>
+      prevStudents.map((stu) => (stu.id === studentId ? { ...stu, marks: value } : stu))
+    )
   }
   const submitNewScores = async (newScores, headers) => {
-    console.log( selectedAssessment.ac_id,  newScores)
     try {
       await axios.post(
         `${process.env.REACT_APP_API_URL}/api/assessment-criteria-score`,
@@ -89,7 +97,7 @@ const Assessment = ({ selectedAssessment, onBack, studentsData }) => {
   const updateScores = async (updateScores, headers) => {
     try {
       await axios.put(
-        `${process.env.REACT_APP_API_URL}/api/assessment-criteria-score/?ac_id = ${selectedAssessment.ac_id}`,
+        `${process.env.REACT_APP_API_URL}/api/assessment-criteria-score/?ac_id=${selectedAssessment.ac_id}`,
         { scores: updateScores },
         { headers }
       )
@@ -137,6 +145,14 @@ const Assessment = ({ selectedAssessment, onBack, studentsData }) => {
     alert("Marks submitted successfully!")
     loadSavedScores(userData)
   }
+  // :white_check_mark: Prevent redundant re-render using useRef
+  useEffect(() => {
+    const missingCount = students.filter((stu) => !stu.marks || stu.marks === "").length
+    if (missingMarksRef.current !== missingCount) {
+      missingMarksRef.current = missingCount
+      onMissingMarksChange(selectedAssessment.ac_id, missingCount)
+    }
+  }, [students, selectedAssessment, onMissingMarksChange])
   return (
     <Wrapper>
       <div className="profile-section">
@@ -165,8 +181,12 @@ const Assessment = ({ selectedAssessment, onBack, studentsData }) => {
         <div className="student-list" ref={containerRef}>
           {students.map((stu) => (
             <div className="ac-box" key={stu.id}>
-              <div>
-                <img src={Student} alt="Profile" className="profile-image" />
+              <div className="student-avatar">
+                {stu.name
+                  .split(" ")
+                  .slice(0, 2)
+                  .map((word) => word[0].toUpperCase())
+                  .join("")}
               </div>
               <div className="details">
                 <h3 className="studentName">{stu.name}</h3>
@@ -194,6 +214,6 @@ const Assessment = ({ selectedAssessment, onBack, studentsData }) => {
         />
       </div>
     </Wrapper>
-  );
-};
+  )
+}
 export default Assessment

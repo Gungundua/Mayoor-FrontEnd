@@ -279,13 +279,13 @@ const ClassView = ({ setIndex, user }) => {
       <div className="class-container">
         <div className="info-box">
           <div className="info-text">
-            <p><strong>Class:</strong> {userData.class}</p>
+            <p><strong>Class:</strong> {userData.getclassName}</p>
             <p><strong>Year:</strong> {userData.year}</p>
-            <p><strong>Subject:</strong> {userData.subject}</p>
+            <p><strong>Subject:</strong> {userData.subjectName}</p>
           </div>
           <div className="info-text">
-            <p><strong>Section:</strong> {userData.section}</p>
-            <p><strong>Quarter:</strong> {userData.quarter}</p>
+            <p><strong>Section:</strong> {userData.sectionName}</p>
+            <p><strong>Quarter:</strong> {userData.quarterName}</p>
           </div>
         </div>
 

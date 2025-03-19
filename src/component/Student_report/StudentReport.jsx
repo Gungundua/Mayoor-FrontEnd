@@ -140,8 +140,8 @@ useEffect(() => {
               <div className="student-details">
                 <p><strong>Name:{student.name}</strong></p>
                 <p><strong>Roll No:{student.id}</strong> </p>
-                <p><strong>Grade:</strong> {student.class}</p>
-                <p><strong>Section:{student.section}</strong> </p>
+                <p><strong>Grade:</strong> {userData?.getclassName ?? "N/A"}</p>
+                <p><strong>Section:</strong> {userData?.sectionName ?? "N/A"}</p>
               </div>
              
             </div>
