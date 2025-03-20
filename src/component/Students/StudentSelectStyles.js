@@ -1,7 +1,11 @@
 import styled from "styled-components";
 
 const Wrapper = styled.section`
-// position: fixed;
+ width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Prevent overflowing of the container */
+    background-color: #21C3BC;
 overflow-x: hidden;
   .container {
     display: flex;
@@ -11,25 +15,27 @@ overflow-x: hidden;
     align-items: center;
     max-width: 100%;
     box-sizing: border-box;
-
   }
 
-  .header {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    background-color: #21c2ba;
-  }
+  // .header {
+  //   width: 100%;
+  //   display: flex;
+  //   flex-direction: column;
+  //   overflow: hidden;
+  //   background-color: #21c2ba;
+  // }
 
   .search-container {
     display: flex;
-    gap: 7px;
-    align-items: center;
-    position: relative;
-    margin-top: 17px;
-    padding: 10px;
-    width: 100%;
+      gap: 5px;
+      align-items: center;
+      position: relative;
+      // width: 100%;
+      // margin: 15px 0;
+      // padding-left: 12px;
+      margin-top: 17px;
+      margin-left: -10px;
+      padding: 10px
   }
 
   .icon {

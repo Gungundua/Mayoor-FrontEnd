@@ -143,17 +143,20 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
     <Wrapper>
       <div className="search-container">
         <div className="icon">
-          <Menu onReturnClick={handleClick} />
-        </div>
-        <div>
-          <input
-            type="text"
-            placeholder="Search LO..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="search-bar"
+          <Menu
+            onProfileClick={() => alert("Go to Profile")}
+            onSettingsClick={() => alert("Open Settings")}
+            onLogoutClick={() => alert("Logging Out...")}
+            onReturnClick={handleClick}
           />
         </div>
+        <input
+          type="text"
+          placeholder="Search LO..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="search-bar"
+        />
       </div>
       <ul className="lo-list">
         {loading ? (
@@ -177,7 +180,7 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
                     <p className="item-title">{item.lo_name}</p>
                   </div>
                   <div className="mapCounter">{nullPriorityCount}</div> {/* Show count here */}
-                  <div>
+                  <div onClick={() => toggleDropdown(index)}>
                     <MenuDots
                       index={index}
                       activeMenuIndex={activeMenuIndex}

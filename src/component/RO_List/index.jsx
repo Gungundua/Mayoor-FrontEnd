@@ -14,6 +14,7 @@ const ROlist = ({ loItems, setLoItems, setIndex, handleLoItems, acItems }) => {
   const [loading, setLoading] = useState(false);
   const [heldRO, setHeldRO] = useState(null); 
   const timeoutRef = useRef(null);
+  const handleClick = () => setIndex(1)
 
   useEffect(() => {
     const userData = sessionStorage.getItem("userData");
@@ -81,7 +82,14 @@ const ROlist = ({ loItems, setLoItems, setIndex, handleLoItems, acItems }) => {
   return (
     <Wrapper>
       <div className="search-container">
-        <Menu onReturnClick={() => setIndex(1)} />
+        <div className="icon">
+          <Menu
+            onProfileClick={() => alert("Go to Profile")}
+            onSettingsClick={() => alert("Open Settings")}
+            onLogoutClick={() => alert("Logging Out...")}
+            onReturnClick={handleClick}
+          />
+        </div>
         <input
           type="text"
           placeholder="Search RO..."
@@ -90,7 +98,6 @@ const ROlist = ({ loItems, setLoItems, setIndex, handleLoItems, acItems }) => {
           className="search-bar"
         />
       </div>
-
       <ul className="ro-list">
         {loading ? (
           <li className="loading-message">Loading...</li>

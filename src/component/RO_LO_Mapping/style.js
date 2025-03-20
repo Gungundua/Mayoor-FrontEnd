@@ -18,7 +18,7 @@ const Wrapper = styled.section`
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  height: 80vh;
+  // height: 80vh;
   overflow-y: auto; /* Add vertical scroll bar when content exceeds height */
   overflow-x: hidden; /* Prevent horizontal scrolling */
   scrollbar-width: thin; /* For Firefox - thin scrollbar */
@@ -67,15 +67,15 @@ const Wrapper = styled.section`
   transition: background-color 0.3s ease;
 }
 .priority-button.h {
-  background-color: green;
+  background-color: rgb(103, 150, 99);
   color: white;
 }
 .priority-button.m {
-  background-color: yellow;
+  background-color: rgb(240, 240, 78);
   color: black;
 }
 .priority-button.l {
-  background-color: red;
+  background-color: rgb(209, 89, 89);
   color: white;
 }
 /* Unselected state for priority buttons */

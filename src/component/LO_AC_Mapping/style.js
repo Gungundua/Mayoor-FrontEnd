@@ -66,15 +66,15 @@ const Wrapper = styled.section`
     transition: background-color 0.3s ease;
   }
   .priority-button.h {
-    background-color: green;
+    background-color: rgb(103, 150, 99);
     color: white;
   }
   .priority-button.m {
-    background-color: yellow;
+    background-color: rgb(240, 240, 78);
     color: black;
   }
   .priority-button.l {
-    background-color: red;
+    background-color: rgb(209, 89, 89);
     color: white;
   }
   /* Unselected state for priority buttons */

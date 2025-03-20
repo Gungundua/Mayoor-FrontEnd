@@ -6,7 +6,7 @@ import TeacherProfile from "../TeacherProfile/index.jsx";
 import Menu from "../MenuBar/index.jsx";
 import Wrapper from "./StudentSelectStyles.js";
 
-const StudentList = ({ onStudentsData }) => {
+const StudentList = ({ onStudentsData , setIndex}) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [students, setStudents] = useState([]);
   const [filteredStudents, setFilteredStudents] = useState([]);
@@ -26,6 +26,10 @@ const StudentList = ({ onStudentsData }) => {
   const handleBackToList2 = () => {
     setShowTeacherProfile(false);
   };
+  const handleClick = () => {
+    setIndex(1);
+  };
+  
 
   const handleProfileClick = () => alert("Go to Profile");
   const handleSettingsClick = () => alert("Open Settings");
@@ -110,25 +114,23 @@ const StudentList = ({ onStudentsData }) => {
 
   return (
     <Wrapper>
-      <div className="container">
-        <div className="search-container">
-          <div className="icon">
-            <Menu
-              onProfileClick={handleProfileClick}
-              onSettingsClick={handleSettingsClick}
-              onLogoutClick={handleLogoutClick}
-            />
-          </div>
-          <div>
-            <input
-              type="text"
-              placeholder="Search Students..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="search-bar"
-            />
-          </div>
+      <div className="search-container">
+        <div className="icon">
+          <Menu
+            onProfileClick={() => alert("Go to Profile")}
+            onSettingsClick={() => alert("Open Settings")}
+            onLogoutClick={() => alert("Logging Out...")}
+            onReturnClick={handleClick}
+          />
         </div>
+        <input
+          type="text"
+          placeholder="Search Students..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="search-bar"
+        />
+      </div>
         <div className="studentlist">
           {filteredStudents.length > 0 ? (
             filteredStudents.map((student, index) => (
@@ -151,7 +153,6 @@ const StudentList = ({ onStudentsData }) => {
             <div className="no-results">Loading...  <div class="circular"></div></div>
           )}
         </div>
-      </div>
     </Wrapper>
   );
 };

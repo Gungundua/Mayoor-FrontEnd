@@ -12,9 +12,6 @@ const Wrapper = styled.section`
       gap: 5px;
       align-items: center;
       position: relative;
-      // width: 100%;
-      // margin: 15px 0;
-      // padding-left: 12px;
       margin-top: 17px;
       padding: 10px;
             margin-left: -10px;
