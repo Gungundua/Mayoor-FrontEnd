@@ -81,32 +81,32 @@ const AC_List = ({
         "Error fetching assessment criteria:",
         error.response?.data || error.message
       );
-      setAcList([])
-      setFilteredAcList([])
-      setAcItems([])
+      setAcList([]);
+      setFilteredAcList([]);
+      setAcItems([]);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
   useEffect(() => {
-    loadAC()
-  }, [userData])
+    loadAC();
+  }, [userData]);
   useEffect(() => {
     if (showSuccess) {
       const timer = setTimeout(() => {
-        setShowSuccess(false)
-      }, 1000)
-      return () => clearTimeout(timer)
+        setShowSuccess(false);
+      }, 1000);
+      return () => clearTimeout(timer);
     }
-  }, [showSuccess])
+  }, [showSuccess]);
   useEffect(() => {
     if (showFailed) {
       const timer = setTimeout(() => {
-        setShowFailed(false)
-      }, 1000)
-      return () => clearTimeout(timer)
+        setShowFailed(false);
+      }, 1000);
+      return () => clearTimeout(timer);
     }
-  }, [showFailed])
+  }, [showFailed]);
   useEffect(() => {
     if (showDeleted) {
       const timer = setTimeout(() => {
@@ -142,15 +142,6 @@ const AC_List = ({
   const handleBackToList = () => {
     setSelectedAssessment(null);
   };
-  if (selectedAssessment) {
-    return (
-      <Assessment
-        selectedAssessment={selectedAssessment}
-        onBack={handleBackToList}
-        studentsData={studentsData}
-      />
-    );
-  }
   // Function to show the confirmation modal before deletion
   const handleDeleteClick = (acId) => {
     setDeleteAcId(acId);
@@ -180,42 +171,27 @@ const AC_List = ({
       setDeleteAcId(null);
     }
   };
-  // const handleEdit = async (acId, updatedName) => {
-  //   const newName = prompt("Enter new name for Assessment Criteria:", updatedName);
-  //   if (!newName || newName.trim() === "") {
-  //     alert("Name cannot be empty.");
-  //     return;
-  //   }
-  //   setLoading(true);
-  //   try {
-  //     const headers = {
-  //       Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-  //       "Content-Type": "application/json",
-  //       year: userData.year,
-  //       classname: userData.class,
-  //       section: userData.section,
-  //       subject: userData.subject,
-  //       quarter: userData.quarter,
-  //     };
-  //     const requestBody = { name: newName };
-  //     await axios.put(`${process.env.REACT_APP_API_URL}/api/assessment-criteria/${acId}`, requestBody, { headers });
-  //     const updatedAcItems = acItems.map(item =>
-  //       item.id === acId ? { ...item, name: newName } : item
-  //     );
-  //     setAcItems(updatedAcItems);
-  //     setFilteredAcList(updatedAcItems);
-  //     alert("Assessment Criteria updated successfully.");
-  //   } catch (error) {
-  //     console.error("Error updating Assessment Criteria:", error.response?.data || error.message);
-  //     alert("Failed to update Assessment Criteria. Please try again.");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
   const handleEdit = (item) => {
     setEditItem(item);
     setShowForm(true);
   };
+  // The missingMarksChange function to handle missing marks update
+  const onMissingMarksChange = (ac_id, count) => {
+    setMissingMarksCount((prev) => ({
+      ...prev,
+      [ac_id]: count,
+    }));
+  };
+  if (selectedAssessment) {
+    return (
+      <Assessment
+        selectedAssessment={selectedAssessment}
+        onBack={handleBackToList}
+        studentsData={studentsData}
+        onMissingMarksChange={onMissingMarksChange}  // Pass the function here
+      />
+    );
+  }
   return (
     <Wrapper>
       <div className="search-container">
