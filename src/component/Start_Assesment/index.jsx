@@ -3,6 +3,8 @@ import Wrapper from "./style"
 import { FaArrowLeft } from "react-icons/fa"
 import axios from "axios"
 import Done from "../assets/check.png"
+import SuccessfulDone from "../Popup_successful";
+import Failed from "../Popup_Failed/index.jsx";
 const Assessment = ({ selectedAssessment, onBack, studentsData, onMissingMarksChange }) => {
   const [searchQuery, setSearchQuery] = useState("")
   const [userData, setUserData] = useState(null)
@@ -10,9 +12,13 @@ const Assessment = ({ selectedAssessment, onBack, studentsData, onMissingMarksCh
   const [students, setStudents] = useState(
     studentsData.map((stu) => ({ ...stu, marks: "" }))
   )
+   const [assessmentList, setAssessmentList] = useState([]);
+  const [filteredAssessmentList, setFilteredAssessmentList] = useState([]);
+    const [showSuccess, setShowSuccess] = useState(false);
+    const [showFailed, setShowFailed] = useState(false);
   const [scoresLoaded, setScoresLoaded] = useState(false)
   const missingMarksRef = useRef(null)
-  // :white_check_mark: Prevent infinite re-render with state guard
+  // :white_tick: Prevent infinite re-render with state guard
   useEffect(() => {
     const userData = sessionStorage.getItem("userData")
     if (userData) {
@@ -24,7 +30,6 @@ const Assessment = ({ selectedAssessment, onBack, studentsData, onMissingMarksCh
       }
     }
   }, [selectedAssessment])
-  // :white_check_mark: API call with loading state
   const [loading, setLoading] = useState(false)
   const loadSavedScores = async (userData) => {
     if (loading) return
@@ -89,9 +94,11 @@ const Assessment = ({ selectedAssessment, onBack, studentsData, onMissingMarksCh
         { headers }
       )
       console.log("New scores submitted successfully")
+      setShowSuccess(true)
     } catch (error) {
       console.error("Error submitting new scores:", error.response?.data || error.message)
-      alert("Failed to submit new scores. Please try again.")
+      setShowFailed(true)
+      // alert("Failed to submit new scores. Please try again.")
     }
   }
   const updateScores = async (updateScores, headers) => {
@@ -101,10 +108,10 @@ const Assessment = ({ selectedAssessment, onBack, studentsData, onMissingMarksCh
         { scores: updateScores },
         { headers }
       )
-      console.log("Scores updated successfully")
+      setShowSuccess(true)
     } catch (error) {
       console.error("Error updating scores:", error.response?.data || error.message)
-      alert("Failed to update scores. Please try again.")
+      setShowFailed(true)
     }
   }
   const handleSubmit = async () => {
@@ -142,10 +149,8 @@ const Assessment = ({ selectedAssessment, onBack, studentsData, onMissingMarksCh
     })
     if (newScores.length > 0) await submitNewScores(newScores, headers)
     if (updateScoresList.length > 0) await updateScores(updateScoresList, headers)
-    alert("Marks submitted successfully!")
     loadSavedScores(userData)
   }
-  // :white_check_mark: Prevent redundant re-render using useRef
   useEffect(() => {
     const missingCount = students.filter((stu) => !stu.marks || stu.marks === "").length
     if (missingMarksRef.current !== missingCount) {
@@ -153,6 +158,28 @@ const Assessment = ({ selectedAssessment, onBack, studentsData, onMissingMarksCh
       onMissingMarksChange(selectedAssessment.ac_id, missingCount)
     }
   }, [students, selectedAssessment, onMissingMarksChange])
+   useEffect(() => {
+      if (!searchQuery) {
+        setFilteredAssessmentList(assessmentList);
+      } else {
+        const filteredData = assessmentList.filter(item =>
+          item.name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+        setFilteredAssessmentList(filteredData);
+      }
+    }, [searchQuery, assessmentList]);
+    useEffect(() => {
+        if (showSuccess) {
+          const timer = setTimeout(() => setShowSuccess(false), 1000);
+          return () => clearTimeout(timer);
+        }
+      }, [showSuccess]);
+      useEffect(() => {
+        if (showFailed) {
+          const timer = setTimeout(() => setShowFailed(false), 1000);
+          return () => clearTimeout(timer);
+        }
+      }, [showFailed]);
   return (
     <Wrapper>
       <div className="profile-section">
@@ -162,9 +189,9 @@ const Assessment = ({ selectedAssessment, onBack, studentsData, onMissingMarksCh
           </button>
           <input
             type="text"
-            placeholder="Search RO..."
+            placeholder="Search Student..."
             value={searchQuery}
-            onChange={handleSearchChange}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="search-bar"
           />
         </div>
@@ -213,6 +240,8 @@ const Assessment = ({ selectedAssessment, onBack, studentsData, onMissingMarksCh
           onClick={handleSubmit}
         />
       </div>
+        {showSuccess && <div className="success-overlay"><SuccessfulDone /></div>}
+        {showFailed && <div className="success-overlay"><Failed /></div>}
     </Wrapper>
   )
 }

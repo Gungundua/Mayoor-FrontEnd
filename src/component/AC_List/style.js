@@ -153,6 +153,7 @@ const Wrapper = styled.section`
     background-color: #21c3bc;
     opacity: 0.9;
     font-weight: bold;
+    margin-bottom: 10px;
     width: 60px;
     height: 60px;
     -moz-border-radius: 50px;

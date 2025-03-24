@@ -10,8 +10,8 @@ import SuccessfulDone from "../Popup_successful";
 import Failed from "../Popup_Failed/index.jsx";
 import DeletedSuccessfully from "../DeletedSuccessfully/index.jsx";
 import DeleteFailed from "../DeleteFailed/index.jsx";
-import AreYouSure from "../AreYouSure"; // Import confirmation modal
-import { Form } from 'react-router';
+import AreYouSure from "../AreYouSure"; 
+
 const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIndex }) => {
   const [activeIndex, setActiveIndex] = useState(null);
   const [activeMenuIndex, setActiveMenuIndex] = useState(null);
@@ -51,6 +51,7 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
     };
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/learning-outcome`, { headers });
+      setLoItems(response.data);
       setFilteredLoList(response.data);
       console.log(response.data)
     } catch (error) {
@@ -66,10 +67,10 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
   }, [userData]);
   useEffect(() => {
     if (!searchQuery) {
-      setFilteredLoList(loItems);
+      setFilteredLoList(loItems);  // Reset to the full list when search query is empty
     } else {
       const filteredData = loItems.filter((item) =>
-        item.name.toLowerCase().includes(searchQuery.toLowerCase())
+        item?.lo_name?.toLowerCase().includes(searchQuery.toLowerCase())  // Use correct property
       );
       setFilteredLoList(filteredData);
     }
@@ -161,7 +162,7 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
       <ul className="lo-list">
         {loading ? (
           <li>
-            <div className="circular"></div>
+            {/* <div className="circular"></div> */}
             <p className="loading-message">Loading....</p>
           </li>
         ) : filteredLoList.length > 0 ? (

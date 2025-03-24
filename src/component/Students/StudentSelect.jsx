@@ -150,7 +150,7 @@ const StudentList = ({ onStudentsData , setIndex}) => {
               </div>
             ))
           ) : (
-            <div className="no-results">Loading...  <div class="circular"></div></div>
+            <div className="no-results">Loading...</div>
           )}
         </div>
     </Wrapper>

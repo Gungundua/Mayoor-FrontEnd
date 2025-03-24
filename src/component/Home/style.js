@@ -4,15 +4,22 @@ const Wrapper = styled.section`
     height : 100vh;    
     display: flex;
     flex-direction: column;
+    
     .screen{
         flex : 1;
         display: flex;
         flex-direction: column;
         overflow: auto;
     }
+    .b{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
     .bottom{
         display: flex;
-        input{
+        height: 80px;
+        button{
             flex : 1;
             border : none;
             background : #135d5d;
@@ -23,6 +30,7 @@ const Wrapper = styled.section`
             cursor: pointer;
             &.active{
                 background-color: #21c3bc;
+                transform: scale(1.1); 
             }
         }
         .tab-icon{

@@ -128,7 +128,7 @@ const AC_List = ({
       setFilteredAcList(acList);
     } else {
       const filteredData = acList.filter((item) =>
-        item.name.toLowerCase().includes(searchQuery.toLowerCase())
+        (item.ac_name || "").toLowerCase().includes(searchQuery.toLowerCase())
       );
       setFilteredAcList(filteredData);
     }
@@ -214,7 +214,7 @@ const AC_List = ({
       <ul className="ac-list">
         {loading ? (
           <li>
-            <div class="circular"></div>
+            {/* <div class="circular"></div> */}
             <p className="loading-message">Loading....</p>
           </li>
         ) : filteredAcList.length > 0 ? (

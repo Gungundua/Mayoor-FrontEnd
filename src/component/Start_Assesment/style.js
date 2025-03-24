@@ -5,16 +5,15 @@ const Wrapper = styled.div`
   overflow: hidden;
   .search-container {
     display: flex;
-    gap: 60px;
+    gap: 50px;
     align-items: center;
     position: relative;
     background-color: #21C3BC;
-    width: 100%;
+    width: 90%;
     margin: 22px 0;
-    padding-left: 19px;
   }
   .search-bar {
-    width: 65%;
+    width: 90%;
     padding: 10px 40px 10px 15px;
     font-size: 16px;
     border-radius: 25px;
@@ -36,7 +35,7 @@ const Wrapper = styled.div`
   .back-button {
     background-color: transparent;
     border: none;
-    font-size: 20px;
+    font-size: 22px;
     cursor: pointer;
     color: #000000;
     margin-right: 15px;
@@ -130,7 +129,7 @@ const Wrapper = styled.div`
      gap: 2px;
   }
   .marks-input {
-    width: 70%;
+    width: 100px;
     padding: 5px;
     font-size: 13px;
     text-align: center;
@@ -148,13 +147,26 @@ const Wrapper = styled.div`
   text-align: center;
   padding: 10px;
   border: none;
-  height: 30px;
-  width: 30px;
+  height: 35px;
+  width: 35px;
+  margin-bottom: 10px;
   border-radius: 50%;
   cursor: pointer;
   position: fixed;
-  bottom: 85px;
-  left: 80%;
+  bottom: 90px;
+  left: 75%;
+  }
+  .success-overlay {
+    position: fixed; /* Ensures full-page coverage */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Keeps it on top */
   }
 `
-export default Wrapper;
+export default Wrapper

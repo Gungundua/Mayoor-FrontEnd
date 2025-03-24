@@ -87,8 +87,9 @@ overflow-x: hidden;
     margin-top: -1px;
     border-top-left-radius: 30px;
     border-top-right-radius: 30px;
-    position: relative;
+    // position: relative;
     width: 93%;
+    overflow-y: auto;
   }
 
   .student-item {
