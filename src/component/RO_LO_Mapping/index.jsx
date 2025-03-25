@@ -4,7 +4,7 @@ import Form_LO from "../Form_LO/index";
 import axios from "axios";
 import SuccessfulDone from "../Popup_successful"; // Import the success message component
 import Failed from "../Popup_Failed/index.jsx";
-const LOMapping = ({ roId, loItems, roData }) => {
+const LOMapping = ({ loItems, roData }) => {
   const [priorityMapping, setPriorityMapping] = useState({});
   const [showForm, setShowForm] = useState(false);
   const [userData, setUserData] = useState(null);
@@ -12,19 +12,18 @@ const LOMapping = ({ roId, loItems, roData }) => {
   const [showSuccess, setShowSuccess] = useState(false); // :white_tick: New state for success message
   const [showFailed, setShowFailed] = useState(false)
   console.log('roDta : ', roData)
+  console.log(roData[0].ro_id);
   useEffect(() => {
     const userData = sessionStorage.getItem("userData");
     if (userData) {
       setUserData(JSON.parse(userData));
     }
-    if (roData && Array.isArray(roData)) {
+    if (roData) {
       const initialMapping = {};
-      roData
-        .flatMap((ro) => ro.assessment_criterias || []) // Ensure assessment_criterias exists
-        .forEach((lo) => {
-          if (lo && lo.priority !== null) { // Ensure lo is defined before accessing priority
-            initialMapping[lo.lo_id] = lo.priority.toLowerCase();
-          }
+      roData.flatMap((ro) => ro.learning_outcomes).forEach((lo) => {
+        if (lo.priority !== null) {
+          initialMapping[lo.lo_id] = lo.priority.toLowerCase();
+        }
         });
       setPriorityMapping(initialMapping);
     }
@@ -67,7 +66,8 @@ const LOMapping = ({ roId, loItems, roData }) => {
       return;
     }
     console.log("Formatted Data being sent:", JSON.stringify(formattedData, null, 2));
-    console.log(roId)
+
+    const roId = roData[0]?.ro_id; 
     const headers = {
       Authorization: `Bearer ${userData?.token}`,
       "Content-Type": "application/json",
@@ -81,7 +81,10 @@ const LOMapping = ({ roId, loItems, roData }) => {
       const response = await axios.put(
         `${process.env.REACT_APP_API_URL}/api/report-outcome-mapping?ro_id=${roId}`,
         formattedData,
-        { headers }
+        {
+          headers,
+          timeout: 60000, 
+        }
       );
       setShowSuccess(true)
       console.log("Priorities updated:", response.data);

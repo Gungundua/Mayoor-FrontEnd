@@ -102,15 +102,19 @@ const ROlist = ({ loItems, setLoItems, setIndex, handleLoItems, acItems }) => {
         {loading ? (
           <li className="loading-message">Loading...</li>
         ) : filteredRoList.length > 0 ? (
-          filteredRoList.map((item, index) => (
-            <li
-              key={item.ro_id}
-              className={`ro-list-item `} // Added class for styling
-              // onClick={() => handleToggle(index)}
-              onTouchStart={() => handleTouchStart(item)}
-              onTouchEnd={handleTouchEnd}
-              onContextMenu={(e) => e.preventDefault()} // Prevent long-press menu
-            >
+          filteredRoList.map((item, index) => {
+            const nullPriorityCount = item.learning_outcomes
+              ? item.learning_outcomes.filter(lo => lo.priority === null).length
+              : 0;
+            return (
+              <li
+                key={item.ro_id}
+                className={`ro-list-item `} // Added class for styling
+                // onClick={() => handleToggle(index)}
+                onTouchStart={() => handleTouchStart(item)}
+                onTouchEnd={handleTouchEnd}
+                onContextMenu={(e) => e.preventDefault()} // Prevent long-press menu
+              >
               <div className="ro-header" onClick={() => toggleDropdown(index)}>
                 <div className="list-icon-containers">
                   <img src={List} alt="" className="list-icons" />
@@ -119,7 +123,7 @@ const ROlist = ({ loItems, setLoItems, setIndex, handleLoItems, acItems }) => {
                   <p className="item-title">{item.ro_name}</p>
                 </div>
                 <div className='mapCounter'>
-                  {item.learning_outcomes ? item.learning_outcomes.length : 0}
+                  {nullPriorityCount}
                 </div>
               </div>
 
@@ -149,7 +153,8 @@ const ROlist = ({ loItems, setLoItems, setIndex, handleLoItems, acItems }) => {
                 </div>
               )}
             </li>
-          ))
+            )
+          })
         ) : (
           <li className="no-results">
             <img className='no-results' src={noData} alt="No Data" />
