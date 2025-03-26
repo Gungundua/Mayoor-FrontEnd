@@ -110,6 +110,12 @@ useEffect(() => {
     }
   };
 
+  const getPercentageClass = (percentage) => {
+    if (percentage < 35) return "#ff4d4d"; // Red
+    if (percentage >= 35 && percentage <= 65) return "#ffc107"; // Yellow
+    return "#4caf50"; // Green
+  };
+  
   return (
     <Wrapper>
       <header>
@@ -138,15 +144,14 @@ useEffect(() => {
               <span className="initials">{student.name.split(' ')[0][0] + (student.name.split(' ')[1] ? student.name.split(' ')[1][0].toUpperCase() : "")}</span>
               </div>
               <div className="student-details">
-                <p><strong>Name:{student.name}</strong></p>
-                <p><strong>Roll No:{student.id}</strong> </p>
-                <p><strong>Grade:</strong> {userData?.getclassName ?? "N/A"}</p>
-                <p><strong>Section:</strong> {userData?.sectionName ?? "N/A"}</p>
+                <p><strong>Name:{student.name|| userData?.name || "N/A"}</strong></p>
+                <p><strong>Roll No:{student.id|| userData?.id || "N/A"}</strong> </p>
+                <p><strong>Grade:</strong> {userData?.getclassName || userData?.class || "N/A"}</p>
+                <p><strong>Section:{userData?.sectionName|| userData?.section || "N/A"}</strong> </p>
               </div>
-             
             </div>
 
-            <h3 className="average-title" >Average Percentage</h3>
+            <h2 className="average-title" >Average Percentage</h2>
             <div className="percentage-container">
               {percentages.map((item, index) => (
                 <div key={index} className="percentage" onClick={() => handleComponentClick(item.component)}>

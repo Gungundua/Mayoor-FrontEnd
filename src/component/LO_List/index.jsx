@@ -28,7 +28,9 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
   const [editItem, setEditItem] = useState(null);
   const [showDeleteFailed, setShowDeleteFailed] = useState(false); // New state for delete failure
   const [heldLO, setHeldLO] = useState(null); // :fire: Track which RO is being held
-  const timeoutRef = useRef(null);
+  const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
+  const holdTimeoutRef = useRef(null);
+  // const timeoutRef = useRef(null);
   const handleClick = () => setIndex(1);
   const toggleDropdown = (index) => setActiveIndex((prevIndex) => (prevIndex === index ? null : index));
   const [userData, setUserData] = useState(null);
@@ -130,15 +132,37 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
     setEditItem(item);
     setShowForm(true);
   };
-  const handleTouchStart = (lo) => {
-    timeoutRef.current = setTimeout(() => {
-      setHeldLO(lo); // Store the RO being held
-    }, 800); // 800ms delay for touch hold
+  const handleTouchStart = (lo, event) => {
+    if (!event || !event.currentTarget) return;  // Add safeguard against undefined event
+    const targetElement = event.currentTarget.getBoundingClientRect();
+  
+    holdTimeoutRef.current = setTimeout(() => {
+      setHeldLO(lo);
+  
+      const offsetX = 20;
+      const offsetY = 20;
+  
+      const newPosition = {
+        left: Math.min(targetElement.left + offsetX, window.innerWidth - 200),
+        top: Math.min(targetElement.bottom + offsetY, window.innerHeight - 200)
+      };
+  
+      setPopupPosition(newPosition);
+    }, 800);
   };
   const handleTouchEnd = () => {
-    clearTimeout(timeoutRef.current);
-    timeoutRef.current = null;
-    setHeldLO(null); // Remove LO display
+    if (holdTimeoutRef.current) {
+      clearTimeout(holdTimeoutRef.current);
+      holdTimeoutRef.current = null;
+    }
+    setHeldLO(null);
+  };
+  const handleMouseLeave = () => {
+    if (holdTimeoutRef.current) {
+      clearTimeout(holdTimeoutRef.current);
+      holdTimeoutRef.current = null;
+    }
+    setHeldLO(null);
   };
   return (
     <Wrapper>
@@ -172,7 +196,11 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
               ? item.assessment_criterias.filter(ac => ac.priority === null).length
               : 0;
             return (
-              <li key={item.lo_id} className={`lo-list-item ${activeIndex === index ? 'active' : ''}`} onTouchStart={() => handleTouchStart(item)} onTouchEnd={handleTouchEnd} onContextMenu={(e) => e.preventDefault()}>
+              <li key={item.lo_id} 
+              className={`lo-list-item ${activeIndex === index ? 'active' : ''}`} 
+              onTouchStart={(e) => handleTouchStart(item, e)}  // Pass 'event' here
+              onTouchEnd={handleTouchEnd} 
+              onContextMenu={(e) => e.preventDefault()}>
                 <div className="lo-header" onClick={() => toggleDropdown(index)}>
                   <div className="list-icon-containers">
                     <img src={List} alt="" className="list-icons" />
@@ -192,17 +220,17 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
                   </div>
                 </div>
                 {/* :fire: Show LO names when held */}
-              {heldLO && heldLO.lo_id === item.lo_id && (
-                <div className="held-popup">
-                  {heldLO.assessment_criterias.length > 0 ? (
-                      heldLO.assessment_criterias.map((ac) => (
-                        <div key={ac.ac_id} className='mapLoItem'>{ac.ac_name}</div>
-                      ))
-                    ) : (
-                      <div>No Assessment Criteria Mapped</div>
-                    )}
-                </div>
-              )}
+                {heldLO && (
+        <div className="held-popup" style={{ top: popupPosition.top, left: popupPosition.left }}>
+          {heldLO.assessment_criterias && heldLO.assessment_criterias.length > 0 ? (
+            heldLO.assessment_criterias.map((ac) => (
+              <div key={ac.ac_id} className='mapLoItem'>{ac.ac_name}</div>
+            ))
+          ) : (
+            <div className="no-data">No data available</div>
+          )}
+        </div>
+      )}
                 <div className={`lo-dropdown-content ${activeIndex === index ? 'show' : 'hide'}`}>
                   {activeIndex === index && (
                     <ACMapping acItems={acItems} setAcItems={setAcItems} loId={item.lo_id} acList={acList} setAcList={setAcList} loData={[item]} />

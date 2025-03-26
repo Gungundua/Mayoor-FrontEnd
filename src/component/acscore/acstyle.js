@@ -8,42 +8,7 @@ const Wrapper = styled.div`
   display: flex;  
   justify-content: space-between;  
    min-height: 70vh;  
-  .AppContainer {  
-    background-color:  #21C3BC;  
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);   
-    display: flex;  
-    flex-direction: column;  
-    align-items: stretch;  
-    width: 100vw;   
-    height: 70vh;  
-    margin: 0 auto;  
-  }  
-   
   
-  @media (min-width: 768px) {  
-    .Header {  
-      padding: 15px 20px;  
-      font-size: 1.4rem;  
-    }  
-  }  
-   .acHeader {  
-    background-color: #21C3BC;
-    color: white;
-    text-align: center;
-    padding: 30px;
-    padding-left :0;
-    font-size: 16px;
-    font-weight: bold;
-    top: 0;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index:100;
-    position: relative;
-  }  
-   
-   
   .NavButton {  
     background: none;  
     border: none;  
@@ -68,20 +33,20 @@ const Wrapper = styled.div`
     color: #fff;
     background-color: #135d5d;
     border-radius: 50%;
-    margin-right: 30px;
+    margin-right: 40px;
+    margin-left: 15px;
 }
     .container{
     position:relative;
-    top: 15px;
+    margin-top: 5px;
     background-color:white;
     border-top-left-radius: 30px;  
     border-top-right-radius: 30px;
     height:100vh;
     width:100vw;
+}
 
-    }
   .ContentContainer {  
-    padding: 15px;  
     display: flex;  
     flex-direction: column;  
     gap: 10px;  
@@ -96,49 +61,37 @@ const Wrapper = styled.div`
     }  
   }  
   .ProfileCard {  
-    background-color: #f9f9f9;  
-    padding: 15px;  
-    border-radius: 20px;  
-    display: flex;  
-    align-items: center;  
-    gap: 15px;  
-    flex-wrap: wrap; 
-      border: 1px solid #e0d8cc; 
+    display: flex;
+    height: 12%;
+    align-items: center;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 20px;
+     margin-top: 5px;
+    border: 1px solid #e0d8cc; 
     background: linear-gradient(white, white) padding-box, 
                 linear-gradient(120deg, #f7f3e9, #fffdf5) border-box; /* Softer gradient */
     color: #444;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); 
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   }  
   @media (min-width: 768px) {  
     .ProfileCard {  
       padding: 20px;  
-      border-radius: 12px;  
-      gap: 20px;  
+      border-radius: 12px;   
     }  
   }  
-  // .ProfilePic {  
-  //   width: 60px;  
-  //   height: 60px;  
-  //   border-radius: 50%;  
-  //   object-fit: cover;  
-  // }  
-  // @media (min-width: 768px) {  
-  //   .ProfilePic {  
-  //     width: 80px;  
-  //     height: 80px;  
-  //   }  
-  // }  
+ 
   .ProfileInfo {  
     flex-grow: 1;  
     display: flex;  
     flex-direction: column;  
-    gap: 5px; 
+    gap: 2px; 
+    margin: 3px 0;
      
   }  
   .ProfileRow {  
-    display: flex;  
-    gap: 10px;  
-    font-size: 0.9rem;  
+    display: flex;   
+    font-size: 17px;  
     flex-wrap: wrap;  
   }  
   @media (min-width: 768px) {  
@@ -152,7 +105,6 @@ const Wrapper = styled.div`
   .Value {  
     flex-grow: 1;  
   }  
-  
   
   .TableContainer {  
     overflow-x: auto; 

@@ -83,8 +83,7 @@ overflow:hidden;
   /* Student Info Section */
   .student-info {
     display: flex;
-   height: 12%;
-    
+    height: 12%;
     align-items: center;
     background-color: #fff;
     padding: 10px;
@@ -102,7 +101,7 @@ overflow:hidden;
   /* Student Details */
   .student-details p,
   .student-section p {
-    font-size: 14px;
+    font-size: 17px;
     margin: 3px 0;
   }
 
@@ -121,7 +120,7 @@ overflow:hidden;
   }
 
   .percentage p {
-    font-size: 11px;
+    font-size: 19px;
     margin-top: 5px;
   }
 
@@ -155,7 +154,7 @@ overflow:hidden;
   // }
 
   .average-title{
-  margin: 25px;
+  margin: 35px;
   display: flex;
   justify-content: center; 
   align-items: center;
@@ -181,16 +180,16 @@ overflow:hidden;
   // }
 
 
-  /* Score Components */
-  .score-component {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: white;
-    z-index: 1;
-  }
+  // /* Score Components */
+  // .score-component {
+  //   position: absolute;
+  //   top: 0;
+  //   left: 0;
+  //   width: 100%;
+  //   height: 100%;
+  //   background: white;
+  //   z-index: 1;
+  // }
     
 
   

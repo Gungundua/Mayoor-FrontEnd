@@ -18,6 +18,58 @@ const Assessment = ({ selectedAssessment, onBack, studentsData, onMissingMarksCh
     const [showFailed, setShowFailed] = useState(false);
   const [scoresLoaded, setScoresLoaded] = useState(false)
   const missingMarksRef = useRef(null)
+
+  useEffect(() => {
+    const loadStudents = async () => {
+      if (!userData || students.length > 0) return;
+
+      try {
+        const headers = {
+          Authorization: "Bearer YOUR_ACCESS_TOKEN",
+          "Content-Type": "application/json",
+          year: userData.year,
+          classname: userData.class,
+          section: userData.section,
+          subject: userData.subject,
+        };
+
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/students`,
+          { headers }
+        );
+         
+        const Data = response.data
+        console.log(Data)
+        let re = /(\b[a-z](?!\s))/g;
+        response.data.students.map(
+          (student) =>
+            (student.name = student.name
+              .toLowerCase()
+              .replace(re, (x) => x.toUpperCase()))
+        );
+
+        if (response.data && Array.isArray(response.data.students)) {
+          setStudents(response.data.students);
+          // onStudentsData(response.data.students);
+        } else {
+          console.warn("Expected an array but received:", response.data);
+          setStudents([]);
+        }
+      } catch (error) {
+        console.error(
+          "Error fetching students:",
+          error.response || error.message
+        );
+        setStudents([]);
+      }
+    };
+
+    if (userData && Object.keys(userData).length > 0 && students.length === 0) {
+      loadStudents();
+    }
+  }, [userData]);
+
+
   // :white_tick: Prevent infinite re-render with state guard
   useEffect(() => {
     const userData = sessionStorage.getItem("userData")

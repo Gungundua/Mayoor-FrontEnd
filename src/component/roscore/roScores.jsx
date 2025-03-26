@@ -1,7 +1,5 @@
 import React, { useState , useEffect} from 'react';
 import Wrapper from './rostyle';
-import axios from 'axios';
-
 
 const StudentList = ({student , scores}) => {
  
@@ -17,10 +15,7 @@ const StudentList = ({student , scores}) => {
     console.log(scores);
   return (
     <Wrapper>
-      <div className="AppContainer">
-      <div className="roHeader"> 
-          <span>RO Scores </span>
-      </div>  
+   
         <div className="container">
         <div className="ContentContainer">
           <div className="ProfileCard">
@@ -33,6 +28,10 @@ const StudentList = ({student , scores}) => {
               <div className="ProfileRow">
                 <span className="Label">Roll No.:</span>
                 <span className="Value">{student.id||userData?.id|| "N/A"}</span>
+              </div>
+              <div className="ProfileRow">
+                <span className="Label">Grade:</span>
+                <span className="Value">{userData?.getclassName ||userData?.class|| "N/A"}</span>
               </div>
               <div className="ProfileRow">
                 <span className="Label">Subject:</span>
@@ -61,7 +60,7 @@ const StudentList = ({student , scores}) => {
           </div>
         </div>
       </div>
-    </div>
+   
     </Wrapper>
   );
 };

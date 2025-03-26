@@ -22,8 +22,11 @@ const ROlist = ({ loItems, setLoItems, setIndex, handleLoItems, acItems }) => {
       loadRO(JSON.parse(userData));
     }
   }, []);
+  // console.log(userData)
 
   const loadRO = async (userdata) => {
+    console.log(userdata)
+
     setLoading(true);
     const headers = {
       Authorization: 'Bearer YOUR_ACCESS_TOKEN',
@@ -32,6 +35,7 @@ const ROlist = ({ loItems, setLoItems, setIndex, handleLoItems, acItems }) => {
       classname: userdata.class,
       section: userdata.section,
       subject: userdata.subject,
+      quarter: userdata.quarter
     };
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/report-outcome`, { headers });
