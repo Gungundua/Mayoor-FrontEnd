@@ -1,27 +1,18 @@
+import { useState } from "react"
+import Header from "../Header"
 import Login from "../Login"
-import MappingTree from "../MappingTree"
-// import Home from "../Home"
-import './index.css'
-// import LoadNotification from "./LoadNotification"
-
-
+import Home from "../Home"
 
 
 const App = () => {
 
-    // const [user, setUser] = useState(null)
-  
+    const [user, setUser] = useState()
 
-    return (
-      <>
-        <Login/>
-        {/* <MappingTree/> */}
-        {/* <LoadNotification/> */}
-        {/* {
-         user ? <Home user={user} /> : <Login setUser = {setUser} />
-        } */}
-        </>
-    )
+    return <>
+        {
+            user ? <Home user={user} /> : <Login setUser = {setUser} />
+        }
+    </>
 }
 
 
