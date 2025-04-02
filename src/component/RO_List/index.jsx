@@ -144,16 +144,9 @@ const ROlist = ({ loItems, setLoItems, setIndex, handleLoItems, acItems ,onLogou
                 </div>
               )}
 
-              {/* Show LO names on touch hold */}
               {heldRO && heldRO.ro_id === item.ro_id && (
                 <div className="held-popup">
-                  {heldRO.learning_outcomes.length > 0 ? (
-                    heldRO.learning_outcomes.map((lo) => (
-                      <div key={lo.lo_id} className='mapLoItem'>{lo.lo_name}</div>
-                    ))
-                  ) : (
-                    <div>No Learning Outcome Mapped</div>
-                  )}
+                  <div className='mapLoItem'>{heldRO.ro_name}</div>
                 </div>
               )}
             </li>

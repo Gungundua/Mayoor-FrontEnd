@@ -99,5 +99,26 @@ const Wrapper = styled.section`
   .savebtn {
     background: #21C2BA;
   }
+  .held-popup {
+    position: absolute;
+    background: rgba(151, 150, 150, 0.8);
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    z-index: 100;
+    margin-top: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 300px;
+}
+.mapLoItem{
+  margin: 10px 10px 0 0;
+  padding: 5px;
+  text-align: center;
+  width: 300px; 
+  white-space: normal; /* Allow text to wrap */
+  word-wrap: break-word; /* Ensure long words wrap */
+  overflow-wrap: break-word;
+}
 `;
 export default Wrapper;

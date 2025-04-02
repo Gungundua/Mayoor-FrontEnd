@@ -10,6 +10,9 @@ const Form_AC = ({closeForm, loadAC, closeFormOnly, setShowSuccess, setShowFaile
   const [loading, setLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [addAssess, setAddAssess] = useState(true);
+  const [heldLO, setHeldLO] = useState(null); // :fire: Track which RO is being held
+  const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
+  const holdTimeoutRef = useRef(null);
   const successTimeout = useRef(null);
   useEffect(() => {
     return () => {
@@ -164,6 +167,42 @@ const Form_AC = ({closeForm, loadAC, closeFormOnly, setShowSuccess, setShowFaile
     }
 };
 
+const handleTouchStart = (lo, event) => {
+  console.log('touch start')
+  if (!event || !event.target) return; // Ensure event and target exist
+  holdTimeoutRef.current = setTimeout(() => {
+    setHeldLO(lo);
+
+    const targetElement = event.target.getBoundingClientRect();
+
+    const offsetX = 10;
+    const offsetY = 20;
+
+    const newPosition = {
+      left: Math.min(targetElement.left + offsetX, window.innerWidth - 200),
+      top: Math.min(targetElement.bottom + offsetY, window.innerHeight - 200),
+    };
+
+    setPopupPosition(newPosition);
+  }, 800);
+};
+
+const handleTouchEnd = () => {
+  if (holdTimeoutRef.current) {
+    clearTimeout(holdTimeoutRef.current);
+  }
+  holdTimeoutRef.current = null;
+  setHeldLO(null);
+};
+
+const handleMouseLeave = () => {
+  if (holdTimeoutRef.current) {
+    clearTimeout(holdTimeoutRef.current);
+  }
+  holdTimeoutRef.current = null;
+  setHeldLO(null);
+};
+
   return (
     <Wrapper>
       <div className="form-box">
@@ -216,7 +255,7 @@ const Form_AC = ({closeForm, loadAC, closeFormOnly, setShowSuccess, setShowFaile
               </li>
             ) : filteredLoList.length > 0 ? (
               filteredLoList.map((item) => (
-                <li key={item.lo_id} className="lo-list-item">
+                <li key={item.lo_id} className="lo-list-item" onTouchStart={(e) => handleTouchStart(item, e)} onTouchEnd={handleTouchEnd}>
                   <div className="lo-header">
                   <div className="lo-info" onClick={() => handleCheckboxChange(item.lo_id)}>
                   <input
@@ -228,6 +267,11 @@ const Form_AC = ({closeForm, loadAC, closeFormOnly, setShowSuccess, setShowFaile
                   <p>{item.lo_name}</p>
                   </div>
                   </div>
+                  {heldLO && (
+                  <div className="held-popup" style={{ top: popupPosition.top, left: popupPosition.left }}>
+                    <div className='mapLoItem'>{heldLO.lo_name}</div>
+                  </div>
+                )}
                 </li>
               ))
             ) : (

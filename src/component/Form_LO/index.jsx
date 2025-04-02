@@ -9,6 +9,8 @@ const Form_LO = ({ closeForm, loadLO, closeFormOnly, setShowSuccess, setShowFail
   const [selectedRoIds, setSelectedRoIds] = useState([]);
   const [loName, setLoName] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [heldRO, setHeldRO] = useState(null); 
+  const timeoutRef = useRef(null);
   const successTimeout = useRef(null);
   const isSubmittingRef = useRef(false);
   useEffect(() => {
@@ -172,6 +174,18 @@ const Form_LO = ({ closeForm, loadLO, closeFormOnly, setShowSuccess, setShowFail
         setIsSubmitting(false);
       }
     };
+
+    const handleTouchStart = (ro) => {
+      timeoutRef.current = setTimeout(() => {
+        setHeldRO(ro);
+      }, 800); // 800ms delay for touch hold
+    };
+  
+    const handleTouchEnd = () => {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+      setHeldRO(null);
+    };
     
   return (
     <Wrapper>
@@ -190,7 +204,7 @@ const Form_LO = ({ closeForm, loadLO, closeFormOnly, setShowSuccess, setShowFail
             <li><p className="loading-message">Loading...</p></li>
           ) : filteredRoList.length > 0 ? (
             filteredRoList.map((item) => (
-              <li key={item.ro_id} className="ro-list-item">
+              <li key={item.ro_id} className="ro-list-item" onTouchStart={() => handleTouchStart(item)} onTouchEnd={handleTouchEnd}>
         <div className="ro-header">
           <div className="ro-info" onClick={() => handleCheckboxChange(item.ro_id)}>
             <input
@@ -202,6 +216,11 @@ const Form_LO = ({ closeForm, loadLO, closeFormOnly, setShowSuccess, setShowFail
             <p className="para">{item.ro_name}</p>
           </div>
         </div>
+        {heldRO && heldRO.ro_id === item.ro_id && (
+                <div className="held-popup">
+                  <div className='mapLoItem'>{heldRO.ro_name}</div>
+                </div>
+              )}
       </li>
             ))
           ) : (

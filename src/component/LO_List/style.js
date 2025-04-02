@@ -93,26 +93,26 @@ const Wrapper = styled.section`
   .lo-list::-webkit-scrollbar {
     width: 8px; /* Width of the scrollbar for WebKit browsers */
   }
-    .held-popup {
-  position: absolute;
-  background: rgba(94, 93, 93, 0.8);
-  color: white;
-  padding: 5px;
-  border-radius: 5px;
-  z-index: 100;
-  margin-top: 5px;
-  display: flex;
-  flex-wrap: wrap;
-  max-width: 400px;
+  .held-popup {
+    position: absolute;
+    background: rgba(151, 150, 150, 0.8);
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    z-index: 100;
+    margin-top: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 400px;
 }
 .mapLoItem{
-  border: #fff solid ;
   margin: 10px 10px 0 0;
-  border-radius: 20px;
-  height: 20px;
   padding: 5px;
-  min-width: 50px;
   text-align: center;
+  width: 300px; 
+  white-space: normal; /* Allow text to wrap */
+  word-wrap: break-word; /* Ensure long words wrap */
+  overflow-wrap: break-word;
 }
 
   .lo-list::-webkit-scrollbar-thumb {
@@ -140,6 +140,14 @@ const Wrapper = styled.section`
     flex: 1;
     display: flex;
     flex-direction: row;
+    overflow: hidden; /* Ensures text is clipped */
+  }
+  .lo-info p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+    margin-right: 30px;
   }
   .lo-dropdown-icon {
     font-size: 18px;

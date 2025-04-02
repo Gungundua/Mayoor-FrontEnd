@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Wrapper from "./style";
 import List from "../images/list.png";
 import axios from "axios";
@@ -34,6 +34,9 @@ const AC_List = ({
   const [deleteAcId, setDeleteAcId] = useState(null);
   const [showDeleteFailed, setShowDeleteFailed] = useState(false);
   const [missingMarksCount, setMissingMarksCount] = useState({});
+  const [heldAC, setHeldAC] = useState(null); // :fire: Track which RO is being held
+  const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
+  const holdTimeoutRef = useRef(null);
   const handleClick = () => {
     setIndex(1);
   };
@@ -191,6 +194,40 @@ const AC_List = ({
       />
     );
   }
+
+  const handleTouchStart = (ac, event) => {
+    if (!event || !event.currentTarget) return;  // Add safeguard against undefined event
+    const targetElement = event.currentTarget.getBoundingClientRect();
+  
+    holdTimeoutRef.current = setTimeout(() => {
+      setHeldAC(ac);
+  
+      const offsetX = 20;
+      const offsetY = 20;
+  
+      const newPosition = {
+        left: Math.min(targetElement.left + offsetX, window.innerWidth - 200),
+        top: Math.min(targetElement.bottom + offsetY, window.innerHeight - 200)
+      };
+  
+      setPopupPosition(newPosition);
+    }, 800);
+  };
+  const handleTouchEnd = () => {
+    if (holdTimeoutRef.current) {
+      clearTimeout(holdTimeoutRef.current);
+      holdTimeoutRef.current = null;
+    }
+    setHeldAC(null);
+  };
+  const handleMouseLeave = () => {
+    if (holdTimeoutRef.current) {
+      clearTimeout(holdTimeoutRef.current);
+      holdTimeoutRef.current = null;
+    }
+    setHeldAC(null);
+  };
+
   return (
     <Wrapper>
       <div className="search-container">
@@ -222,6 +259,8 @@ const AC_List = ({
               key={item.ac_id}
               className="ac-list-item"
               onClick={() => handleStartAssessment(item)}
+              onTouchStart={(e) => handleTouchStart(item, e)}  // Pass 'event' here
+              onTouchEnd={handleTouchEnd} 
             >
               <div className="ac-header">
                 <div className="list-icon-containers">
@@ -243,6 +282,11 @@ const AC_List = ({
                   />
                 </div>
               </div>
+              {heldAC && (
+                  <div className="held-popup" style={{ top: popupPosition.top, left: popupPosition.left }}>
+                    <div className='mapLoItem'>{heldAC.ac_name}</div>
+                  </div>
+                )}
             </li>
           ))
         ) : (

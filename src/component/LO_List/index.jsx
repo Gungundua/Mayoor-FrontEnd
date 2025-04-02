@@ -51,13 +51,21 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
       subject: userData.subject,
       quarter: userData.quarter,
     };
+  
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/learning-outcome`, { headers });
-      setLoItems(response.data);
-      setFilteredLoList(response.data);
-      console.log(response.data)
+      
+      if (response.data.length === 0) {
+        setLoItems([]);  // Clear the old data
+        setFilteredLoList([]); // Also clear filtered list
+      } else {
+        setLoItems(response.data);
+        setFilteredLoList(response.data);
+      }
     } catch (error) {
-      console.error('Error fetching report outcomes:', error);
+      console.error('Error fetching learning outcomes:', error);
+      setLoItems([]);  // Clear data in case of error
+      setFilteredLoList([]);
     } finally {
       setLoading(false);
     }
@@ -219,18 +227,11 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
                     />
                   </div>
                 </div>
-                {/* :fire: Show LO names when held */}
                 {heldLO && (
-        <div className="held-popup" style={{ top: popupPosition.top, left: popupPosition.left }}>
-          {heldLO.assessment_criterias && heldLO.assessment_criterias.length > 0 ? (
-            heldLO.assessment_criterias.map((ac) => (
-              <div key={ac.ac_id} className='mapLoItem'>{ac.ac_name}</div>
-            ))
-          ) : (
-            <div className="no-data">No data available</div>
-          )}
-        </div>
-      )}
+                  <div className="held-popup" style={{ top: popupPosition.top, left: popupPosition.left }}>
+                    <div className='mapLoItem'>{heldLO.lo_name}</div>
+                  </div>
+                )}
                 <div className={`lo-dropdown-content ${activeIndex === index ? 'show' : 'hide'}`}>
                   {activeIndex === index && (
                     <ACMapping acItems={acItems} setAcItems={setAcItems} loId={item.lo_id} acList={acList} setAcList={setAcList} loData={[item]} />

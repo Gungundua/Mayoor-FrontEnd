@@ -136,7 +136,17 @@ const Wrapper = styled.section`
 
   .ac-info {
     flex: 1;
-  }
+    display: flex;
+    flex-direction: row;
+    overflow: hidden; /* Ensures text is clipped */
+}
+.ac-info p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+    margin-right: 30px;
+}
 
   .ac-dropdown-icon {
     font-size: 18px;
@@ -277,6 +287,28 @@ const Wrapper = styled.section`
   justify-content: center;
   align-items: center;
   z-index: 1000; /* Keeps it on top */
+}
+
+.held-popup {
+    position: absolute;
+    background: rgba(151, 150, 150, 0.8);
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    z-index: 100;
+    margin-top: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 400px;
+}
+.mapLoItem{
+  margin: 10px 10px 0 0;
+  padding: 5px;
+  text-align: center;
+  width: 300px; 
+  white-space: normal; /* Allow text to wrap */
+  word-wrap: break-word; /* Ensure long words wrap */
+  overflow-wrap: break-word;
 }
 
 `
