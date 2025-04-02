@@ -4,7 +4,7 @@ import Form_AC from "../Form_AC/index";
 import axios from "axios";
 import SuccessfulDone from "../Popup_successful"; // Import the success message component
 import Failed from "../Popup_Failed/index.jsx";
-const ACMapping = ({ loId, acList, loData }) => {
+const ACMapping = ({ loId, acList, loData, onSuccess }) => {
   const [priorityMapping, setPriorityMapping] = useState({});
   const [showForm, setShowForm] = useState(false);
   const [userData, setUserData] = useState(null);
@@ -81,6 +81,7 @@ const ACMapping = ({ loId, acList, loData }) => {
         { headers }
       );
       console.log("Priorities updated:", response.data);
+      onSuccess()
      setShowSuccess(true)
     } catch (error) {
       console.error("Error updating priorities:", error.response?.data || error.message);

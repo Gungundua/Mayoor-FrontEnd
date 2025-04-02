@@ -4,7 +4,7 @@ import Form_LO from "../Form_LO/index";
 import axios from "axios";
 import SuccessfulDone from "../Popup_successful"; // Import the success message component
 import Failed from "../Popup_Failed/index.jsx";
-const LOMapping = ({ loItems, roData }) => {
+const LOMapping = ({ loItems, roData, onSuccess }) => {
   const [priorityMapping, setPriorityMapping] = useState({});
   const [showForm, setShowForm] = useState(false);
   const [userData, setUserData] = useState(null);
@@ -60,12 +60,12 @@ const LOMapping = ({ loItems, roData }) => {
           priority: priority.toLowerCase(),
         })),
     };
+
     if (formattedData.data.length === 0) {
       alert("No priorities selected.");
       setLoading(false);
       return;
     }
-    console.log("Formatted Data being sent:", JSON.stringify(formattedData, null, 2));
 
     const roId = roData[0]?.ro_id; 
     const headers = {
@@ -77,6 +77,7 @@ const LOMapping = ({ loItems, roData }) => {
       subject: userData?.subject,
       quarter: userData?.quarter,
     };
+
     try {
       const response = await axios.put(
         `${process.env.REACT_APP_API_URL}/api/report-outcome-mapping?ro_id=${roId}`,
@@ -86,10 +87,12 @@ const LOMapping = ({ loItems, roData }) => {
           timeout: 60000, 
         }
       );
-      setShowSuccess(true)
+      setShowSuccess(true);
       console.log("Priorities updated:", response.data);
+      onSuccess(); // Call parent function to trigger re-render
+      setShowSuccess(true)
     } catch (error) {
-      setShowFailed(true)
+      setShowFailed(true);
       console.error("Error updating priorities:", error.response?.data || error.message);
     } finally {
       setLoading(false);

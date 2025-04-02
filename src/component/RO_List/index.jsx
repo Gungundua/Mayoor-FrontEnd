@@ -15,13 +15,21 @@ const ROlist = ({ loItems, setLoItems, setIndex, handleLoItems, acItems ,onLogou
   const [heldRO, setHeldRO] = useState(null); 
   const timeoutRef = useRef(null);
   const handleClick = () => setIndex(1)
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const handleSuccess = () => {
+    const userData = sessionStorage.getItem("userData");
+    if (userData) {
+      loadRO(JSON.parse(userData)); // Reload data after a successful update
+    }
+  };
 
   useEffect(() => {
     const userData = sessionStorage.getItem("userData");
     if (userData) {
       loadRO(JSON.parse(userData));
     }
-  }, []);
+  }, [refreshKey])
   // console.log(userData)
 
   const loadRO = async (userdata) => {
@@ -140,6 +148,8 @@ const ROlist = ({ loItems, setLoItems, setIndex, handleLoItems, acItems ,onLogou
                     setLoItems={setLoItems} 
                     handleLoItems={handleLoItems} 
                     acItems={acItems} 
+                    key={refreshKey}
+                    onSuccess={handleSuccess}
                   />
                 </div>
               )}

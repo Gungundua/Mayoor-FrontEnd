@@ -296,7 +296,6 @@ const Wrapper = styled.section`
     padding: 5px;
     border-radius: 5px;
     z-index: 100;
-    margin-top: 5px;
     display: flex;
     flex-wrap: wrap;
     max-width: 400px;

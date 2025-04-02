@@ -30,16 +30,27 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
   const [heldLO, setHeldLO] = useState(null); // :fire: Track which RO is being held
   const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
   const holdTimeoutRef = useRef(null);
+  const [refreshKey, setRefreshKey] = useState(0);
   // const timeoutRef = useRef(null);
   const handleClick = () => setIndex(1);
   const toggleDropdown = (index) => setActiveIndex((prevIndex) => (prevIndex === index ? null : index));
   const [userData, setUserData] = useState(null);
+
+  const handleSuccess = () => {
+    const userData = sessionStorage.getItem("userData");
+    if (userData) {
+      loadLO(JSON.parse(userData)); // Reload data after a successful update
+    }
+  };
+
   useEffect(() => {
     const storedUserData = sessionStorage.getItem("userData");
     if (storedUserData) {
-      setUserData(JSON.parse(storedUserData));
+        setUserData(JSON.parse(storedUserData)); // Set the userData first
+        loadLO(JSON.parse(storedUserData)); // Use the parsed data
     }
-  }, []);
+}, []);
+
   const loadLO = async (userData) => {
     setLoading(true);
     const headers = {
@@ -234,7 +245,7 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
                 )}
                 <div className={`lo-dropdown-content ${activeIndex === index ? 'show' : 'hide'}`}>
                   {activeIndex === index && (
-                    <ACMapping acItems={acItems} setAcItems={setAcItems} loId={item.lo_id} acList={acList} setAcList={setAcList} loData={[item]} />
+                    <ACMapping acItems={acItems} setAcItems={setAcItems} loId={item.lo_id} acList={acList} setAcList={setAcList} loData={[item]} key={refreshKey} onSuccess={handleSuccess}/>
                   )}
                 </div>
               </li>
