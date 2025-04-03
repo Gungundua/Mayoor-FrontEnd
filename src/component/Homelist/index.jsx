@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Wrapper from './style';
 import Ripples from 'react-ripples'
-const HomeList = ({ user, setIndex, msg }) => {
+import { Link } from 'react-router';
+import Home from '../Home';
+const HomeList = ({ user }) => {
   const [userData, setUserData] = useState({});
   useEffect(() => {
     const clearSessionStorageOnRefresh = () => {
@@ -51,7 +53,7 @@ const HomeList = ({ user, setIndex, msg }) => {
   };
 
   const handleClick = () => {
-  setIndex(2);
+  // setIndex(2);
   const updatedUserdata = {
     year: parseInt(selectedYear, 10),
     class: parseInt(selectedClass, 10),
@@ -132,16 +134,22 @@ const HomeList = ({ user, setIndex, msg }) => {
           <Ripples><div tabIndex={0} className={`option ${selectedSubject === '13' ? 'active' : ''}`} onClick={e => setSelectedSubject('13')}>Discipline</div></Ripples>
           <Ripples><div tabIndex={0} className={`option ${selectedSubject === '14' ? 'active' : ''}`} onClick={e => setSelectedSubject('14')}>Attendance</div></Ripples>
         </div>
-        <Ripples className="started"><button
+        <Link to="/home">
+        {/* <Ripples className="started"><button
           className="get-started"
-          onClick={(e) => {
-            e.preventDefault();
-            handleClick();
-          }}
+          // onClick={(e) => {
+          //   e.preventDefault();
+          //   handleClick();
+          // }}
           disabled={!selectedSubject}
+          value={Home}
         >
           Get Started
-        </button></Ripples>
+        </button></Ripples> */}
+        <div className='started'>
+        <input type="button" value="Get started" className='get-started' onClick={handleClick}  />
+        </div>
+        </Link>
       </form>
     </Wrapper>
   );

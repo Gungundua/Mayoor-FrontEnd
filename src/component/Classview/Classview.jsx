@@ -3,10 +3,8 @@ import ReactApexChart from "react-apexcharts";
 import Wrapper from "./ClassViewStyle"; 
 import Menu from "../MenuBar/index";
 import axios from "axios";
-
-
-
-const ClassView = ({ setIndex, user,onLogout }) => {
+import { useNavigate } from "react-router";
+const ClassView = ({ user,onLogout }) => {
   const [selectedChart, setSelectedChart] = useState("ac");
   const [acData, setAcData] = useState([]);
   const [loData, setLoData] = useState([]);
@@ -153,9 +151,6 @@ const [selectedStudents, setSelectedStudents] = useState([]);
     setMetricData(updatedMetricData);
   }, [selectedChart]);
   
-
-
-
   const loadRoScore = async (userData) => {
     const headers = {
       Authorization: 'Bearer YOUR_ACCESS_TOKEN',
@@ -193,8 +188,6 @@ const [selectedStudents, setSelectedStudents] = useState([]);
     }
   }, [userData]);
   
-  
-
 
   const loadAcScore = async (userData) => {
     const headers = {
@@ -305,9 +298,6 @@ const [selectedStudents, setSelectedStudents] = useState([]);
     
   });
   
-  
-  
-
   const getChartSeries = () => {
     const data =
       selectedChart === "ac" ? acData :
@@ -319,50 +309,9 @@ const [selectedStudents, setSelectedStudents] = useState([]);
       data: Array.isArray(data) && data.length > 0 ? data : [0], // Fallback to avoid errors
     }];
   };
-  
-
-  const handleClick = () => {
-    setIndex(1);
-  };
 
   const handleProfileClick = () => alert("Go to Profile");
   const handleSettingsClick = () => alert("Open Settings");
-
-  // useEffect(() => {
-  // const graphContainer = document.querySelector(".chart-wrapper"); // Select chart wrapper
-  // if (!graphContainer) return;
-
-  // let startX = 0;
-  // let startY = 0;
-
-  // const handleTouchStart = (event) => {
-  //   startX = event.touches[0].clientX;
-  //   startY = event.touches[0].clientY;
-  // };
-
-  // const handleTouchMove = (event) => {
-  //   const deltaX = event.touches[0].clientX - startX;
-  //   const deltaY = event.touches[0].clientY - startY;
-
-  //   // If horizontal movement is more than vertical, prevent swipe navigation
-  //   if (Math.abs(deltaX) > Math.abs(deltaY)) {
-  //     event.stopPropagation();
-  //     event.preventDefault();
-  //   }
-  // };
-
-  // graphContainer.addEventListener("touchstart", handleTouchStart);
-  // graphContainer.addEventListener("touchmove", handleTouchMove);
-
-  // return () => {
-  //   graphContainer.removeEventListener("touchstart", handleTouchStart);
-  //   graphContainer.removeEventListener("touchmove", handleTouchMove);
-  // 
-  // };
-
-  
-  
-//}, []);
 
 const loadStudentsAvg = async (userData) => {
   const headers = {
@@ -393,7 +342,11 @@ useEffect(() => {
 
 
 const chartWidth = Math.max(1200, selectedData.length * 0); // Adjust width dynamically
+const navigate = useNavigate();
 
+  const handleReturnClick = () => {
+    navigate("/homelist"); // Navigate to HomeList
+  };
 
   return (
     <Wrapper>
@@ -403,7 +356,7 @@ const chartWidth = Math.max(1200, selectedData.length * 0); // Adjust width dyna
             onProfileClick={handleProfileClick}
             onSettingsClick={handleSettingsClick}
             onLogoutClick={onLogout}
-            onReturnClick={handleClick}
+            onReturnClick={handleReturnClick}
           />
         </div>
         <div className="class-title">

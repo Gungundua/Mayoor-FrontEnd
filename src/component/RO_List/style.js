@@ -1,11 +1,10 @@
 import styled from "styled-components";
-
 const Wrapper = styled.section`
 width: 100%;
     display: flex;
     flex-direction: column;
     overflow: hidden; /* Prevent overflowing of the container */
-    background-color: #21c2ba;
+    background-color: #21C2BA;
     .search-container {
       display: flex;
       gap: 5px;
@@ -28,7 +27,7 @@ width: 100%;
       font-size: 16px;
       border-radius: 25px;
       border: 1px solid #ddd; /* Same border color as other elements */
-  background-color: rgba(255, 255, 255, 0.6);
+      background-color: rgba(255, 255, 255, 0.6);
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow for subtle depth */
       outline: none;
       transition: border-color 0.3s, box-shadow 0.3s; /* Smooth transition */
@@ -42,7 +41,6 @@ width: 100%;
     .search-bar::placeholder {
       color: #aaa
        }
-      
     .no-results{
     list-style: none;
     flex: 1; /* Allow the list to grow and take up available space */
@@ -57,7 +55,6 @@ width: 100%;
     display: flex;
     color : gray;
   }
-
   .no_results{
     color: gray;
     text-align: center;
@@ -68,14 +65,11 @@ width: 100%;
       top: 50%;
       transform: translateY(-50%);
     }
-
     .list-icon {
-      width: 18px;
-      height: 18px;
+      width: 20px;
+      height: 30px;
       opacity: 0.7;
     }
-
-    
     .ro-list-title {
     text-align: center;
     color: white;
@@ -83,10 +77,9 @@ width: 100%;
     padding: 15px;
     height: 50px;
   }
-
   .ro-list {
     list-style: none;
-    flex: 1; /* Allow the list to grow and take up available space */
+    flex: 1;
     overflow-y: auto; /* Enable vertical scrolling */
     scrollbar-width: thin; /* For Firefox: thinner scrollbar */
     scrollbar-color: #ccc transparent;
@@ -96,22 +89,17 @@ width: 100%;
     padding: 10px;
   }
     .loading-message{
-    height: 30px;  
-    width: 30px;
-    display: block; 
-    margin: auto; 
-    color: grey;
+    display: block;
+    width: 100px;
+    margin: 200px auto;
     }
-
   .ro-list::-webkit-scrollbar {
     width: 8px; /* Width of the scrollbar for WebKit browsers */
   }
-
   .ro-list::-webkit-scrollbar-thumb {
     background-color: #ccc; /* Color of the scrollbar thumb */
     border-radius: 4px;
   }
-
   .ro-list-item {
    width: 90%;
     background: white;
@@ -123,16 +111,13 @@ width: 100%;
     overflow: hidden;
     z-index: -1;
   }
-
   .ro-header {
     display: flex;
     align-items: center;
     cursor: pointer;
   }
-
   .ro-info {
     flex: 1;
-    display: flex;
     flex-direction: row;
     overflow: hidden; /* Ensures text is clipped */
 }
@@ -143,18 +128,20 @@ width: 100%;
     flex: 1;
     margin-right: 30px;
 }
-
+.item-title{
+  font-size: larger;
+  padding-bottom: 5px;
+  color:rgb(47, 46, 46);
+}
   .ro-dropdown-icon {
     font-size: 18px;
-    color: #00796b;
+    color: #00796B;
   }
-
   .ro-dropdown-content {
     // padding: 10px;
     background: #eee;
     color:#1a302d;
   }
-  
 .list-icons{
   height: 20px;
 }
@@ -166,7 +153,6 @@ width: 100%;
 /* .item-title{
   font-weight: bold;
 } */
-
 .mapCounter{
   height: 20px;
   width: 20px;
@@ -176,7 +162,6 @@ width: 100%;
   color: #fff;
   padding: 2px;
 }
-
 .circular{
     height: 50px;
     width: 50px;
@@ -188,7 +173,6 @@ width: 100%;
     border-radius: 50%;
     animation: loader 2s linear infinite;
 }
-
 @keyframes loader {
     from{
         transform: rotate(0deg);
@@ -213,14 +197,13 @@ width: 100%;
   margin: 10px 10px 0 0;
   padding: 5px;
   text-align: center;
-  width: 300px; 
+  width: 300px;
   white-space: normal; /* Allow text to wrap */
   word-wrap: break-word; /* Ensure long words wrap */
   overflow-wrap: break-word;
 }
-
-.ro-list-item, 
-.ro-header, 
+.ro-list-item,
+.ro-header,
 .held-popup {
   user-select: none; /* Standard property (Chrome, Edge, Opera, etc.) */
   -webkit-user-select: none; /* Safari & older versions of Chrome */
@@ -228,5 +211,4 @@ width: 100%;
   -ms-user-select: none; /* Internet Explorer/Edge */
 }
 `
-
 export default Wrapper;

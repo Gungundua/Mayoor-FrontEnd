@@ -4,8 +4,7 @@ const Wrapper = styled.section`
     display: flex;
     flex-direction: column;
     overflow: hidden; /* Prevent overflowing of the container */
-    background-color: #21c2ba;
-
+    background-color: #21C2BA;
     .search-container {
       display: flex;
       gap: 5px;
@@ -18,11 +17,9 @@ const Wrapper = styled.section`
       margin-left: -10px;
       padding: 10px
     }
-
     .menu{
     padding-right:17px;
     }
-
     .icon{
       display: flex;
       // gap: 12px;
@@ -30,7 +27,6 @@ const Wrapper = styled.section`
       // padding-right: 15px;
       margin-left: 20px;
     }
-
     .search-bar {
       width: 100%;
       padding: 10px 40px 10px 15px; /* Padding for space for the search icon */
@@ -77,7 +73,6 @@ const Wrapper = styled.section`
       height: 18px;
       opacity: 0.7;
     }
-
   .lo-list {
     list-style: none;
     flex: 1; /* Allow the list to grow and take up available space */
@@ -89,7 +84,6 @@ const Wrapper = styled.section`
     background-color: #fff;
     padding: 10px 10px 50px 10px;
   }
-
   .lo-list::-webkit-scrollbar {
     width: 8px; /* Width of the scrollbar for WebKit browsers */
   }
@@ -109,17 +103,15 @@ const Wrapper = styled.section`
   margin: 10px 10px 0 0;
   padding: 5px;
   text-align: center;
-  width: 300px; 
+  width: 300px;
   white-space: normal; /* Allow text to wrap */
   word-wrap: break-word; /* Ensure long words wrap */
   overflow-wrap: break-word;
 }
-
   .lo-list::-webkit-scrollbar-thumb {
     background-color: #ccc; /* Color of the scrollbar thumb */
     border-radius: 4px;
   }
-
   .lo-list-item {
     width: 90%;
     background: white;
@@ -138,7 +130,6 @@ const Wrapper = styled.section`
   }
   .lo-info {
     flex: 1;
-    display: flex;
     flex-direction: row;
     overflow: hidden; /* Ensures text is clipped */
   }
@@ -149,6 +140,11 @@ const Wrapper = styled.section`
     flex: 1;
     margin-right: 30px;
   }
+  .item-title{
+  font-size: larger;
+  padding-bottom: 5px;
+  color:rgb(47, 46, 46);
+}
   .lo-dropdown-icon {
     font-size: 18px;
     color: #00796B;
@@ -177,7 +173,7 @@ const Wrapper = styled.section`
     color: rgb(26, 24, 24)
     }
   .add{
-    background-color: #21c2ba;
+    background-color: #21C2BA;
     opacity: 0.9;
     font-weight: bold;
     width: 60px;
@@ -213,15 +209,14 @@ const Wrapper = styled.section`
   }
 .list-icons{
   height: 20px;
- // background-color: #21c2ba;
+ // background-color: #21C2BA;
 }
 .list-icon-containers{
- // background-color: #21c2ba;
+ // background-color: #21C2BA;
   margin-right: 10px;
   border-radius: 5px;
   padding: 2px;
 }
-
 .popup-overlay {
   position: fixed;
   top: 0;
@@ -241,7 +236,7 @@ const Wrapper = styled.section`
 //   width: 300px;
 //   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 //   animation: popup 0.3s ease-in-out;
-// } 
+// }
 @keyframes popup {
   from {
     transform: scale(0.8);
@@ -272,7 +267,6 @@ const Wrapper = styled.section`
   margin-right: 5px;
   padding: 2px;
 }
-
 .circular{
     height: 50px;
     width: 50px;
@@ -284,7 +278,6 @@ const Wrapper = styled.section`
     border-radius: 50%;
     animation: loader 2s linear infinite;
 }
-
 @keyframes loader {
     from{
         transform: rotate(0deg);
@@ -293,7 +286,6 @@ const Wrapper = styled.section`
         transform: rotate(360deg);
     }
 }
-
 .success-overlay {
   position: fixed; /* Ensures full-page coverage */
   top: 0;
@@ -306,20 +298,18 @@ const Wrapper = styled.section`
   align-items: center;
   z-index: 1000; /* Keeps it on top */
 }
-
-.lo-list-item, 
-.lo-header, 
+.lo-list-item,
+.lo-header,
 .held-popup {
   user-select: none; /* Standard property (Chrome, Edge, Opera, etc.) */
   -webkit-user-select: none; /* Safari & older versions of Chrome */
   -moz-user-select: none; /* Firefox */
   -ms-user-select: none; /* Internet Explorer/Edge */
 }
+.loading-message{
+    display: block;
+    width: 100px;
+    margin: 200px auto;
+    }
 `
 export default Wrapper;
-
-
-
-
-
-

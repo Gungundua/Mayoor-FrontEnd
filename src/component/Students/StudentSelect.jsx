@@ -4,6 +4,7 @@ import axios from "axios";
 import StudentReport from "../Student_report/StudentReport.jsx";
 import TeacherProfile from "../TeacherProfile/index.jsx";
 import Menu from "../MenuBar/index.jsx";
+import { useNavigate } from "react-router-dom";
 import Wrapper from "./StudentSelectStyles.js";
 const StudentList = ({ onStudentsData, setIndex, onLogout }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -14,6 +15,7 @@ const StudentList = ({ onStudentsData, setIndex, onLogout }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);  // <-- Added loading state
+  const navigate = useNavigate();
   const handleReport = (student) => {
     setShowReport(student);
   };
@@ -23,9 +25,7 @@ const StudentList = ({ onStudentsData, setIndex, onLogout }) => {
   const handleBackToList2 = () => {
     setShowTeacherProfile(false);
   };
-  const handleClick = () => {
-    setIndex(1);
-  };
+ 
   useEffect(() => {
     const userData = sessionStorage.getItem("userData");
     if (userData) {
@@ -105,6 +105,9 @@ const StudentList = ({ onStudentsData, setIndex, onLogout }) => {
   if (showTeacherProfile) {
     return <TeacherProfile onBack={handleBackToList2} />;
   }
+  const handleReturnClick = () => {
+    navigate("/homelist"); // Navigate to HomeList
+  };
   return (
     <Wrapper>
       <div className="search-container">
@@ -113,7 +116,7 @@ const StudentList = ({ onStudentsData, setIndex, onLogout }) => {
             onProfileClick={() => alert("Go to Profile")}
             onSettingsClick={() => alert("Open Settings")}
             onLogoutClick={onLogout}
-            onReturnClick={handleClick}
+            onReturnClick={handleReturnClick}
           />
         </div>
         <input

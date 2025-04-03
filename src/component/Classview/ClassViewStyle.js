@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 const Wrapper = styled.div`
+max-width: 100%;
   .class-header {
     height: 110px;
     align-items: center;

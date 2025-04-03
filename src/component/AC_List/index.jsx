@@ -11,12 +11,14 @@ import Failed from "../Popup_Failed/index.jsx";
 import AreYouSure from "../AreYouSure/index.jsx";
 import DeleteFailed from "../DeleteFailed/index.jsx";
 import DeletedSuccessfully from "../DeletedSuccessfully/index.jsx";
+import ReactLoading from 'react-loading'
+import Skeleton from 'react-loading-skeleton';
+import { useNavigate } from "react-router-dom";
 const AC_List = ({
   acItems,
   setAcItems,
   handleAcItems,
   studentsData,
-  setIndex,
   onLogout
 }) => {
   const [acList, setAcList] = useState([]);
@@ -37,9 +39,7 @@ const AC_List = ({
   const [heldAC, setHeldAC] = useState(null); // :fire: Track which RO is being held
   const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
   const holdTimeoutRef = useRef(null);
-  const handleClick = () => {
-    setIndex(1);
-  };
+  const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   useEffect(() => {
     const userData = sessionStorage.getItem("userData");
@@ -194,22 +194,17 @@ const AC_List = ({
       />
     );
   }
-
   const handleTouchStart = (ac, event) => {
     if (!event || !event.currentTarget) return;  // Add safeguard against undefined event
     const targetElement = event.currentTarget.getBoundingClientRect();
-  
     holdTimeoutRef.current = setTimeout(() => {
       setHeldAC(ac);
-  
       const offsetX = 0;
       const offsetY = 0;
-  
       const newPosition = {
         left: Math.min(targetElement.left + offsetX, window.innerWidth - 200),
         top: Math.min(targetElement.bottom + offsetY, window.innerHeight - 200)
       };
-  
       setPopupPosition(newPosition);
     }, 800);
   };
@@ -227,7 +222,11 @@ const AC_List = ({
     }
     setHeldAC(null);
   };
+  
 
+  const handleReturnClick = () => {
+    navigate("/homelist"); // Navigate to HomeList
+  };
   return (
     <Wrapper>
       <div className="search-container">
@@ -236,7 +235,7 @@ const AC_List = ({
             onProfileClick={() => alert("Go to Profile")}
             onSettingsClick={() => alert("Open Settings")}
             onLogoutClick={onLogout}
-            onReturnClick={handleClick}
+            onReturnClick={handleReturnClick} // Pass the handleClick function here
           />
         </div>
         <input
@@ -249,9 +248,11 @@ const AC_List = ({
       </div>
       <ul className="ac-list">
         {loading ? (
-          <li>
-            {/* <div class="circular"></div> */}
-            <p className="loading-message">Loading....</p>
+          <li className="loading-message">
+            <div>
+              <ReactLoading type="spin" color="#135D5D" height={100} width={100}  />
+              <Skeleton count={3} />
+            </div>
           </li>
         ) : filteredAcList.length > 0 ? (
           filteredAcList.map((item, index) => (
@@ -260,7 +261,7 @@ const AC_List = ({
               className="ac-list-item"
               onClick={() => handleStartAssessment(item)}
               onTouchStart={(e) => handleTouchStart(item, e)}  // Pass 'event' here
-              onTouchEnd={handleTouchEnd} 
+              onTouchEnd={handleTouchEnd}
             >
               <div className="ac-header">
                 <div className="list-icon-containers">

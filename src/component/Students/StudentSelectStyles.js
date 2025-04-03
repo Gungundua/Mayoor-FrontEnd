@@ -3,36 +3,26 @@ const Wrapper = styled.section`
  width: 100%;
     display: flex;
     flex-direction: column;
+    background-color: #21C2BA;
     overflow: hidden; /* Prevent overflowing of the container */
-    background-color: #21c2ba;
-overflow-x: hidden;
   .container {
     display: flex;
     flex-direction: column;
-    background-color: #21C2BA;
+    // background-color: #21C2BA;
     width: 100%;
     align-items: center;
     max-width: 100%;
     box-sizing: border-box;
   }
-  // .header {
-  //   width: 100%;
-  //   display: flex;
-  //   flex-direction: column;
-  //   overflow: hidden;
-  //   background-color: #21C2BA;
-  // }
+
   .search-container {
     display: flex;
       gap: 5px;
       align-items: center;
       position: relative;
-      // width: 100%;
-      // margin: 15px 0;
-      // padding-left: 12px;
       margin-top: 17px;
+      padding: 10px;
       margin-left: -10px;
-      padding: 10px
   }
   .icon {
     display: flex;
@@ -73,11 +63,11 @@ overflow-x: hidden;
   .studentlist {
     background-color: white;
     padding: 15px;
+    flex: 1;
     /* box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); */
-    margin-top: -1px;
+    // margin-top: -1px;
     border-top-left-radius: 30px;
     border-top-right-radius: 30px;
-    // position: relative;
     width: 93%;
     overflow-y: auto;
   }

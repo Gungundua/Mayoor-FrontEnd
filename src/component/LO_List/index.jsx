@@ -10,7 +10,10 @@ import SuccessfulDone from "../Popup_successful";
 import Failed from "../Popup_Failed/index.jsx";
 import DeletedSuccessfully from "../DeletedSuccessfully/index.jsx";
 import DeleteFailed from "../DeleteFailed/index.jsx";
-import AreYouSure from "../AreYouSure"; 
+import AreYouSure from "../AreYouSure";
+import ReactLoading from 'react-loading'
+import Skeleton from 'react-loading-skeleton';
+import { useNavigate } from 'react-router';
 
 const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIndex,onLogout }) => {
   const [activeIndex, setActiveIndex] = useState(null);
@@ -31,18 +34,17 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
   const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
   const holdTimeoutRef = useRef(null);
   const [refreshKey, setRefreshKey] = useState(0);
+  const navigate = useNavigate();
   // const timeoutRef = useRef(null);
   const handleClick = () => setIndex(1);
   const toggleDropdown = (index) => setActiveIndex((prevIndex) => (prevIndex === index ? null : index));
   const [userData, setUserData] = useState(null);
-
   const handleSuccess = () => {
     const userData = sessionStorage.getItem("userData");
     if (userData) {
       loadLO(JSON.parse(userData)); // Reload data after a successful update
     }
   };
-
   useEffect(() => {
     const storedUserData = sessionStorage.getItem("userData");
     if (storedUserData) {
@@ -50,7 +52,6 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
         loadLO(JSON.parse(storedUserData)); // Use the parsed data
     }
 }, []);
-
   const loadLO = async (userData) => {
     setLoading(true);
     const headers = {
@@ -62,10 +63,8 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
       subject: userData.subject,
       quarter: userData.quarter,
     };
-  
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/learning-outcome`, { headers });
-      
       if (response.data.length === 0) {
         setLoItems([]);  // Clear the old data
         setFilteredLoList([]); // Also clear filtered list
@@ -154,18 +153,14 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
   const handleTouchStart = (lo, event) => {
     if (!event || !event.currentTarget) return;  // Add safeguard against undefined event
     const targetElement = event.currentTarget.getBoundingClientRect();
-  
     holdTimeoutRef.current = setTimeout(() => {
       setHeldLO(lo);
-  
       const offsetX = 0;
       const offsetY = 0;
-  
       const newPosition = {
         left: Math.min(targetElement.left + offsetX, window.innerWidth - 200),
         top: Math.min(targetElement.bottom + offsetY, window.innerHeight - 200)
       };
-  
       setPopupPosition(newPosition);
     }, 800);
   };
@@ -183,6 +178,9 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
     }
     setHeldLO(null);
   };
+  const handleReturnClick = () => {
+    navigate("/homelist"); // Navigate to HomeList
+  };
   return (
     <Wrapper>
       <div className="search-container">
@@ -191,7 +189,7 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
             onProfileClick={() => alert("Go to Profile")}
             onSettingsClick={() => alert("Open Settings")}
             onLogoutClick={onLogout}
-            onReturnClick={handleClick}
+            onReturnClick={handleReturnClick} // Pass the return click handler
           />
         </div>
         <input
@@ -204,21 +202,23 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
       </div>
       <ul className="lo-list">
         {loading ? (
-          <li>
-            {/* <div className="circular"></div> */}
-            <p className="loading-message">Loading....</p>
+          <li className="loading-message">
+            <div>
+              <ReactLoading type="spin" color="#135D5D" height={100} width={100}  />
+              <Skeleton count={3} />
+            </div>
           </li>
         ) : filteredLoList.length > 0 ? (
           filteredLoList.map((item, index) => {
-            // Count ACs with null priority
+            const acCount = item.assessment_criterias ? item.assessment_criterias.length :0
             const nullPriorityCount = item.assessment_criterias
               ? item.assessment_criterias.filter(ac => ac.priority === null).length
               : 0;
             return (
-              <li key={item.lo_id} 
-              className={`lo-list-item ${activeIndex === index ? 'active' : ''}`} 
+              <li key={item.lo_id}
+              className={`lo-list-item ${activeIndex === index ? 'active' : ''}`}
               onTouchStart={(e) => handleTouchStart(item, e)}  // Pass 'event' here
-              onTouchEnd={handleTouchEnd} 
+              onTouchEnd={handleTouchEnd}
               onContextMenu={(e) => e.preventDefault()}>
                 <div className="lo-header" onClick={() => toggleDropdown(index)}>
                   <div className="list-icon-containers">
@@ -226,8 +226,9 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
                   </div>
                   <div className="lo-info">
                     <p className="item-title">{item.lo_name}</p>
+                    <p>Pending Priority: {nullPriorityCount}</p>
                   </div>
-                  <div className="mapCounter">{nullPriorityCount}</div> {/* Show count here */}
+                  <div className="mapCounter">{acCount}</div> {/* Show count here */}
                   <div onClick={() => toggleDropdown(index)}>
                     <MenuDots
                       index={index}

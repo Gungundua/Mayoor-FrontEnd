@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import imgMenu from "../assets/menu.png";
 import Wrapper from "./style";
-const Menu = ({ onProfileClick, onSettingsClick, onLogoutClick, onReturnClick }) => {
+const Menu = ({ onLogoutClick, onReturnClick }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   // Close menu when clicking outside
   useEffect(() => {

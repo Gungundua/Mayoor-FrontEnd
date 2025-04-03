@@ -6,6 +6,7 @@ const Wrapper = styled.section`
     flex-direction: column;
     background: #21C2BA;
     font-family: Poppins;
+    height: 100vh;
 
     .options{
         display : flex;
@@ -122,6 +123,7 @@ const Wrapper = styled.section`
         flex : 1;
         max-width: 500px;
         margin: auto;
+        // height: 100vh;
         width: 100%;
         box-sizing: border-box;
         label{
@@ -166,7 +168,7 @@ const Wrapper = styled.section`
         margin-top: 10px;
     }
 
-    .get-started{
+    .get-started {
         background : #21C2BA;
         color : #000;
         font-size: 20px;
@@ -175,9 +177,11 @@ const Wrapper = styled.section`
         border : none;
         margin-top : 30px;
         width: auto;
+        // text-decoration: none;
         font-weight : bold;
         border-bottom : solid 3px #00a098;
     }
+       
 `
 
 export default Wrapper;
