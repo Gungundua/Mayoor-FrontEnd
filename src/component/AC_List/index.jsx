@@ -202,8 +202,8 @@ const AC_List = ({
     holdTimeoutRef.current = setTimeout(() => {
       setHeldAC(ac);
   
-      const offsetX = 20;
-      const offsetY = 20;
+      const offsetX = 0;
+      const offsetY = 0;
   
       const newPosition = {
         left: Math.min(targetElement.left + offsetX, window.innerWidth - 200),

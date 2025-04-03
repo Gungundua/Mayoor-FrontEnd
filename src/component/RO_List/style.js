@@ -218,6 +218,15 @@ width: 100%;
   word-wrap: break-word; /* Ensure long words wrap */
   overflow-wrap: break-word;
 }
+
+.ro-list-item, 
+.ro-header, 
+.held-popup {
+  user-select: none; /* Standard property (Chrome, Edge, Opera, etc.) */
+  -webkit-user-select: none; /* Safari & older versions of Chrome */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+}
 `
 
 export default Wrapper;

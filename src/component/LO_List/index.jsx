@@ -158,8 +158,8 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
     holdTimeoutRef.current = setTimeout(() => {
       setHeldLO(lo);
   
-      const offsetX = 20;
-      const offsetY = 20;
+      const offsetX = 0;
+      const offsetY = 0;
   
       const newPosition = {
         left: Math.min(targetElement.left + offsetX, window.innerWidth - 200),

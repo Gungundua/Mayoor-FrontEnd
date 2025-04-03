@@ -1,6 +1,6 @@
 import styled from "styled-components";
 const Wrapper = styled.section`
-  .form-box {
+   .form-box {
     width: min-content;
     padding: 30px;
     background: white;
@@ -43,6 +43,19 @@ const Wrapper = styled.section`
   .lo-info{
   color: black;
   }
+  .lo-info {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden; /* Ensures text is clipped */
+}
+.lo-info p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+    margin-right: 30px;
+}
   /* :white_check_mark: Fix LO List Display */
   .lo-list {
     list-style: none;

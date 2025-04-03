@@ -9,17 +9,27 @@ const Wrapper = styled.section`
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     text-align: center;
   }
-
   .header{
   font-weight: bold;
-
   }
+  .ro-info {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden; /* Ensures text is clipped */
+}
+.ro-info p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+    margin-right: 30px;
+}
   p {
     margin-bottom: 15px;
     font-size: 16px;
     color: #333;
   }
-
   .input {
     width: 95%;
     padding: 10px;
@@ -29,7 +39,6 @@ const Wrapper = styled.section`
     background: #eee;
     color: black;
   }
-
   .ro-list {
     list-style: none;
     padding: 0;
@@ -42,7 +51,6 @@ const Wrapper = styled.section`
      &::-webkit-scrollbar {
     display: none;
   }
-    
   }
     input[type="checkbox"]{
     height: 20px;
@@ -50,9 +58,7 @@ const Wrapper = styled.section`
     }
     .para{
     color: #262626;
-
     }
-
   .ro-list-item {
     background: white;
     padding: 10px;
@@ -63,21 +69,17 @@ const Wrapper = styled.section`
     cursor: pointer;
     text-align: left;
   }
-
   .ro-info {
     display: flex;
     flex-direction: row;
     gap: 15px;
     color: #262626;
   }
-
-
   .buttons {
     display: flex;
     justify-content: space-between;
     width: 100%;
   }
-
   .closebtn,
   .savebtn {
     padding: 10px 20px;
@@ -88,14 +90,12 @@ const Wrapper = styled.section`
     transition: background 0.3s;
     color: white;
   }
-
   .closebtn {
-    background: #dedede;
+    background: #DEDEDE;
     color: black;
   }
-
   .savebtn {
-    background: #21c2ba;
+    background: #21C2BA;
   }
   .held-popup {
     position: absolute;
