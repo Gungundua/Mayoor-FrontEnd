@@ -81,38 +81,12 @@ const Wrapper = styled.div`
     }  
   }  
  
-  .ProfileInfo {  
-    flex-grow: 1;  
-    display: flex;  
-    flex-direction: column;  
-    gap: 2px; 
-    margin: 3px 0;
-     
-  }  
-  .ProfileRow {  
-    display: flex;   
-    font-size: 17px;  
-    flex-wrap: wrap;  
-  }  
-  @media (min-width: 768px) {  
-    .ProfileRow {  
-      font-size: 1rem;  
-    }  
-  }  
-  .Label {  
-    font-weight: bold;  
-  }  
-  .Value {  
-    // flex-grow: 1;  
-  }  
-
-      /* Student Details */
+   /* Student Details */
   .student-details p,
   .student-section p {
-    font-size: 17px;
+    font-size: 14px;
     margin: 3px 0;
-    text-align : left;
-  }
+  } 
   
   .TableContainer {  
     overflow-x: auto; 
@@ -145,11 +119,33 @@ const Wrapper = styled.div`
       font-size: 1rem;  
     }  
   }  
+     .held-popup {
+  position: absolute;
+  background: rgba(94, 93, 93, 0.8);
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  z-index: 100;
+  margin-top: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 400px;
+ 
+}
   .TableDataCell {  
     border: 1px solid #ddd;  
     padding: 8px;  
     text-align: center;  
-    font-size: 0.9rem;  
+    font-size: 0.9rem; 
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+    user-select: none;  
+    -webkit-user-select: none;  
+    -moz-user-select: none;  
+    -ms-user-select: none; 
+    
   }  
   @media (min-width: 768px) {  
     .TableDataCell {  

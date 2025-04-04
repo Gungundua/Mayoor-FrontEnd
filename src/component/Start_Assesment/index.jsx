@@ -101,6 +101,7 @@ const Assessment = ({ selectedAssessment, onBack, studentsData, onMissingMarksCh
         `${process.env.REACT_APP_API_URL}/api/assessment-criteria-score`,
         { headers }
       )
+      console.log("assessment criteria " + response.data)
       if (response.data && response.data.length > 0) {
         setStudents((prevStudents) =>
           prevStudents.map((stu) => {

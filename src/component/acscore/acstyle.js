@@ -7,7 +7,8 @@ const Wrapper = styled.div`
   background-color:#fff;  
   display: flex;  
   justify-content: space-between;  
-   min-height: 70vh;  
+  min-height: 70vh;  
+   overflow-x:hidden;
   
   .NavButton {  
     background: none;  
@@ -42,8 +43,9 @@ const Wrapper = styled.div`
     background-color:white;
     border-top-left-radius: 30px;  
     border-top-right-radius: 30px;
-    height:100vh;
+    min-height:100vh;
     width:100vw;
+    overflow: hidden;
 }
 
   .ContentContainer {  
@@ -53,7 +55,8 @@ const Wrapper = styled.div`
     overflow-y: auto;  
     flex: 1;  
     width: 100%;  
-    box-sizing: border-box;  
+    box-sizing: border-box; 
+    scrollbar-width: none; 
   }  
   @media (min-width: 768px) {  
     .ContentContainer {  
@@ -67,7 +70,7 @@ const Wrapper = styled.div`
     background-color: #fff;
     padding: 10px;
     border-radius: 20px;
-     margin-top: 5px;
+     margin-top: 1px;
     border: 1px solid #e0d8cc; 
     background: linear-gradient(white, white) padding-box, 
                 linear-gradient(120deg, #f7f3e9, #fffdf5) border-box; /* Softer gradient */
@@ -81,43 +84,18 @@ const Wrapper = styled.div`
     }  
   }  
  
-  .ProfileInfo {  
-    flex-grow: 1;  
-    display: flex;  
-    flex-direction: column;  
-    gap: 2px; 
-    margin: 3px 0;
-     
-  }  
-  .ProfileRow {  
-    display: flex;   
-    font-size: 17px;  
-    flex-wrap: wrap;  
-  }  
-  @media (min-width: 768px) {  
-    .ProfileRow {  
-      font-size: 1rem;  
-    }  
-  }  
-  .Label {  
-    font-weight: bold;  
-  }  
-  .Value {  
-    // flex-grow: 1;  
-  }  
-
-    /* Student Details */
+  /* Student Details */
   .student-details p,
   .student-section p {
-    font-size: 17px;
+    font-size: 14px;
     margin: 3px 0;
-    text-align : left;
   }
   
   .TableContainer {  
     overflow-x: auto; 
-    width:100%; 
-    
+    overflow-y: auto;
+    width:100%;
+    scrollbar-width: none; 
   }  
   .ScoresTable {  
     width: 100%;  
@@ -145,11 +123,32 @@ const Wrapper = styled.div`
       font-size: 1rem;  
     }  
   }  
+      .held-popup {
+  position: absolute;
+  background: rgba(94, 93, 93, 0.8);
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  z-index: 100;
+  margin-top: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 400px;
+ 
+}
   .TableDataCell {  
-    border: 1px solid #ddd;  
+   border: 1px solid #ddd;  
     padding: 8px;  
     text-align: center;  
-    font-size: 0.9rem;  
+    font-size: 0.9rem; 
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+    user-select: none;  
+    -webkit-user-select: none;  
+    -moz-user-select: none;  
+    -ms-user-select: none; 
   }  
   @media (min-width: 768px) {  
     .TableDataCell {  

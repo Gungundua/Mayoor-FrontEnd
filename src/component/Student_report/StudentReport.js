@@ -3,15 +3,16 @@ import styled from "styled-components";
 const Wrapper = styled.div`
   /* Global Styles */
   margin: 0;
-  background-color: #21c2ba;
-  height:90;
-overflow:hidden;
+  background-color: #21C3BC;
+  height:100vh;
+  overflow-x:hidden;
+   
 
 
   /* Header */
   .st-header {
     height:30px;
-    background-color: #21c2ba;
+    background-color: #21C3BC;
     color: white;
     text-align: center;
     padding: 30px;
@@ -24,7 +25,7 @@ overflow:hidden;
     align-items: center;
     justify-content: center;
     z-index:100;
-    position: relative;
+    position: absoltue;
 
   }
 
@@ -37,14 +38,6 @@ overflow:hidden;
    
 }
 
-// .back-icon {
- 
-//   left-aligned:85px;
-//   left: 55px;
-//   cursor: pointer;
-//   font-size: 18px;
-//   color: white;
-// }
 
    .initials {
     display: flex;
@@ -73,7 +66,7 @@ overflow:hidden;
   max-height: 100vh;
  
   max-width: 100%;
-  overflow:hidden; 
+  overflow-y:auto; 
   z-index: 1; 
    
   }
@@ -82,18 +75,22 @@ overflow:hidden;
 
   /* Student Info Section */
   .student-info {
-    display: flex;
-    height: 12%;
-    align-items: center;
-    background-color: #fff;
-    padding: 10px;
-    border-radius: 20px;
-     margin-top: 5px;
-    border: 1px solid #e0d8cc; 
-    background: linear-gradient(white, white) padding-box, 
-                linear-gradient(120deg, #f7f3e9, #fffdf5) border-box; /* Softer gradient */
-    color: #444;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  padding: 8px;
+  border-radius: 20px;
+  margin-top: 5px;
+  border: 1px solid #e0d8cc;
+  background: linear-gradient(white, white) padding-box,
+  linear-gradient(120deg, #f7f3e9, #fffdf5) border-box;
+  color: #444;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  height: auto; 
+  min-height: 75px; 
+  width: 100%;
+  box-sizing: border-box; 
+  overflow-wrap: break-word; 
   }
 
   
@@ -101,7 +98,7 @@ overflow:hidden;
   /* Student Details */
   .student-details p,
   .student-section p {
-    font-size: 17px;
+    font-size: 14px;
     margin: 3px 0;
   }
 
@@ -111,6 +108,7 @@ overflow:hidden;
   flex-wrap: wrap;
   justify-content: center;
   gap: 75px; 
+ 
 }
 
   .percentage {
@@ -124,16 +122,6 @@ overflow:hidden;
     margin-top: 5px;
   }
 
-  // /* Chart Container */
-  // .chart-container {
-  //   width: 100%;
-  //   height: 300px;
-  //   background-color: #fff;
-  //   border-radius: 10px;
-  //   padding: 0px;
-  //   box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
-  //   margin-down: 80px ;
-  // }
 
   // /* Remark Section */
   // .remark-section {
@@ -161,38 +149,6 @@ overflow:hidden;
   color : #444;
   
   }
-
-  // .subject-performance{
-  // margin: 20px;
-  // height:30px;
-  // display: flex;
-  // justify-content: center; 
-  // align-items: center;
-  // color:rgb(0,0,0,0.8)
-  // }
-
-  // .edit-icon {
-  //   position: absolute;
-  //   right: 8px;
-  //   top: 8px;
-  //   cursor: pointer;
-  //   color: gray;
-  // }
-
-
-  // /* Score Components */
-  // .score-component {
-  //   position: absolute;
-  //   top: 0;
-  //   left: 0;
-  //   width: 100%;
-  //   height: 100%;
-  //   background: white;
-  //   z-index: 1;
-  // }
-    
-
-  
 `;
 
 export default Wrapper;
