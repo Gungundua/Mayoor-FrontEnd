@@ -258,7 +258,7 @@ const AC_List = ({
           filteredAcList.map((item, index) => (
             <li
               key={item.ac_id}
-              className="ac-list-item"
+              className={`ac-list-item ${item.learning_outcomes.length === 0 ? "no-lo" : ""}`}
               onClick={() => handleStartAssessment(item)}
               onTouchStart={(e) => handleTouchStart(item, e)}  // Pass 'event' here
               onTouchEnd={handleTouchEnd}

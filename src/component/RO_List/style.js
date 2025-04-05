@@ -59,9 +59,9 @@ width: 100%;
     color: gray;
     text-align: center;
   }
-    .list-icon-container {
+    /* .list-icon-container {
       position: absolute;
-      left: 10px; /* Position the search icon inside the input */
+      left: 10px;
       top: 50%;
       transform: translateY(-50%);
     }
@@ -69,7 +69,7 @@ width: 100%;
       width: 20px;
       height: 30px;
       opacity: 0.7;
-    }
+    } */
     .ro-list-title {
     text-align: center;
     color: white;
@@ -106,7 +106,7 @@ width: 100%;
     margin: 10px auto;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     padding: 15px;
-    border-radius: 30px 30px 0 0;
+    border-radius: 10px;
     color: #6C6C6C;
     overflow: hidden;
     z-index: -1;
@@ -142,9 +142,6 @@ width: 100%;
     background: #eee;
     color:#1a302d;
   }
-.list-icons{
-  height: 20px;
-}
 .list-icon-containers{
   margin-right: 10px;
   border-radius: 5px;

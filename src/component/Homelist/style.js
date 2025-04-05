@@ -181,7 +181,9 @@ const Wrapper = styled.section`
         font-weight : bold;
         border-bottom : solid 3px #00a098;
     }
-       
+    a{
+        text-decoration: none;
+    }
 `
 
 export default Wrapper;

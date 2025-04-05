@@ -6,6 +6,8 @@ import TeacherProfile from "../TeacherProfile/index.jsx";
 import Menu from "../MenuBar/index.jsx";
 import { useNavigate } from "react-router-dom";
 import Wrapper from "./StudentSelectStyles.js";
+import ReactLoading from 'react-loading'
+import Skeleton from 'react-loading-skeleton'
 const StudentList = ({ onStudentsData, setIndex, onLogout }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [students, setStudents] = useState([]);
@@ -25,7 +27,6 @@ const StudentList = ({ onStudentsData, setIndex, onLogout }) => {
   const handleBackToList2 = () => {
     setShowTeacherProfile(false);
   };
- 
   useEffect(() => {
     const userData = sessionStorage.getItem("userData");
     if (userData) {
@@ -129,7 +130,12 @@ const StudentList = ({ onStudentsData, setIndex, onLogout }) => {
       </div>
       <div className="studentlist">
         {loading ? (
-          <div className="loading">Loading...</div>
+          <div className="loading-message">
+            <div>
+              <ReactLoading type="spin" color="#135D5D" height={100} width={100}  />
+              <Skeleton count={3} />
+            </div>
+          </div>
         ) : filteredStudents.length > 0 ? (
           filteredStudents.map((student, index) => (
             <div

@@ -34,6 +34,7 @@ const Wrapper = styled.section`
         font-weight: bold;
         cursor: pointer;
         transition: transform 0.2s ease-in-out; /* Add smooth transition */
+        text-decoration: none;
         
         &.active {
             background-color: #21c2ba;
@@ -49,6 +50,8 @@ const Wrapper = styled.section`
         width: 30px;
 
         }
+
+       
 `;
 
 export default Wrapper;

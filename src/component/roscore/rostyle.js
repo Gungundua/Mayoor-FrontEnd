@@ -132,11 +132,13 @@ const Wrapper = styled.div`
   max-width: 400px;
  
 }
-  .TableDataCell {  
-  border: 1px solid #ddd;  
+.TableDataCell {  
+    border: 1px solid #ddd;  
     padding: 8px;  
     text-align: center;  
     font-size: 0.9rem; 
+    max-width: 150px;
+    width: 150px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -145,7 +147,7 @@ const Wrapper = styled.div`
     -webkit-user-select: none;  
     -moz-user-select: none;  
     -ms-user-select: none; 
-  }  
+    }
   @media (min-width: 768px) {  
     .TableDataCell {  
       padding: 10px;  

@@ -14,7 +14,6 @@ const Wrapper = styled.section`
     max-width: 100%;
     box-sizing: border-box;
   }
-
   .search-container {
     display: flex;
       gap: 5px;
@@ -124,11 +123,10 @@ const Wrapper = styled.section`
         transform: rotate(360deg);
     }
 }
-.loading{
-  text-align: center;
-    color: gray;
-    font-size: 16px;
-    margin-top: 10px;
+.loading-message{
+    display: block;
+    width: 100px;
+    margin: 200px auto;
 }
-`;
+`
 export default Wrapper;

@@ -216,7 +216,7 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
               : 0;
             return (
               <li key={item.lo_id}
-              className={`lo-list-item ${activeIndex === index ? 'active' : ''}`}
+              className={`lo-list-item ${item.report_outcome === 0 ? 'no-ro' : ''} ${activeIndex === index ? 'active' : ''}`}
               onTouchStart={(e) => handleTouchStart(item, e)}  // Pass 'event' here
               onTouchEnd={handleTouchEnd}
               onContextMenu={(e) => e.preventDefault()}>
