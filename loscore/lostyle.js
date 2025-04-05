@@ -137,6 +137,8 @@ const Wrapper = styled.div`
     padding: 8px;  
     text-align: center;  
     font-size: 0.9rem; 
+    max-width: 150px;
+    width: 150px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
