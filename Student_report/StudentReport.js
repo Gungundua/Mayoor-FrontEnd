@@ -2,11 +2,11 @@ import styled from "styled-components";
 
 const Wrapper = styled.div`
   /* Global Styles */
-  margin: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
   background-color: #21C3BC;
-  height:100vh;
-  overflow-x:hidden;
-   
 
 
   /* Header */
@@ -25,7 +25,7 @@ const Wrapper = styled.div`
     align-items: center;
     justify-content: center;
     z-index:100;
-    position: absoltue;
+    position: sticky;
 
   }
 
@@ -62,10 +62,9 @@ const Wrapper = styled.div`
   border-top-right-radius: 30px;
   border-top-left-radius: 30px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  height: calc(100vh - 50px);
-  max-height: 100vh;
- 
-  max-width: 100%;
+   height: calc(100vh - 50px);
+   max-height: 100vh;
+   max-width: 100%;
   overflow-y:auto; 
   z-index: 1; 
    
