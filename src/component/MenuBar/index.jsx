@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import imgMenu from "../assets/menu.png";
 import Wrapper from "./style";
 import { useNavigate } from "react-router";
+import Tutorial from "../Tutorial";
+
 const Menu = ({ onLogoutClick, onReturnClick }) => {
   const [menuOpen, setMenuOpen] = useState(false);
-  // Close menu when clicking outside
   const navigate = useNavigate();
-    
+  const tutorialRef = useRef(); // 👈 Ref to control tutorial
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (!event.target.closest(".menu-container")) {
@@ -19,31 +21,36 @@ const Menu = ({ onLogoutClick, onReturnClick }) => {
 
   const handleDashboard = () => {
     navigate("/home/dashboard");
-}
+  };
+
+  const handleTutorial = () => {
+    tutorialRef.current?.startTutorial(); // 👈 Manual trigger
+  };
+
   return (
     <Wrapper>
-    <div className="menu-container">
-      {/* Hamburger Icon */}
-      <img
-        src={imgMenu}
-        alt="Menu"
-        className="menu-icon"
-        onClick={(e) => {
-          e.stopPropagation(); // Prevent closing when clicking the icon
-          setMenuOpen(!menuOpen);
-        }}
-      />
-      <div className={`sidebar ${menuOpen ? "open" : ""}`}>
-        {/* <button onClick={onProfileClick}>Profile</button> */}
-        <button onClick={onReturnClick}>Menu⤴</button>
-        {/* <button onClick={onSettingsClick}>Settings</button> */}
-        <button onClick={handleDashboard}>Teacher's Dashboard</button>
-        <button onClick={onLogoutClick} className="logout-btn">
-          Log Out
-        </button>
+      <div className="menu-container">
+        <img
+          src={imgMenu}
+          alt="Menu"
+          className="menu-icon"
+          onClick={(e) => {
+            e.stopPropagation();
+            setMenuOpen(!menuOpen);
+          }}
+        />
+        <div className={`sidebar ${menuOpen ? "open" : ""}`}>
+          <button onClick={onReturnClick}>Menu⤴</button>
+          <button onClick={handleDashboard}>Teacher's Dashboard</button>
+          <button onClick={handleTutorial}>Tutorial</button>
+          <button onClick={onLogoutClick} className="logout-btn">
+            Log Out
+          </button>
+        </div>
       </div>
-    </div>
+      <Tutorial ref={tutorialRef} /> {/* 👈 Attach the ref here */}
     </Wrapper>
   );
 };
+
 export default Menu;

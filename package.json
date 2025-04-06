@@ -24,6 +24,7 @@
     "react-scripts": "5.0.1",
     "react-swipeable": "^7.0.2",
     "ripples": "^0.0.1",
+    "shepherd.js": "^14.5.0",
     "styled-components": "^6.1.14"
   },
   "scripts": {
