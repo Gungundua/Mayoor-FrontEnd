@@ -1,11 +1,12 @@
 import styled from "styled-components";
 
 const Wrapper = styled.div`
-  /* Global Styles */
-  margin: 0;
+ /* Global Styles */
+ display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
   background-color: #21C3BC;
-  height:100vh;
-  overflow-x:hidden;
    
 
 
@@ -25,7 +26,7 @@ const Wrapper = styled.div`
     align-items: center;
     justify-content: center;
     z-index:100;
-    position: absoltue;
+    position: sticky;
 
   }
 

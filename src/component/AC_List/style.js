@@ -293,7 +293,7 @@ const Wrapper = styled.section`
     display: block;
     width: 100px;
     margin: 200px auto;
-    }
+}
 
 .no-lo {
   background-color: #ffcccc;  

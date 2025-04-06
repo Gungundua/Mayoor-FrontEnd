@@ -35,6 +35,8 @@ const Wrapper = styled.div`
         border-top-right-radius: 30px;
         border-top-left-radius: 30px;
         flex: 1;
+        overflow-y: auto;
+        padding: 1rem;
     }
         .back-button {
     background-color: transparent;
@@ -100,6 +102,15 @@ const Wrapper = styled.div`
     .ro {
         border-color: red;
     }
+
+    .loading-message{
+    display: block;
+    width: 100px;
+    margin: 200px auto;
+}
+.no-results{
+    text-align: center;
+}
 
 `
 export default Wrapper
