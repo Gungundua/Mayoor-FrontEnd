@@ -25,7 +25,7 @@ const Wrapper = styled.div`
   .checklist-popup {
     position: absolute;
     top: 45px;
-    left: -150px;
+    left: -160px;
     background: #fff;
     border: 1px solid #ccc;
     padding: 10px;

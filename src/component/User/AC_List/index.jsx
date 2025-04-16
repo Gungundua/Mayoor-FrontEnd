@@ -14,8 +14,6 @@ import DeletedSuccessfully from "../DeletedSuccessfully/index.jsx";
 import ReactLoading from 'react-loading'
 import Skeleton from 'react-loading-skeleton';
 import { useNavigate } from "react-router-dom";
-import { HiOutlineDocumentText,HiOutlineDocumentPlus,HiOutlineExclamationTriangle } from "react-icons/hi2";
-
 const AC_List = ({
   acItems,
   setAcItems,
@@ -38,7 +36,7 @@ const AC_List = ({
   const [deleteAcId, setDeleteAcId] = useState(null);
   const [showDeleteFailed, setShowDeleteFailed] = useState(false);
   const [missingMarksCount, setMissingMarksCount] = useState({});
-  const [heldAC, setHeldAC] = useState(null); // :fire: Track which RO is being held
+  const [heldAC, setHeldAC] = useState(null);
   const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
   const holdTimeoutRef = useRef(null);
   const navigate = useNavigate();
@@ -146,6 +144,7 @@ const AC_List = ({
   };
   const handleBackToList = () => {
     setSelectedAssessment(null);
+    loadAC();
   };
   // Function to show the confirmation modal before deletion
   const handleDeleteClick = (acId) => {
@@ -159,7 +158,7 @@ const AC_List = ({
       const response = await axios.delete(
         `${process.env.REACT_APP_API_URL}/api/assessment-criteria?id=${deleteAcId}`
       );
-      const updatedAcItems = filteredAcList.filter((item) => item.ac_id !== deleteAcId);
+      const updatedAcItems = acItems.filter((item) => item.acId !== deleteAcId);
       setAcItems(updatedAcItems);
       setFilteredAcList(updatedAcItems);
       setshowDeleted(true);
@@ -180,24 +179,23 @@ const AC_List = ({
     setShowForm(true);
   };
   // The missingMarksChange function to handle missing marks update
-  const onMissingMarksChange = (ac_id, count) => {
-    setMissingMarksCount((prev) => ({
-      ...prev,
-      [ac_id]: count,
-    }));
-  };
+  // const onMissingMarksChange = (ac_id, count) => {
+  //   setMissingMarksCount((prev) => ({
+  //     ...prev,
+  //     [ac_id]: count,
+  //   }));
+  // };
   if (selectedAssessment) {
     return (
       <Assessment
         selectedAssessment={selectedAssessment}
         onBack={handleBackToList}
         studentsData={studentsData}
-        onMissingMarksChange={onMissingMarksChange}  // Pass the function here
       />
     );
   }
   const handleTouchStart = (ac, event) => {
-    if (!event || !event.currentTarget) return;  // Add safeguard against undefined event
+    if (!event || !event.currentTarget) return;
     const targetElement = event.currentTarget.getBoundingClientRect();
     holdTimeoutRef.current = setTimeout(() => {
       setHeldAC(ac);
@@ -224,10 +222,8 @@ const AC_List = ({
     }
     setHeldAC(null);
   };
-  
-
   const handleReturnClick = () => {
-    navigate("/user/homelist"); // Navigate to HomeList
+    navigate("/homelist"); // Navigate to HomeList
   };
   return (
     <Wrapper>
@@ -242,7 +238,7 @@ const AC_List = ({
         </div>
         <input
           type="text"
-          placeholder="Search Assessment Criterion"
+          placeholder="Search AC..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="search-bar"
@@ -252,31 +248,28 @@ const AC_List = ({
         {loading ? (
           <li className="loading-message">
             <div>
-              <span>Loading...  </span>
-              <ReactLoading type="spin" color="#135D5D" height={40} width={40}  />
+              <ReactLoading type="spin" color="#135D5D" height={100} width={100}  />
               <Skeleton count={3} />
-              
             </div>
           </li>
         ) : filteredAcList.length > 0 ? (
           filteredAcList.map((item, index) => (
             <li
               key={item.ac_id}
-              className="ac-list-item"
+              className={`ac-list-item ${Array.isArray(item.learning_outcomes) && item.learning_outcomes.length === 0 ? "no-lo" : ""}`}
               onClick={() => handleStartAssessment(item)}
               onTouchStart={(e) => handleTouchStart(item, e)}  // Pass 'event' here
               onTouchEnd={handleTouchEnd}
             >
               <div className="ac-header">
                 <div className="list-icon-containers">
-                  {/* <img src={List} alt="" className="list-icons" /> */}
-                  <HiOutlineDocumentText size={30} color="#222"  />
+                  <img src={List} alt="" className="list-icons" />
                 </div>
                 <div className="ac-info">
                   <p className="item-title">{item.ac_name}</p>
                 </div>
-                <div >
-                  {item.learning_outcomes?.length === 0 ? (<HiOutlineExclamationTriangle size={30} color="#ffa590" />) : "" }
+                <div className="mapCounter">
+                {item.remaining_students ?? 0}
                 </div>
                 <div>
                   <MenuDots
@@ -308,7 +301,7 @@ const AC_List = ({
           setShowForm(true);
         }}
       >
-        <span className="plus"><HiOutlineDocumentPlus size={30} color="#000"/></span>
+        <span className="plus">+</span>
       </div>
       {showForm && (
         <div className="popup-overlay">

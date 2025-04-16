@@ -39,8 +39,8 @@ const HomeList = () => {
 
   const getQuarterName = (quarterNum) => {
     const quarterNames = {
-      '1': 'Q I', '2': 'Q II', '3': 'T I',
-      '4': 'Q III', '5': 'Q IV', '6': 'T II'
+      '1': 'FA-I', '2': 'FA-II', '3': 'Term-I',
+      '4': 'FA-III', '5': 'FA-IV', '6': 'Term-II'
     };
     return quarterNames[quarterNum] || quarterNum;
   };
