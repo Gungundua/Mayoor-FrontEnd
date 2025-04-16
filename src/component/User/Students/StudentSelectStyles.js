@@ -67,7 +67,7 @@ const Wrapper = styled.section`
     // margin-top: -1px;
     border-top-left-radius: 30px;
     border-top-right-radius: 30px;
-    width: 93%;
+    width: 100;
     overflow-y: auto;
   }
   .student-item {

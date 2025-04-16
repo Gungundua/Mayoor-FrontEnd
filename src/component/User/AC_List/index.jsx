@@ -242,7 +242,7 @@ const AC_List = ({
         </div>
         <input
           type="text"
-          placeholder="Search AC..."
+          placeholder="Search Assessment Criterion"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="search-bar"

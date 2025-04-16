@@ -195,7 +195,7 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
         </div>
         <input
           type="text"
-          placeholder="Search LO..."
+          placeholder="Search Learning Outcome"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="search-bar"

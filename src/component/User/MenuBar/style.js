@@ -1,6 +1,7 @@
 import styled from "styled-components"
 
 const Wrapper = styled.section`
+ color: #030303;
 .menu {
     position: relative;
 }

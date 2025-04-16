@@ -97,7 +97,7 @@ const ROlist = ({ loItems, setLoItems, setIndex, handleLoItems, acItems, onLogou
         </div>
         <input
           type="text"
-          placeholder="Search RO..."
+          placeholder="Search Reported Outcome"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="search-bar"

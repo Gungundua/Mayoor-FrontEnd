@@ -10,22 +10,16 @@ const Wrapper = styled.section`
       gap: 5px;
       align-items: center;
       position: relative;
-      // width: 100%;
-      // margin: 15px 0;
-      // padding-left: 12px;
       margin-top: 17px;
-      margin-left: -10px;
-      padding: 10px
-    }
-    .menu{
-    padding-right:17px;
+      padding: 10px;
+            margin-left: -10px;
     }
     .icon{
       display: flex;
-      // gap: 12px;
+      gap: 12px;
       align-items: center;
-      // padding-right: 15px;
       margin-left: 20px;
+      // padding-right: 15px;
     }
     .search-bar {
       width: 100%;
