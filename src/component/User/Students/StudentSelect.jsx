@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import Wrapper from "./StudentSelectStyles.js";
 import ReactLoading from 'react-loading'
 import Skeleton from 'react-loading-skeleton'
+import DownloadChecklist from "../Download/index.jsx";
 const StudentList = ({ onStudentsData, setIndex, onLogout }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [students, setStudents] = useState([]);
@@ -128,6 +129,12 @@ const StudentList = ({ onStudentsData, setIndex, onLogout }) => {
           className="search-bar"
         />
       </div>
+      <div className="header-row">
+        <h1 className="page-name">Student List</h1>
+        <div className="download-section">
+          <DownloadChecklist />
+        </div>
+      </div>
       <div className="studentlist">
         {loading ? (
           <div className="loading-message">
@@ -135,7 +142,6 @@ const StudentList = ({ onStudentsData, setIndex, onLogout }) => {
               <span>Loading...  </span>
               <ReactLoading type="spin" color="#135D5D" height={40} width={40}  />
               <Skeleton count={3} />
-              
             </div>
           </div>
         ) : filteredStudents.length > 0 ? (

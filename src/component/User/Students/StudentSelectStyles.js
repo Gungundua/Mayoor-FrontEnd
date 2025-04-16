@@ -67,22 +67,22 @@ const Wrapper = styled.section`
     // margin-top: -1px;
     border-top-left-radius: 30px;
     border-top-right-radius: 30px;
-    width: 100;
+    width: 93%;
     overflow-y: auto;
   }
   .student-item {
-    width: 95%;
-    background-color: white;
-    padding: 10px;
-    margin: 10px auto;
-    border-radius: 20px;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    min-height: 50px;
-    cursor: pointer;
-  }
+  width: 95%;
+  background-color: white;
+  padding: 10px;
+  margin: 10px auto;
+  border-radius: 20px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Added */
+  min-height: 50px;
+  cursor: pointer;
+}
   .student-avatar {
     width: 50px;
     height: 50px;
@@ -95,9 +95,14 @@ const Wrapper = styled.section`
     border-radius: 10px;
   }
   .student-name {
-    font-size: 14px;
-    color: #6C6C6C;
-  }
+  font-size: 14px;
+  color: #6C6C6C;
+  flex: 1; /* Added to push the checklist to the right */
+  margin-left: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
   .no-results {
     text-align: center;
     color: gray;
@@ -139,5 +144,23 @@ const Wrapper = styled.section`
       justify-content: center;
       align-items: center;
     }
+    .header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 20px;
+  position: relative;
+}
+.page-name {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+}
+.download-section {
+  margin-left: auto;
+}
 `
 export default Wrapper;
