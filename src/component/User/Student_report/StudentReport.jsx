@@ -146,7 +146,7 @@ useEffect(() => {
               </div>
               <div className="student-details">
                 <p><strong>Name:</strong> {student.name || userData?.name || "N/A"}</p>
-                <p><strong>Roll No:</strong> {student.id || userData?.id || "N/A"} </p>
+                <p><strong>Roll No:</strong> {student.student || userData?.student || "N/A"} </p>
                 <p><strong>Grade:</strong> {userData?.className || "N/A"}</p>
                 <p><strong>Section:</strong> {userData?.sectionName || "N/A"}</p>
               </div>

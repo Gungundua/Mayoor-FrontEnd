@@ -61,21 +61,65 @@ const HomeList = () => {
     else if (hour < 18) return "Good Afternoon,";
     else return "Good Evening,";
   };
+  const getSectionNumber = (name) => {
+  const sectionNames = {
+    1: "Orchid",
+    2: "Tulip",
+    3: "Daffodil",
+  };
+
+  // Find the key (number) for the given name
+  return parseInt(
+    Object.keys(sectionNames).find((key) => sectionNames[key] === name),
+    10
+  );
+};
+
+const subjectNames = {
+  1: "English",
+  2: "Hindi",
+  3: "Mathematics",
+  4: "Science",
+  5: "Computer Sc.",
+  6: "Social Studies",
+  7: "III Language",
+  8: "GP Values",
+  9: "Music",
+  10: "Dance/Dramatics",
+  11: "Art",
+  12: "Sports",
+  13: "Discipline",
+  14: "Attendance"
+};
+const getSubjectNumber = (name) => {
+  return parseInt(
+    Object.keys(subjectNames).find((key) => subjectNames[key] === name),
+    10
+  );
+};
+
 
   const handleClick = () => {
-    console.log('hello', userData)
+  const sectionNum = getSectionNumber(selectedSection); // 'Orchid' -> 1
+  const subjectNum = getSubjectNumber(selectedSubject); // 'English' -> 1
+
   const updatedUserdata = {
     year: parseInt(selectedYear, 10),
     class: parseInt(selectedClass, 10),
-    section: selectedSection,      // store section number/id
+    section: sectionNum,
     quarter: parseInt(selectedQuarter, 10),
-    subject: selectedSubject,      // store subject number/id
+    subject: subjectNum,                    // Number
     className: getClassName(selectedClass),
     quarterName: getQuarterName(selectedQuarter),
+    sectionName: selectedSection,
+    subjectName: selectedSubject            // Store subject name too
   };
+
   sessionStorage.setItem("userData", JSON.stringify(updatedUserdata));
   setUserData(updatedUserdata);
 };
+
+
 
   const toggle = e => {
     e.target.nextSibling.style.display = e.target.nextSibling.style.display === 'flex' ? 'none' : 'flex';
@@ -95,18 +139,24 @@ const HomeList = () => {
 
   // Sync userData when any selection changes
  useEffect(() => {
+  const sectionNum = getSectionNumber(selectedSection); // 'Orchid' -> 1
+  const subjectNum = getSubjectNumber(selectedSubject); // 'English' -> 1
+
   const updatedUserdata = {
     year: parseInt(selectedYear, 10),
     class: parseInt(selectedClass, 10),
-    section: selectedSection,      // number/id only
+    section: sectionNum,
     quarter: parseInt(selectedQuarter, 10),
-    subject: selectedSubject,      // number/id only
+    subject: subjectNum,                    // Number
     className: getClassName(selectedClass),
     quarterName: getQuarterName(selectedQuarter),
+    sectionName: selectedSection,
+    subjectName: selectedSubject            // Store subject name too
   };
   sessionStorage.setItem("userData", JSON.stringify(updatedUserdata));
   setUserData(updatedUserdata);
 }, [selectedYear, selectedClass, selectedSection, selectedQuarter, selectedSubject]);
+
 
 
   return (

@@ -34,6 +34,7 @@ const StudentList = ({ onStudentsData, setIndex, onLogout }) => {
       setUserData(JSON.parse(userData));
     }
   }, []);
+  console.log('hello',userData)
   useEffect(() => {
     const handler = setTimeout(() => {
       setFilteredStudents(
