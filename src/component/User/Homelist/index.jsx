@@ -157,6 +157,12 @@ const getSubjectNumber = (name) => {
   setUserData(updatedUserdata);
 }, [selectedYear, selectedClass, selectedSection, selectedQuarter, selectedSubject]);
 
+const isAllSelected =
+  selectedYear &&
+  availableClasses.includes(selectedClass) &&
+  availableSections.includes(selectedSection) &&
+  availableSubjects.includes(selectedSubject) &&
+  selectedQuarter;
 
 
   return (
@@ -226,7 +232,7 @@ const getSubjectNumber = (name) => {
 
         <Link to="/user/home">
           <div className='started'>
-            <input type="button" value="Get started" className='get-started' onClick={handleClick} />
+            <input type="button" value="Get started" className='get-started' onClick={handleClick} disabled={!isAllSelected} />
           </div>
         </Link>
       </form>
