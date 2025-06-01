@@ -66,6 +66,7 @@ const Form_LO = ({ closeForm, loadLO, closeFormOnly, setShowSuccess, setShowFail
       classname: userData.class,
       quarter : userData.quarter,
       subject: userData.subject,
+      section: userData.section
     };
     try {
       const response = await axios.get(
@@ -128,6 +129,7 @@ const Form_LO = ({ closeForm, loadLO, closeFormOnly, setShowSuccess, setShowFail
         year: userData.year,
         subject: userData.subject,
         quarter: userData.quarter,
+        section: userData.section
       };
     
       const body = {
