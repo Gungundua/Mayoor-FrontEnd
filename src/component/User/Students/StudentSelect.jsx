@@ -133,13 +133,16 @@ const StudentList = ({ onStudentsData, setIndex, onLogout }) => {
       </div>
       <div className="studentlist">
         {loading ? (
-          <div className="loading-message">
-            <div>
-              <span>Loading...  </span>
-              <ReactLoading type="spin" color="#135D5D" height={40} width={40} />
-              <Skeleton count={3} />
-
-            </div>
+          <div className="skeleton-wrapper">
+            {Array.from({ length: 7 }).map((_, i) => (
+              <div className="custom-skeleton-card" key={i}>
+                <div className="avatar-skeleton shimmer" />
+                <div className="text-skeleton-wrapper">
+                  <div className="line-skeleton shimmer short" />
+                  <div className="line-skeleton shimmer" />
+                </div>
+              </div>
+            ))}
           </div>
         ) : filteredStudents.length > 0 ? (
           filteredStudents.map((student, index) => (

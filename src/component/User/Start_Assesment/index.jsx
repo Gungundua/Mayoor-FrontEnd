@@ -236,45 +236,56 @@ const Assessment = ({ selectedAssessment, onBack, onMissingMarksChange }) => {
         </div>
       </div>
       <div className="ac-container">
-        <div className="student-list" ref={containerRef}>
-          {displayList.map((stu) => (
-            <div className="ac-box" key={stu.id}>
-              <div className="student-avatar">
-                {stu.name
-                  .split(" ")
-                  .slice(0, 2)
-                  .map((word) => word[0].toUpperCase())
-                  .join("")}
+        {loading ? (
+          <div className="skeleton-wrapper">
+            {Array.from({ length: 7 }).map((_, i) => (
+              <div className="custom-skeleton-card" key={i}>
+                <div className="avatar-skeleton shimmer" />
+                <div className="text-skeleton-wrapper">
+                  <div className="line-skeleton shimmer short" />
+                  <div className="line-skeleton shimmer" />
+                </div>
               </div>
-              <div className="details">
-                <h3 className="studentName">{stu.name}</h3>
-                <p className="roll-number">Roll Number: {stu.id}</p>
-                <input
-                  type="text"
-                  step="0.1"
-                  className="marks-input"
-                  value={isNaN(stu.marks) ? "" : stu.marks}
-                  onChange={(e) => handleMarksChange(e, stu.id)}
-                  placeholder="Enter Marks"
-                  min="0"
-                  max={selectedAssessment?.max_marks || 100}
-                  required
-                />
-              </div>
+            ))}
+          </div>
+        ) : (
+          <>
+            <div className="student-list" ref={containerRef}>
+              {displayList.map((stu) => (
+                <div className="ac-box" key={stu.id}>
+                  <div className="student-avatar">
+                    {stu.name
+                      .split(" ")
+                      .slice(0, 2)
+                      .map((word) => word[0].toUpperCase())
+                      .join("")}
+                  </div>
+                  <div className="details">
+                    <h3 className="studentName">{stu.name}</h3>
+                    <p className="roll-number">Roll Number: {stu.id}</p>
+                    <input
+                      type="text"
+                      step="0.1"
+                      className="marks-input"
+                      value={isNaN(stu.marks) ? "" : stu.marks}
+                      onChange={(e) => handleMarksChange(e, stu.id)}
+                      placeholder="Enter Marks"
+                      min="0"
+                      max={selectedAssessment?.max_marks || 100}
+                      required
+                    />
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-        <div className="add">
-          <span className="plus">
-            <img src={Done} alt="Done" className="done-button" onClick={handleSubmit} />
-          </span>
-        </div>
+            <div className="add">
+              <span className="plus">
+                <img src={Done} alt="Done" className="done-button" onClick={handleSubmit} />
+              </span>
+            </div>
+          </>
+        )}
       </div>
-      {loading && (
-        <div className="loading-overlay">
-          <ReactLoading type="spin" color="#007BFF" height={50} width={50} />
-        </div>
-      )}
       {showSuccess && (
         <div className="success-overlay">
           <SuccessfulDone />

@@ -67,12 +67,23 @@ const Dashboard = () => {
         </div>
             <main>
                 {loading ? (
-                    <div className="loading-message">
-                        <div>
-                            <ReactLoading type="spin" color="#135D5D" height={100} width={100}  />
-                            <Skeleton count={3} />
+                    <>
+                      {Array.from({ length: 3 }).map((_, index) => (
+                        <div className="card-skeleton" key={index}>
+                          <div className="info-skeleton shimmer">
+                            <div className="line-skeleton short shimmer" />
+                            <div className="line-skeleton shimmer" />
+                            <div className="line-skeleton shimmer" />
+                            <div className="line-skeleton shimmer" />
+                          </div>
+                          <div className="stats-skeleton">
+                            <div className="box-skeleton shimmer"></div>
+                            <div className="box-skeleton shimmer"></div>
+                            <div className="box-skeleton shimmer"></div>
+                          </div>
                         </div>
-                    </div>
+                      ))}
+                    </>
                 ) :teacherData.length > 0 ? (
                 teacherData.map((card, index) => (
                     <div className="card" key={index}>

@@ -216,5 +216,69 @@ const Wrapper = styled.div`
   align-items: center;
   z-index: 1000;
   }
+
+  .skeleton-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding-top: 20px;
+  overflow-y: auto;
+}
+.custom-skeleton-card {
+  width: 85%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #ffffff;
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  border: 1px solid #ddd;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
+}
+.avatar-skeleton {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  background: #ccc;
+  position: relative;
+  overflow: hidden;
+}
+.text-skeleton-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.line-skeleton {
+  height: 14px;
+  border-radius: 4px;
+  background: #ccc;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+.line-skeleton.short {
+  width: 60%;
+}
+.shimmer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150px;
+  height: 100%;
+  width: 150px;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.3), transparent);
+  animation: shimmer 1.5s infinite;
+}
+@keyframes shimmer {
+  100% {
+    transform: translateX(300%);
+  }
+}
+
 `
 export default Wrapper

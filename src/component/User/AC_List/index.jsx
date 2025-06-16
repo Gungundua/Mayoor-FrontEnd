@@ -249,13 +249,18 @@ const AC_List = ({
       <div className='top-heading'><h1>Assessment Criteria</h1></div>
       <ul className="ac-list">
         {loading ? (
-          <li className="loading-message">
-            <div>
-              <span>Loading...  </span>
-              <ReactLoading type="spin" color="#135D5D" height={40} width={40}  />
-              <Skeleton count={3} />
-            </div>
-          </li>
+          <>
+            {Array.from({ length: 12 }).map((_, index) => (
+              <li className="ac-skeleton-item" key={index}>
+                <div className="skeleton-icon shimmer" />
+                <div className="skeleton-info">
+                  <div className="skeleton-line shimmer short" />
+                  <div className="skeleton-line shimmer" />
+                </div>
+                <div className="skeleton-badge shimmer" />
+              </li>
+            ))}
+          </>
         ) : filteredAcList.length > 0 ? (
           filteredAcList.map((item, index) => (
             <li

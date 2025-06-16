@@ -329,5 +329,78 @@ const Wrapper = styled.section`
     .no-lo {
   background-color: #ffcccc;  
 }
+
+.ac-skeleton-item {
+  display: flex;
+  align-items: center;
+  padding: 14px 16px;
+  background-color: rgba(255, 255, 255, 0.03);
+  border-radius: 10px;
+  margin-bottom: 12px;
+  position: relative;
+  gap: 16px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+}
+
+.skeleton-icon {
+  width: 35px;
+  height: 35px;
+  border-radius: 6px;
+  background-color: #ccc;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.skeleton-line {
+  height: 10px;
+  background-color: #ccc;
+  border-radius: 5px;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-line.short {
+  width: 60%;
+}
+
+.skeleton-badge {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #ccc;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.shimmer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150px;
+  height: 100%;
+  width: 150px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  animation: shimmer 1.2s infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(300%);
+  }
+}
+
 `
 export default Wrapper;

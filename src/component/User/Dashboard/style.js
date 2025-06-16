@@ -100,5 +100,65 @@ const Wrapper = styled.div`
 .no-results{
     text-align: center;
 }
+
+.card-skeleton {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 16px;
+  border-radius: 12px;
+  margin: 16px 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.info-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.line-skeleton {
+  height: 10px;
+  border-radius: 5px;
+  background-color: #ccc;
+  position: relative;
+  overflow: hidden;
+}
+
+.line-skeleton.short {
+  width: 60%;
+}
+
+.stats-skeleton {
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+}
+
+.box-skeleton {
+  flex: 1;
+  height: 50px;
+  background-color: #ccc;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150px;
+  height: 100%;
+  width: 150px;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.3), transparent);
+  animation: shimmer 1.2s infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(300%);
+  }
+}
+
 `
 export default Wrapper

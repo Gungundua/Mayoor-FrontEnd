@@ -148,5 +148,82 @@ const Wrapper = styled.section`
       justify-content: center;
       align-items: center;
     }
+
+    // If using styled-components inside Wrapper
+/* .skeleton-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+}
+
+.skeleton-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.skeleton-info {
+  flex: 1;
+} */
+.custom-skeleton-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #ffffff0d;
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+
+.avatar-skeleton {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #ccc;
+  position: relative;
+  overflow: hidden;
+}
+
+.text-skeleton-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.line-skeleton {
+  height: 12px;
+  border-radius: 4px;
+  background: #ccc;
+  position: relative;
+  overflow: hidden;
+}
+
+.line-skeleton.short {
+  width: 60%;
+}
+
+.shimmer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150px;
+  height: 100%;
+  width: 150px;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.3), transparent);
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(300%);
+  }
+}
+
 `
 export default Wrapper;
