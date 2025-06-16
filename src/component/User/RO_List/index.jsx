@@ -1,13 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Wrapper from './style';
 import LOMapping from '../RO_LO_Mapping';
-import List from '../images/list.png';
 import axios from 'axios';
-import noData from "../assets/noData.png";
 import Menu from '../MenuBar';
-import ReactLoading from 'react-loading'
 import { useNavigate } from 'react-router';
-import Skeleton from 'react-loading-skeleton';
 import { HiOutlineDocumentText } from "react-icons/hi2";
 
 const ROlist = ({ loItems, setLoItems, setIndex, handleLoItems, acItems, onLogout }) => {
@@ -107,8 +103,8 @@ const ROlist = ({ loItems, setLoItems, setIndex, handleLoItems, acItems, onLogou
       <ul className="ro-list">
         {loading ? (
           <>
-            {Array.from({ length: 12 }).map((_, index) => (
-              <li className="ac-skeleton-item" key={index}>
+            {Array.from({ length: 8 }).map((_, index) => (
+              <li className="ro-skeleton-item" key={index}>
                 <div className="skeleton-icon shimmer" />
                 <div className="skeleton-info">
                   <div className="skeleton-line shimmer short" />

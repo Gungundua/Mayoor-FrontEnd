@@ -312,7 +312,7 @@ const Wrapper = styled.section`
   background-color: #ffcccc;  
 }
 
-.ac-skeleton-item {
+/* .ac-skeleton-item {
   display: flex;
   align-items: center;
   padding: 14px 16px;
@@ -381,6 +381,91 @@ const Wrapper = styled.section`
 @keyframes shimmer {
   100% {
     transform: translateX(300%);
+  }
+} */
+
+
+
+.ac-skeleton-item {
+  width: 88%;
+  margin: 10px auto;
+  padding: 20px 15px;
+  border-radius: 10px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  list-style: none;
+}
+
+.skeleton-icon {
+  width: 35px;
+  height: 35px;
+  border-radius: 5px;
+  background-color: #dddddd;
+  flex-shrink: 0;
+}
+
+.skeleton-info {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.skeleton-line {
+  height: 10px;
+  width: 80%;
+  background-color: #dddddd;
+  border-radius: 5px;
+}
+
+.skeleton-line.short {
+  width: 50%;
+}
+
+.skeleton-badge {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #dddddd;
+}
+.skeleton-badge2 {
+  width: 5px;
+  height: 20px;
+  background-color: #dddddd;
+  border-radius: 4px;
+}
+
+/* Optional shimmer animation */
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150px;
+  width: 100px;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(255, 255, 255, 0.6) 50%,
+    transparent 100%
+  );
+  animation: shimmer 1.2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    left: -150px;
+  }
+  100% {
+    left: 100%;
   }
 }
 

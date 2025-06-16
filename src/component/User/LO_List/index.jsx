@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Wrapper from './style';
 import ACMapping from '../LO_AC_Mapping';
-import List from '../images/list.png';
 import axios from 'axios';
 import Form_LO from '../Form_LO';
 import MenuDots from '../MenuDots';
@@ -11,8 +10,6 @@ import Failed from "../Popup_Failed/index.jsx";
 import DeletedSuccessfully from "../DeletedSuccessfully/index.jsx";
 import DeleteFailed from "../DeleteFailed/index.jsx";
 import AreYouSure from "../AreYouSure";
-import ReactLoading from 'react-loading'
-import Skeleton from 'react-loading-skeleton';
 import { useNavigate } from 'react-router';
 import { HiOutlineDocumentText, HiOutlineDocumentPlus } from "react-icons/hi2";
 
@@ -208,14 +205,15 @@ const LOlist = ({ acItems, setAcItems, loItems, setLoItems, handleLoItems, setIn
       <ul className="lo-list">
         {loading ? (
           <>
-            {Array.from({ length: 12 }).map((_, index) => (
-              <li className="ac-skeleton-item" key={index}>
+            {Array.from({ length: 10 }).map((_, index) => (
+              <li className="lo-skeleton-item" key={index}>
                 <div className="skeleton-icon shimmer" />
                 <div className="skeleton-info">
                   <div className="skeleton-line shimmer short" />
                   <div className="skeleton-line shimmer" />
                 </div>
                 <div className="skeleton-badge shimmer" />
+                <div className="skeleton-badge2 shimmer" />
               </li>
             ))}
           </>

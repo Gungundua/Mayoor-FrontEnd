@@ -250,14 +250,15 @@ const AC_List = ({
       <ul className="ac-list">
         {loading ? (
           <>
-            {Array.from({ length: 12 }).map((_, index) => (
+            {Array.from({ length: 10 }).map((_, index) => (
               <li className="ac-skeleton-item" key={index}>
                 <div className="skeleton-icon shimmer" />
                 <div className="skeleton-info">
                   <div className="skeleton-line shimmer short" />
-                  <div className="skeleton-line shimmer" />
+                  {/* <div className="skeleton-line shimmer" /> */}
                 </div>
                 <div className="skeleton-badge shimmer" />
+                <div className="skeleton-badge2 shimmer" />
               </li>
             ))}
           </>

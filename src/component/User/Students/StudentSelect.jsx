@@ -134,12 +134,12 @@ const StudentList = ({ onStudentsData, setIndex, onLogout }) => {
       <div className="studentlist">
         {loading ? (
           <div className="skeleton-wrapper">
-            {Array.from({ length: 7 }).map((_, i) => (
+            {Array.from({ length: 12 }).map((_, i) => (
               <div className="custom-skeleton-card" key={i}>
                 <div className="avatar-skeleton shimmer" />
                 <div className="text-skeleton-wrapper">
                   <div className="line-skeleton shimmer short" />
-                  <div className="line-skeleton shimmer" />
+                  {/* <div className="line-skeleton shimmer" /> */}
                 </div>
               </div>
             ))}

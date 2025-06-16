@@ -233,7 +233,7 @@ width: 100%;
   -ms-user-select: none; /* Internet Explorer/Edge */
 }
 
-.ac-skeleton-item {
+/* .ac-skeleton-item {
   display: flex;
   align-items: center;
   padding: 14px 16px;
@@ -303,7 +303,82 @@ width: 100%;
   100% {
     transform: translateX(300%);
   }
+} */
+
+
+
+
+
+
+.ro-skeleton-item {
+  width: 88%;
+  background: white;
+  margin: 10px auto;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px 15px ;
+  border-radius: 10px;
+  color: #dddddd;
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
+.skeleton-icon {
+  width: 35px;
+  height: 35px;
+  background-color: #dddddd;
+  border-radius: 6px;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+.skeleton-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+}
+.skeleton-line {
+  height: 10px;
+  width: 50%;           /* ⬅️ Default line width reduced */
+  background-color: #dddddd;
+  border-radius: 5px;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-line.short {
+  width: 35%;           /* ⬅️ Short line now narrower */
+}
+.skeleton-badge {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #dddddd;
+  position: relative;
+  flex-shrink: 0;
+}
+.shimmer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150px;
+  height: 100%;
+  width: 150px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  animation: shimmer 1.2s infinite;
+}
+@keyframes shimmer {
+  100% {
+    transform: translateX(300%);
+  }
+}
+
 
 `
 export default Wrapper;

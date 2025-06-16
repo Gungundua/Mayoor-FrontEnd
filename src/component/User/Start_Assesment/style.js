@@ -231,21 +231,23 @@ const Wrapper = styled.div`
   height: auto;
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 30px;
   background: #ffffff;
-  padding: 16px;
-  border-radius: 12px;
+  padding: 22px 15px;
+  border-radius: 5px;
   margin-bottom: 12px;
   border: 1px solid #ddd;
   box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
+  margin: 10px 0px 10px 0px;
 }
 .avatar-skeleton {
   width: 50px;
   height: 50px;
+  background-color: #20B2AA;
   border-radius: 10px;
-  background: #ccc;
   position: relative;
   overflow: hidden;
+  flex-shrink: 0;
 }
 .text-skeleton-wrapper {
   flex: 1;
@@ -254,12 +256,12 @@ const Wrapper = styled.div`
   gap: 8px;
 }
 .line-skeleton {
-  height: 14px;
+  height: 10px;
   border-radius: 4px;
   background: #ccc;
   position: relative;
   overflow: hidden;
-  width: 100%;
+  width: 70%;
 }
 .line-skeleton.short {
   width: 60%;
@@ -278,6 +280,15 @@ const Wrapper = styled.div`
   100% {
     transform: translateX(300%);
   }
+}
+.enter-marks-skeleton{
+  height: 20px;
+  border-radius: 5px;
+  background: #ccc;
+  position: relative;
+  overflow: hidden;
+  width: 35%;
+  margin-left: 20px;
 }
 
 `

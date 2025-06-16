@@ -242,8 +242,9 @@ const Assessment = ({ selectedAssessment, onBack, onMissingMarksChange }) => {
               <div className="custom-skeleton-card" key={i}>
                 <div className="avatar-skeleton shimmer" />
                 <div className="text-skeleton-wrapper">
-                  <div className="line-skeleton shimmer short" />
                   <div className="line-skeleton shimmer" />
+                  <div className="line-skeleton shimmer short" />
+                  <div className="enter-marks-skeleton"></div>
                 </div>
               </div>
             ))}
