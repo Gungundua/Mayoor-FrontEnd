@@ -258,7 +258,7 @@ const Wrapper = styled.div`
 .line-skeleton {
   height: 10px;
   border-radius: 4px;
-  background: #ccc;
+  background: #dddddd;
   position: relative;
   overflow: hidden;
   width: 70%;
@@ -284,7 +284,7 @@ const Wrapper = styled.div`
 .enter-marks-skeleton{
   height: 20px;
   border-radius: 5px;
-  background: #ccc;
+  background: #dddddd;
   position: relative;
   overflow: hidden;
   width: 35%;
