@@ -101,45 +101,25 @@ const Wrapper = styled.div`
     text-align: center;
 }
 
-.card-skeleton {
-  background: rgba(255, 255, 255, 0.03);
-  padding: 16px;
-  border-radius: 12px;
-  margin: 16px 0;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-}
-
-.info-skeleton {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-bottom: 16px;
-}
-
+/* Keep original card structure */
 .line-skeleton {
-  height: 10px;
-  border-radius: 5px;
+  height: 12px;
   background-color: #ccc;
+  border-radius: 5px;
+  margin: 5px 0;
   position: relative;
   overflow: hidden;
+  width: 100%;
 }
 
 .line-skeleton.short {
-  width: 60%;
+  width: 48%;
 }
 
-.stats-skeleton {
-  display: flex;
-  gap: 16px;
-  justify-content: space-between;
-}
-
-.box-skeleton {
-  flex: 1;
-  height: 50px;
-  background-color: #ccc;
-  border-radius: 8px;
+/* Shimmer effect on boxes and lines */
+.shimmer {
   position: relative;
+  background-color: #ddd;
   overflow: hidden;
 }
 
@@ -150,7 +130,12 @@ const Wrapper = styled.div`
   left: -150px;
   height: 100%;
   width: 150px;
-  background: linear-gradient(to right, transparent, rgba(255,255,255,0.3), transparent);
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255,255,255,0.4),
+    transparent
+  );
   animation: shimmer 1.2s infinite;
 }
 
@@ -159,6 +144,8 @@ const Wrapper = styled.div`
     transform: translateX(300%);
   }
 }
-
+.box.shimmer {
+  border: none !important;
+}
 `
 export default Wrapper

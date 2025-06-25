@@ -67,23 +67,23 @@ const Dashboard = () => {
         </div>
             <main>
                 {loading ? (
-                    <>
-                      {Array.from({ length: 3 }).map((_, index) => (
-                        <div className="card-skeleton" key={index}>
-                          <div className="info-skeleton shimmer">
-                            <div className="line-skeleton short shimmer" />
-                            <div className="line-skeleton shimmer" />
-                            <div className="line-skeleton shimmer" />
-                            <div className="line-skeleton shimmer" />
-                          </div>
-                          <div className="stats-skeleton">
-                            <div className="box-skeleton shimmer"></div>
-                            <div className="box-skeleton shimmer"></div>
-                            <div className="box-skeleton shimmer"></div>
-                          </div>
+                  <>
+                    {Array.from({ length: 4 }).map((_, index) => (
+                      <div className="card" key={index}>
+                        <div className="info">
+                          <div className="line-skeleton shimmer short" />
+                          <div className="line-skeleton shimmer short" />
+                          <div className="line-skeleton shimmer short" />
+                          <div className="line-skeleton shimmer short" />
                         </div>
-                      ))}
-                    </>
+                        <div className="stats">
+                          <div className="box shimmer" style={{ width: "50px", height: "60px" }} />
+                          <div className="box shimmer" style={{ width: "50px", height: "60px" }} />
+                          <div className="box shimmer" style={{ width: "50px", height: "60px" }} />
+                        </div>
+                      </div>
+                    ))}
+                  </>
                 ) :teacherData.length > 0 ? (
                 teacherData.map((card, index) => (
                     <div className="card" key={index}>
